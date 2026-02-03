@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CONFIG_NAME="${CONFIG_NAME:=default}"
+CONFIG_FILE="/config/$CONFIG_NAME.yaml"
+
+BUILD_DIR="/source/$CONFIG_NAME"
+sync-mixins
+
+SOURCE_DIR="/source/$CONFIG_NAME"
+
+init-mixins
+
+render-resources
+
+lint-resources

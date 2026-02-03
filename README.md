@@ -2,6 +2,11 @@
 
 A collection of tools and scripts for managing monitoring resources as a code. This toolkit simplifies the process of developing, linting, and deploying Grafana dashboards, Prometheus/Mimir rules, Loki rules, and SLOs.
 
+- **Syncing**: Fetch and manage external mixins and libraries using `vendir` (e.g., `sync-mixins`).
+- **Rendering**: Convert Jsonnet/Libsonnet templates into ready-to-use JSON/YAML resources (e.g., `render-resources`).
+- **Linting**: Validate the syntax and correctness of generated resources (e.g., `lint-resources`).
+- **Applying**: Deploy resources to services like Grafana, Mimir, and Loki (e.g., `apply-resources`).
+
 ## Docker Images
 
 The project provides the following Docker images:
@@ -11,18 +16,7 @@ The project provides the following Docker images:
 - **Jupyter Monitor Tools**: `ghcr.io/cznewt/jupyter-monitor-tools:latest`
   - JupyterLab environment pre-configured with Jsonnet language server and monitor tools.
 
-## Scripts Overview
-
-The toolkit provides a suite of scripts located in `docker/files/scripts` to automate various stages of the monitoring lifecycle.
-
-### Key Areas
-
-- **Syncing**: Fetch and manage external mixins and libraries using `vendir` (e.g., `sync-mixins`).
-- **Rendering**: Convert Jsonnet/Libsonnet templates into ready-to-use JSON/YAML resources (e.g., `render-resources`).
-- **Linting**: Validate the syntax and correctness of generated resources (e.g., `lint-resources`).
-- **Applying**: Deploy resources to services like Grafana, Mimir, and Loki (e.g., `apply-resources`).
-
-### Quick Start
+## Usage
 
 For a full automation run (sync, render, lint, and apply), you can use the high-level orchestration script:
 
@@ -52,3 +46,4 @@ render-all-resources
 - [Scripts Documentation](docs/scripts.md)
 - [Software Documentation](docs/software.md)
 - [Configuration Documentation](docs/configuration.md)
+- [Mixins Documentation](docs/mixins.md)
