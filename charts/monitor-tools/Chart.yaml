@@ -1,0 +1,6 @@
+apiVersion: v2
+name: monitor-tools
+description: A Helm chart for Monitor Tools workspace
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

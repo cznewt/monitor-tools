@@ -11,3 +11,15 @@ metadata:
 spec:
   type: tool
   lifecycle: experimental
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: jupyter-monitor-tools
+  title: Jupyter Monitor Tools
+  description: A visual user interface for study and management of monitoring resources as code.
+  tags:
+    - gitops
+spec:
+  type: service
+  lifecycle: experimental

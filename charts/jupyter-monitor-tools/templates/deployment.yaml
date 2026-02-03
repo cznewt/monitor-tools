@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-jupyter
+  labels:
+    app: {{ .Release.Name }}-jupyter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-jupyter
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-jupyter
+    spec:
+      containers:
+        - name: jupyter
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,16 @@
+image:
+  repository: ghcr.io/cznewt/jupyter-monitor-tools
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 8888
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 256Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 256Mi

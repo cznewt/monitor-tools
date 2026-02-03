@@ -1,0 +1,12 @@
+image:
+  repository: ghcr.io/cznewt/monitor-tools
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi

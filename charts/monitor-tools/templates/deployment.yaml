@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-monitor-tools
+  labels:
+    app: {{ .Release.Name }}-monitor-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-monitor-tools
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-monitor-tools
+    spec:
+      containers:
+        - name: monitor-tools
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["sleep", "infinity"]
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

@@ -16,3 +16,13 @@ mixins:
       includePaths:
         - windows-mixin/**/*
       newRootPath: windows-mixin
+libs:
+  windows-observ-lib:
+    source:
+      git:
+        url: https://github.com/grafana/jsonnet-libs.git
+        ref: master
+        depth: 1
+      includePaths:
+        - windows-observ-lib/**/*
+      newRootPath: windows-observ-lib

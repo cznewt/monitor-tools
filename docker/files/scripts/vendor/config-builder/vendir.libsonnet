@@ -15,11 +15,11 @@
     },
   vendirLibConfig(config)::
     {
-      [if std.objectHas(config.mixins[name], 'source') then 'vendir.' + name + '-lib.yaml']: std.manifestYamlDoc({
+      [if std.objectHas(config.libs[name], 'source') then 'vendir.' + name + '-lib.yaml']: std.manifestYamlDoc({
         apiVersion: 'vendir.k14s.io/v1alpha1',
         kind: 'Config',
         directories: [{
-          path: 'vendor/' + name,
+          path: 'mixins/' + name,
           contents: [{
             path: '.'
           } + config.libs[name].source],

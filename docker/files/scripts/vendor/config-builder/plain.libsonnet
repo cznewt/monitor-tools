@@ -1,10 +1,10 @@
 {
-  grafanaDashboards(mixin)::
+  grafanaDashboards(mixin, config)::
     {
       [name]: std.manifestJsonEx(mixin.grafanaDashboards[name], '  ')
       for name in std.objectFields(if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {})
     },
-  promRuleGroups(mixin)::
+  promRuleGroups(mixin, config)::
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
     {

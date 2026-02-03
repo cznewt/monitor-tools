@@ -3,5 +3,7 @@
 CONFIG_DIR="${CONFIG_DIR:=/config}"
 
 sync-all-mixins
+
 init-all-mixins
+
 render-all-resources

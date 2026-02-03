@@ -1,9 +1,9 @@
 local builder = (import 'cb.libsonnet');
 
 {
-  plainGrafanaDashboards(name, mixin)::
+  plainGrafanaDashboards(name, mixin, config)::
     builder.plain.grafanaDashboards(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
-  plainPrometheusRules(name, mixin)::
+  plainPrometheusRules(name, mixin, config)::
     builder.plain.promRuleGroups(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
   grizzlyGrafanaFolders(name, mixin, config)::
     builder.grizzly.grafanaFolders(config.mixins[name].config + {mixinName: name}),
