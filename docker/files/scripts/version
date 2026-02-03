@@ -1,0 +1,5 @@
+#!/bin/bash
+
+jsonnet --version
+
+jrsonnet --version

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+BUILD_DIR="${BUILD_DIR:=/source/default/sloth/sloth-slos}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+sloth=$(yq eval '.sloth.slos | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$sloth" = "null" ] || [ -z "$sloth" ]; then
+    echo "No sloth in $CONFIG_FILE config."
+    exit 0
+else
+    echo "Rendering sloth ServiceLevelObjective(s) to $BUILD_DIR..."
+    jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+      -e "(import 'cbm.libsonnet').slothRules(std.parseYaml(importstr '$CONFIG_FILE'))"
+fi

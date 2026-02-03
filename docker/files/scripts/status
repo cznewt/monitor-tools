@@ -1,0 +1,15 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+mixins=$(yq eval '.mixins | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+libs=$(yq eval '.libs | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$mixins" = "null" ] || [ -z "$mixins" ]; then echo "No mixins found."; else
+  echo "Rendering vendir MixinConfig to $BUILD_DIR..."
+fi
+
+if [ "$libs" = "null" ] || [ -z "$libs" ]; then echo "No libs found."; else
+  echo "Rendering vendir LibConfig to $BUILD_DIR..."
+fi

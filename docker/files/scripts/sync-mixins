@@ -1,0 +1,32 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+BUILD_DIR="${BUILD_DIR:=/source/default}"
+
+echo "Syncing mixins for $CONFIG_FILE to $BUILD_DIR..."
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+mixins=$(yq eval '.mixins | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+libs=$(yq eval '.libs | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$mixins" = "null" ] || [ -z "$mixins" ]; then echo "No mixins found."; else
+  echo "Rendering vendir MixinConfig to $BUILD_DIR..."
+  jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+    -e "(import 'cbc.libsonnet').vendirMixinConfig(std.parseYaml(importstr '$CONFIG_FILE'))"
+fi
+
+if [ "$libs" = "null" ] || [ -z "$libs" ]; then echo "No libs found."; else
+  echo "Rendering vendir LibConfig to $BUILD_DIR..."
+  jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+    -e "(import 'cbc.libsonnet').vendirLibConfig(std.parseYaml(importstr '$CONFIG_FILE'))"
+fi
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml" -not -name "*.lock.yaml")
+
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+
+for yaml_file in $yaml_files; do
+  echo "Syncing vendir $yaml_file target..."
+  vendir sync --chdir $BUILD_DIR --file $yaml_file --lock-file "${yaml_file%.*}.lock.yaml"
+done

@@ -1,0 +1,18 @@
+name: example-observ-lib
+prometheus:
+  render: mimirtool
+grafana:
+  render: grizzly
+mixins:
+  windows:
+    config:
+      mimirNamespace: windows
+      grafanaDashboardFolder: Base
+    source:
+      git:
+        url: https://github.com/grafana/jsonnet-libs.git
+        ref: master
+        depth: 1
+      includePaths:
+        - windows-mixin/**/*
+      newRootPath: windows-mixin

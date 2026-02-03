@@ -1,0 +1,57 @@
+name: example-pyrra
+pyrra:
+  render: mimirtool
+  slos:
+    prometheus-api-query:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: prometheus-api-query
+        namespace: monitoring
+        labels:
+          prometheus: k8s
+          role: alert-rules
+      spec:
+        target: '99.0'
+        window: 7d
+        indicator:
+          ratio:
+            errors:
+              metric: prometheus_http_requests_total{handler=~"/api.*",code=~"5.."}
+            total:
+              metric: prometheus_http_requests_total{handler=~"/api.*"}
+            grouping:
+              - handler
+    nginx-api-errors:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: nginx-api-errors
+        namespace: monitoring
+        labels:
+          prometheus: k8s
+          role: alert-rules
+      spec:
+        target: '99.9'
+        window: 4w
+        indicator:
+          ratio:
+            errors:
+              metric: nginx_ingress_controller_requests{namespace="lastfm",ingress="lastfm",service="lastfm",status=~"5.."}
+            total:
+              metric: nginx_ingress_controller_requests{namespace="lastfm",ingress="lastfm",service="lastfm"}
+    nginx-api-latency:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: nginx-api-latency
+        namespace: monitoring
+      spec:
+        target: '90'
+        window: 4w
+        indicator:
+          latency:
+            success:
+              metric: nginx_ingress_controller_request_duration_seconds_bucket{namespace="lastfm",ingress="lastfm",service="lastfm",status=~"5..",le="1"}
+            total:
+              metric: nginx_ingress_controller_request_duration_seconds_count{namespace="lastfm",ingress="lastfm",service="lastfm"}

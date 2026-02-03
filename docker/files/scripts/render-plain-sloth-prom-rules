@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/plain/prom-rules}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+sloth=$(yq eval '.sloth.slos | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$sloth" = "null" ] || [ -z "$sloth" ]; then
+    echo "No sloth in $CONFIG_FILE config."
+    exit 0
+else
+    mkdir -p "$BUILD_DIR"
+    echo "Rendering plain PrometheusRules from sloth definitions in $SOURCE_DIR/sloth/sloth-slos to $BUILD_DIR..."
+    sloth generate --input="$SOURCE_DIR/sloth/sloth-slos" --out="$BUILD_DIR"
+fi

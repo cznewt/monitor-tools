@@ -1,0 +1,8 @@
+#!/bin/bash
+
+CONFIG_DIR="${CONFIG_DIR:=/config}"
+
+for CONFIG_FILE in $CONFIG_DIR/*.y*ml; do
+  ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
+  CONFIG_FILE="$CONFIG_FILE" BUILD_DIR="/source/$ENV_NAME" sync-mixins
+done

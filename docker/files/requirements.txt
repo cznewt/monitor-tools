@@ -1,0 +1,6 @@
+pyyaml
+prometheus-client
+py-markdown-table
+cookiecutter
+mkdocs
+monitoring-utils @ git+https://github.com/cznewt/monitoring-utils.git@master#subdirectory=monitoring-utils

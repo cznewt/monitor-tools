@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BUILD_DIR="${BUILD_DIR:=/build/default/mimirtool/alertmanager-config}"
+
+files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.*")
+
+if [ -z "$files" ]; then echo "No config file found in '$BUILD_DIR'."; exit 1; fi
+
+if [ -z "$MIMIR_ADDRESS" ]; then echo "MIMIR_ADDRESS not set, cannot connect to Mimir server."; exit 1; fi
+if [ -z "$MIMIR_TENANT_ID" ]; then echo "MIMIR_TENANT_ID not set, cannot connect to Mimir server."; exit 1; fi
+
+for config_file in $files; do
+  echo "Applying $config_file mimirtool AlertmanagerConfigs to $MIMIR_ADDRESS/$MIMIR_TENANT_ID"
+  mimirtool alertmanager load "$config_file"
+done

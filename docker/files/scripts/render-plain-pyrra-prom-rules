@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/plain/prom-rules}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+pyrra=$(yq eval '.pyrra.slos | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$pyrra" = "null" ] || [ -z "$pyrra" ]; then
+    echo "No pyrra in $CONFIG_FILE config."
+    exit 0
+else
+    mkdir -p "$BUILD_DIR"
+    echo "Rendering plain PrometheusRules from pyrra definitions in $SOURCE_DIR/pyrra/pyrra-slos to $BUILD_DIR..."
+    pyrra generate --config-files="$SOURCE_DIR/pyrra/pyrra-slos/*.yaml" --prometheus-folder="$BUILD_DIR" --generic-rules
+fi

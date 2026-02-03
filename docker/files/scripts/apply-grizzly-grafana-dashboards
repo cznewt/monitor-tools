@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BUILD_DIR="${BUILD_DIR:=/build/default/grizzly/grafana-dashboards}"
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+
+if [ -z "$GRAFANA_URL" ]; then echo "GRAFANA_URL not set, cannot connect to Grafana server."; exit 1; fi
+if [ -z "$GRAFANA_TOKEN" ]; then echo "GRAFANA_TOKEN not set, cannot connect to Grafana server."; exit 1; fi
+
+for yaml_file in $yaml_files; do
+  echo "Applying $yaml_file grizzly GrafanaDashboards to $GRAFANA_URL..."
+  grr apply $yaml_file --disable-reporting
+done

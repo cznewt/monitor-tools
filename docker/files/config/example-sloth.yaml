@@ -1,0 +1,98 @@
+name: example-sloth
+sloth:
+  render: mimirtool
+  slos:
+    home-wifi:
+      version: "prometheus/v1"
+      service: "home-wifi"
+      labels:
+        cluster: "valhalla"
+        component: "ubiquiti"
+        context: "home"
+      slos:
+        - name: "good-wifi-client-satisfaction"
+          objective: 95
+          description: "Will warn us that we don't have a good wifi at home."
+          sli:
+            events:
+              error_query: sum_over_time((count(unifipoller_client_satisfaction_ratio < 0.75))[{{.window}}:]) OR on() vector(0)
+              total_query: sum_over_time((count(unifipoller_client_satisfaction_ratio))[{{.window}}:])
+          alerting:
+            name: GoodWifiClientSatisfaction
+            page_alert:
+              labels:
+                severity: home
+            ticket_alert:
+              labels:
+                severity: warning
+
+        - name: "risk-wifi-client-satisfaction"
+          objective: 99.9
+          description: "Will warn us that we something very bad is happenning with our home wifi."
+          sli:
+            events:
+              error_query: sum_over_time((count(unifipoller_client_satisfaction_ratio < 0.5))[{{.window}}:]) OR on() vector(0)
+              total_query: sum_over_time((count(unifipoller_client_satisfaction_ratio))[{{.window}}:])
+          alerting:
+            name: RiskWifiClientSatisfaction
+            page_alert:
+              labels:
+                severity: home
+            ticket_alert:
+              labels:
+                severity: warning
+    k8s-apiserver:
+      version: "prometheus/v1"
+      service: "k8s-apiserver"
+      labels:
+        cluster: "valhalla"
+        component: "kubernetes"
+      slos:
+        - name: "requests-availability"
+          objective: 99.9
+          description: "Warn that we are returning correctly the requests to the clients (kubectl users, controllers...)."
+          labels:
+            category: availability
+          sli:
+            events:
+              error_query: sum(rate(apiserver_request_total{code=~"(5..|429)"}[{{.window}}]))
+              total_query: sum(rate(apiserver_request_total[{{.window}}]))
+          alerting:
+            name: K8sApiserverAvailabilityAlert
+            labels:
+              category: "availability"
+            annotations:
+              runbook: "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeapierrorshigh"
+            page_alert:
+              labels:
+                severity: critical
+            ticket_alert:
+              labels:
+                severity: warning
+
+        - name: "requests-latency"
+          objective: 99
+          description: "Warn that we apiserver responses are being slow and this will affect the clients  (kubectl users, controllers...)."
+          labels:
+            category: latency
+          sli:
+            events:
+              error_query: |
+                (
+                  sum(rate(apiserver_request_duration_seconds_count{verb!="WATCH"}[{{.window}}]))
+                  -
+                  sum(rate(apiserver_request_duration_seconds_bucket{le="0.4",verb!="WATCH"}[{{.window}}]))
+                )
+              total_query: sum(rate(apiserver_request_duration_seconds_count{verb!="WATCH"}[{{.window}}]))
+          alerting:
+            name: K8sApiserverLatencyAlert
+            labels:
+              category: "latency"
+            annotations:
+              runbook: "https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-kubeapilatencyhigh"
+            page_alert:
+              labels:
+                severity: critical
+            ticket_alert:
+              labels:
+                severity: warning

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/grizzly/grafana-folders}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+keys=$(yq eval '.mixins | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+for key in $keys; do
+  if [ "$key" = "-" ]; then continue; fi
+  mixinDir="$SOURCE_DIR/mixins/$key-mixin"
+  echo "Rendering $mixinDir grizzly GrafanaFolders to $BUILD_DIR..."
+  jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+  -e "(import 'cbm.libsonnet').grizzlyGrafanaFolders('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+done

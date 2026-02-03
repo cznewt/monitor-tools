@@ -1,0 +1,18 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/mimirtool/alertmanager-config}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+alertmanager=$(yq eval '.alertmanager | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$alertmanager" = "null" ] || [ -z "$alertmanager" ]; then
+    echo "No alertmanager in $CONFIG_FILE config."
+    exit 0
+else
+    echo "Rendering mimirtool AlertmanagerConfig to $BUILD_DIR..."
+    jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+      -e "(import 'cbm.libsonnet').mimirtoolAlertmanagerConfig(std.parseYaml(importstr '$CONFIG_FILE'))"
+fi

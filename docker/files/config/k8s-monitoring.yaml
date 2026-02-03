@@ -1,0 +1,85 @@
+name: k8s-monitoring
+prometheus:
+  render: mimirtool
+grafana:
+  render: grizzly
+mixins:
+  alloy:
+    config:
+      mimirNamespace: alloy
+      grafanaDashboardFolder: Monitoring
+    source:
+      git:
+        url: https://github.com/grafana/alloy.git
+        ref: main
+        depth: 1
+      includePaths:
+        - operations/alloy-mixin/**/*
+      newRootPath: operations/alloy-mixin  
+  cert-manager:
+    config:
+      mimirNamespace: cert-manager
+      enableMultiCluster: true
+      grafanaDashboardFolder: Platform
+    source:
+      git:
+        url: https://github.com/imusmanmalik/cert-manager-mixin.git
+        ref: main
+        depth: 1
+  ingress-nginx:
+    config:
+      mimirNamespace: ingress-nginx
+      grafanaDashboardFolder: Platform
+    source:
+      git:
+        url: https://github.com/adinhodovic/ingress-nginx-mixin.git
+        ref: main
+        depth: 1
+  kube-state-metrics:
+    config:
+      mimirNamespace: kube-state-metrics
+      grafanaDashboardFolder: Monitoring
+    source:
+      git:
+        url: https://github.com/kubernetes/kube-state-metrics.git
+        ref: main
+        depth: 1
+      includePaths:
+        - jsonnet/kube-state-metrics-mixin//**/*
+      newRootPath: jsonnet/kube-state-metrics-mixin
+  kubernetes-events:
+    config:
+      mimirNamespace: kubernetes-events
+      grafanaDashboardFolder: Platform
+    source:
+      git:
+        url: https://github.com/adinhodovic/kubernetes-events-mixin.git
+        ref: main
+        depth: 1
+  kubernetes:
+    mixinDir: /source/mixins/kubernetes-mixin
+    vendorDir: /source/mixins/kubernetes-mixin/vendor
+    config:
+      showMultiCluster: true
+      mimirNamespace: kubernetes
+      grafanaDashboardFolder: Platform
+      cadvisorSelector: job="integrations/kubernetes/cadvisor"
+      kubeletSelector: job="integrations/kubernetes/kubelet"
+      kubeApiserverSelector: job="integrations/kubernetes/kube-apiserver"
+      kubeProxySelector: job="integrations/kubernetes/kube-proxy"
+      kubeStateMetricsSelector: job="integrations/kubernetes/kube-state-metrics"
+      nodeExporterSelector: job="integrations/node_exporter"
+    source:
+      git:
+        url: https://github.com/kubernetes-monitoring/kubernetes-mixin.git
+        ref: master
+        depth: 1
+  opencost:
+    config:
+      mimirNamespace: opencost
+      grafanaDashboardFolder: Monitoring
+    source:
+      git:
+        url: https://github.com/adinhodovic/opencost-mixin.git
+        ref: main
+        depth: 1

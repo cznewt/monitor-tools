@@ -1,0 +1,11 @@
+# tsfresh
+jupyter
+scikit-learn
+pyEDM
+pandas-datareader
+papermill
+seaborn
+statsmodels
+notebook
+jupyterthemes
+jupyterlab-lsp

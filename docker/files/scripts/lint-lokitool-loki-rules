@@ -1,0 +1,12 @@
+#!/bin/bash
+
+BUILD_DIR="${BUILD_DIR:=/build/default/lokitool/loki-rules}"
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+
+for yaml_file in $yaml_files; do
+  echo "Linting lokitool MimirRule $yaml_file..."
+  lokitool rules lint $yaml_file
+done

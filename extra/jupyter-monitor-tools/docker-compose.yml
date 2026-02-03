@@ -1,0 +1,8 @@
+services:
+  jupyter-monitor-tools:
+    image: ghcr.io/cznewt/jupyter-monitor-tools:latest
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    ports:
+      - 8888:8888

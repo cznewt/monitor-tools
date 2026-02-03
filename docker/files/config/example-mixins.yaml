@@ -1,0 +1,37 @@
+name: example-mixins
+prometheus:
+  render: mimirtool
+grafana:
+  render: grizzly
+mixins:
+  argo-cd:
+    mixinDir: /source/mixins/argo-cd-mixin
+    vendorDir: /source/mixins/argo-cd-mixin/vendor
+    config:
+      mimirNamespace: argo-cd
+      grafanaDashboardFolder: Delivery
+    source:
+      git:
+        url: https://github.com/adinhodovic/argo-cd-mixin.git
+        ref: main
+        depth: 1
+  django:
+    mixinDir: /source/mixins/django-mixin
+    vendorDir: /source/mixins/django-mixin/vendor
+    config:
+      mimirNamespace: django
+      grafanaDashboardFolder: Web Service
+    source:
+      git:
+        url: https://github.com/adinhodovic/django-mixin.git
+        ref: main
+        depth: 1
+  blackbox-exporter:
+    config:
+      mimirNamespace: blackbox-exporter
+      grafanaDashboardFolder: Monitoring
+    source:
+      git:
+        url: https://github.com/adinhodovic/blackbox-exporter-mixin.git
+        ref: main
+        depth: 1    

@@ -1,0 +1,31 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/mimirtool/mimir-rules}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "[Error] Config file $CONFIG_FILE does not exist."; exit 1; fi
+ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
+pyrra=$(yq eval '.pyrra.slos | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$pyrra" = "null" ] || [ -z "$pyrra" ]; then
+  echo "No pyrra in $CONFIG_FILE config."
+  exit 0
+else
+  mkdir -p "$BUILD_DIR/raw-sloth-rules"
+  echo "Rendering plain PrometheusRules from pyrra definitions in $SOURCE_DIR/pyrra/pyrra-slos to $BUILD_DIR/raw-sloth-rules..."
+  pyrra generate --config-files="$SOURCE_DIR/pyrra/pyrra-slos/*.yaml" --prometheus-folder="$BUILD_DIR/raw-sloth-rules" --generic-rules
+
+  yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+
+  if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+
+  for yaml_file in $yaml_files; do
+    dst_file = "${yaml_file/\/raw-sloth-rules/}"
+    mv $yaml_file $dst_file
+    printf "\nnamespace: $ENV_NAME\n" >> $dst_file
+  done
+
+  mkdir -p "$BUILD_DIR/raw-sloth-rules" -rf
+
+fi

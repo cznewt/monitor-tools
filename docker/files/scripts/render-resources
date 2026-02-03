@@ -1,0 +1,60 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+
+mixins=$(yq eval ".mixins" "$CONFIG_FILE")
+ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
+grafana=$(yq eval ".grafana.render" "$CONFIG_FILE")
+prometheus=$(yq eval ".prometheus.render" "$CONFIG_FILE")
+alertmanager=$(yq eval ".alertmanager.render" "$CONFIG_FILE")
+pyrra=$(yq eval ".pyrra.render" "$CONFIG_FILE")
+sloth=$(yq eval ".sloth.render" "$CONFIG_FILE")
+
+if [ "$mixins" = "null" ] || [ -z "$mixins" ]; then
+  printf  "\nMixins not found in $CONFIG_FILE, skipping...\n"
+else
+  printf  "\nProcessing mixins from $CONFIG_FILE...\n"
+
+  # grafana resources
+  printf  "\nProcessing Grafana resources with $grafana processor...\n"
+  if [ "$grafana" = "grizzly" ]; then 
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-folders render-grizzly-grafana-folders
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
+  fi
+  if [ "$grafana" = "plain" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
+  fi
+
+  # prometheus resources
+  printf  "\nProcessing Prometheus resources with $prometheus processor...\n"
+  if [ "$prometheus" = "mimirtool" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-mimir-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules
+  fi
+  if [ "$prometheus" = "plain" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules
+  fi
+fi
+
+# alertmanager resources
+printf  "\nProcessing Alertmanager resources with $alertmanager processor...\n"
+if [ "$alertnamanger" = "mimirtool" ]; then 
+  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config render-mimirtool-alertmanager-config
+fi
+
+# pyrra resources
+printf  "\nProcessing Pyrra resources with $pyrra processor...\n"
+CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/pyrra/pyrra-slos render-pyrra-rules
+if [ "$pyrra" = "mimirtool" ]; then 
+  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-pyrra-prom-rules
+  #CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-pyrra-prom-rules
+fi
+
+# sloth resources
+printf  "\nProcessing Sloth resources with $sloth processor...\n"
+CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/sloth/sloth-slos render-sloth-rules
+if [ "$sloth" = "mimirtool" ]; then 
+  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-sloth-prom-rules
+fi

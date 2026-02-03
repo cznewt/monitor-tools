@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: monitor-tools
+  title: Monitor Tools
+  description: A collection of tools and scripts for management of monitoring resources as code.
+  tags:
+    - gitops
+  annotations:
+    github.com/project-slug: cznewt/monitor-tools
+spec:
+  type: tool
+  lifecycle: experimental

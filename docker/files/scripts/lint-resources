@@ -1,0 +1,40 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+
+ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
+grafana=$(yq eval ".grafana.render" "$CONFIG_FILE")
+prometheus=$(yq eval ".prometheus.render" "$CONFIG_FILE")
+loki=$(yq eval ".loki.render" "$CONFIG_FILE")
+alertmanager=$(yq eval ".alertmanager.render" "$CONFIG_FILE")
+
+# grafana resources
+if [ "$grafana" = "null" ] || [ -z "$grafana" ]; then
+    echo "No grafana defined in $CONFIG_FILE config."
+else
+  printf "\nLinting Grafana resources with $grafana processor...\n"
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards lint-plain-grafana-dashboards
+fi
+
+# prometheus resources
+if [ "$prometheus" = "null" ] || [ -z "$prometheus" ]; then
+    echo "No prometheus defined in $CONFIG_FILE config."
+else
+  printf  "\nLinting Prometheus resources with $prometheus processor...\n"
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules lint-mimirtool-mimir-rules
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/plain/prom-rules lint-plain-prom-rules
+fi
+
+# loki resources
+printf  "\nLinting Loki resources with $loki processor...\n"
+if [ "$loki" = "lokitool" ]; then
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/lokitool/loki-rules lint-lokitool-loki-rules
+fi
+
+# alertmanager resources
+printf  "\nLinting Alertmanager resources with $alertmanager processor...\n"
+
+if [ "$alertnamanger" = "mimirtool" ]; then 
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config lint-mimirtool-alertmanager-config
+fi

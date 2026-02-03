@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BUILD_DIR="${BUILD_DIR:=/build/default/lokitool/loki-rules}"
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+
+if [ -z "$LOKI_ADDRESS" ]; then echo "LOKI_ADDRESS not set, cannot connect to Loki server."; exit 1; fi
+if [ -z "$LOKI_TENANT_ID" ]; then echo "LOKI_TENANT_ID not set, cannot connect to Loki server."; exit 1; fi
+
+for yaml_file in $yaml_files; do
+  echo "Applying $yaml_file lokitool LokiRules to $LOKI_ADDRESS/$LOKI_TENANT_ID"
+  lokitool rules load "$yaml_file"
+done

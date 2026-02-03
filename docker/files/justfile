@@ -1,0 +1,44 @@
+#!/usr/bin/env just --justfile
+
+default:
+  just --list
+
+[group('grafana')]
+render-grizzly-grafana-datasources:
+  @render-grizzly-grafana-datasources
+
+[group('grafana')]
+render-grizzly-grafana-dashboards:
+  @render-grizzly-grafana-dashboards
+
+[group('mimir')]
+render-mimirtool-mimir-rules:
+  @render-mimirtool-mimir-rules
+
+[group('mimir')]
+render-mimirtool-am-config:
+  @render-mimirtool-am-config
+
+[group('slo')]
+render-plain-pyrra-rules:
+  @render-plain-pyrra-rules
+
+[group('grafana')]
+apply-grafana-datasources:
+  @apply-grafana-datasources
+
+[group('grafana')]
+apply-grafana-dashboards:
+  @apply-grafana-dashboards
+
+[group('mimir')]
+apply-mimir-rules:
+  @apply-mimir-rules
+
+[group('mimir')]
+apply-am-config:
+  @apply-am-config
+
+[group('slo')]
+apply-pyrra-rules:
+  @apply-pyrra-rules

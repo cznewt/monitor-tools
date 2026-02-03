@@ -1,0 +1,15 @@
+name: iot-monitoring
+prometheus:
+  render: mimirtool
+grafana:
+  render: grizzly
+mixins:
+  syncthing:
+    config:
+      mimirNamespace: syncthing
+      grafanaDashboardFolder: IoT
+    source:
+      git:
+        url: https://github.com/adinhodovic/syncthing-mixin.git
+        ref: main
+        depth: 1      
