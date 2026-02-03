@@ -3,7 +3,6 @@ site_description: A collection of tools and scripts for managing monitoring reso
 
 theme:
   name: readthedocs
-  highlightjs: true
 
 nav:
   - Home: index.md
@@ -14,7 +13,5 @@ nav:
     - Software: software.md
 
 markdown_extensions:
-  - admonition
-  - codehilite
   - toc:
       permalink: true

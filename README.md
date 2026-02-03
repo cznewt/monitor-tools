@@ -2,6 +2,15 @@
 
 A collection of tools and scripts for managing monitoring resources as a code. This toolkit simplifies the process of developing, linting, and deploying Grafana dashboards, Prometheus/Mimir rules, Loki rules, and SLOs.
 
+## Docker Images
+
+The project provides the following Docker images:
+
+- **Monitor Tools**: `ghcr.io/cznewt/monitor-tools:latest`
+  - Base image containing all necessary tools (Jsonnet, Grizzly, Mimirtool, etc.).
+- **Jupyter Monitor Tools**: `ghcr.io/cznewt/jupyter-monitor-tools:latest`
+  - JupyterLab environment pre-configured with Jsonnet language server and monitor tools.
+
 ## Scripts Overview
 
 The toolkit provides a suite of scripts located in `docker/files/scripts` to automate various stages of the monitoring lifecycle.
@@ -18,7 +27,9 @@ The toolkit provides a suite of scripts located in `docker/files/scripts` to aut
 For a full automation run (sync, render, lint, and apply), you can use the high-level orchestration script:
 
 ```bash
-do-all
+sync-all-mixins
+init-all-mixins
+render-all-resources
 ```
 
 ### Software & Tools
