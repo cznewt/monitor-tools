@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd /source
+
+mkdir -p /source/out/grafana_dashboards
+
+jsonnet -c -m /source/out/grafana_dashboards -J "/source/vendor" \
+  -e "local dashboards = {grafanaDashboards:: {}} + (import 'mixin.libsonnet').grafanaDashboards; { [name]: dashboards[name] for name in std.objectFields(dashboards) }"

@@ -18,6 +18,50 @@ The project provides the following Docker images:
 
 ## Usage
 
+### Local development and testing
+
+Use the following commands to manage your mixins locally:
+
+```
+#!/usr/bin/env just --justfile
+
+default:
+  just --list
+
+install-vendor:
+    @echo "Installing dependencies..."
+    @docker run --rm -v $(pwd):/source ghcr.io/cznewt/monitor-tools:latest install-standalone-mixin
+
+clean-vendor:
+	  @rm -rf vendor
+	  @rm jsonnetfile.lock.json
+
+clean-builds:
+	  @rm -rf out
+
+format-jsonnet:
+    @echo "Formatting jsonnet files..."
+    @docker run --rm -v $(pwd):/source ghcr.io/cznewt/monitor-tools:latest format-standalone-mixin
+
+render-grafana-dashboards:
+    @echo "Rendering grafana dashboards to out/grafana_dashboards..."
+    @docker run --rm -v $(pwd):/source ghcr.io/cznewt/monitor-tools:latest render-standalone-grafana-dashboards
+
+render-prometheus-alerts:
+    @echo "Rendering prometheus alerts to out/prometheus_alerts..."
+    @docker run --rm -v $(pwd):/source ghcr.io/cznewt/monitor-tools:latest render-standalone-prom-alerts
+
+lint-grafana-dashboards:
+    @echo "Linting grafana dashboards at out/grafana_dashboards..."
+    @docker run --rm -v $(pwd):/source ghcr.io/cznewt/monitor-tools:latest lint-standalone-grafana-dashboards
+
+lint-prometheus-alerts:
+    @echo "Linting prometheus alerts at out/prometheus_alerts..."
+    @docker run --rm -v $(pwd):/source ghcr.io/cznewt/monitor-tools:latest lint-standalone-prom-alerts
+```
+
+### As service
+
 For a full automation run (sync, render, lint, and apply), you can use the high-level orchestration script:
 
 ```bash
@@ -26,7 +70,7 @@ init-all-mixins
 render-all-resources
 ```
 
-### Tools
+## Tools
 
 | Tool | Version | Description |
 | :--- | :--- | :--- |

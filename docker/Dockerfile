@@ -156,27 +156,34 @@ RUN apt-get update --yes && \
     pipx && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN mkdir -p /build && \
+    mkdir -p /source
 
 COPY ./files/requirements.txt /requirements-base.txt
-COPY ./files/mixins /mixins
-COPY ./files/config /config
-COPY ./files/scripts /scripts
-
-RUN mkdir -p /build && \
-    mkdir -p /source && \
-    chown ubuntu:ubuntu /scripts -R && \
-    chown ubuntu:ubuntu /config -R && \
-    chown ubuntu:ubuntu /mixins -R && \
-    chown ubuntu:ubuntu /build -R && \
-    chown ubuntu:ubuntu /source -R 
 
 USER ubuntu
 
-COPY ./files/justfile /source/justfile
-
-WORKDIR /source
+WORKDIR /home/ubuntu
 
 RUN uv venv && \
     uv pip install -r /requirements-base.txt
 
-ENV PATH="${PATH}:/usr/local/go/bin:/scripts:/source/.venv/bin:/home/ubuntu/.local/bin"
+USER root
+
+COPY ./files/mixins /mixins
+COPY ./files/config /config
+COPY ./files/scripts /scripts
+COPY ./files/justfile /home/ubuntu/justfile
+
+RUN chown ubuntu:ubuntu /scripts -R && \
+    chown ubuntu:ubuntu /config -R && \
+    chown ubuntu:ubuntu /mixins -R && \
+    chown ubuntu:ubuntu /home/ubuntu/justfile -R && \
+    chown ubuntu:ubuntu /build -R && \
+    chown ubuntu:ubuntu /source -R 
+
+WORKDIR /source
+
+ENV PATH="${PATH}:/usr/local/go/bin:/scripts:/home/ubuntu/.venv/bin:/home/ubuntu/.local/bin"
+
+USER ubuntu
