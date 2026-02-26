@@ -1,5 +1,3 @@
 #!/bin/bash
 
-cd /source
-
 BUILD_DIR="/source/out/grafana_dashboards" lint-plain-grafana-dashboards

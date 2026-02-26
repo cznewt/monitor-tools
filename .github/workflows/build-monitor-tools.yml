@@ -3,18 +3,18 @@ name: Build monitor-tools
 on:
   workflow_dispatch:
   push:
-    branches: ["main", "master"]
+    branches: ["main"]
     paths:
       - docker/**
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: cznewton/monitor-tools
+  IMAGE_NAME: cznewt/monitor-tools
 
 jobs:
   build-monitor-tools:
     name: "Build monitor-tools"
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/docker-publish.yml
     permissions:
       contents: read

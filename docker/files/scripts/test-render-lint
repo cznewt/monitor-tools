@@ -7,7 +7,6 @@ BUILD_DIR="/source/$CONFIG_NAME"
 sync-mixins
 
 SOURCE_DIR="/source/$CONFIG_NAME"
-
 init-mixins
 
 render-resources
