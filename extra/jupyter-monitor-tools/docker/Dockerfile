@@ -20,7 +20,7 @@ COPY ./files/jupyter /home/ubuntu/.jupyter
 
 RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
-RUN uv pip install --system --no-cache-dir -r /requirements-notebook.txt
+RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-notebook.txt
 
 USER ubuntu
 
