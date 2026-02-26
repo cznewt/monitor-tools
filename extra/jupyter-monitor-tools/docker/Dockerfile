@@ -22,9 +22,9 @@ RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
 RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-notebook.txt
 
-USER ubuntu
-
 RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+USER ubuntu
 
 EXPOSE 8888
 
