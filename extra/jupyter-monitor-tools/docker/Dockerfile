@@ -20,9 +20,9 @@ COPY ./files/jupyter /home/ubuntu/.jupyter
 
 RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
-USER ubuntu
+RUN uv pip install --system --no-cache-dir -r /requirements-notebook.txt
 
-RUN uv pip install --no-cache-dir -r /requirements-notebook.txt
+USER ubuntu
 
 RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
