@@ -10,11 +10,11 @@ on:
     inputs:
       APP_NAME:
         description: "The app to publish"
-        default: app-name
+        default: model-tools
         type: string
       APP_DIR:
         description: "The app directory"
-        default: app-dir/docker
+        default: docker
         type: string
 
   # push:
@@ -24,7 +24,6 @@ on:
   # create:
   # pull_request:
   #   branches: [ "main" ]
-
 
 env:
   # Use docker.io for Docker Hub if empty
