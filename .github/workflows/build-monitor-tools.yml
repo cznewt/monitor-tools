@@ -6,6 +6,7 @@ on:
     branches: ["main"]
     paths:
       - docker/**
+      - extra/jupyter-monitor-tools/docker/**
 
 env:
   REGISTRY: ghcr.io
@@ -24,3 +25,17 @@ jobs:
     with:
       APP_NAME: monitor-tools
       APP_DIR: docker
+
+  build-jupyter-monitor-tools:
+    name: "Build jupyter-monitor-tools"
+    needs: build-monitor-tools
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/docker-publish.yml
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    secrets: inherit
+    with:
+      APP_NAME: jupyter-monitor-tools
+      APP_DIR: extra/jupyter-monitor-tools/docker
