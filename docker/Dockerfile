@@ -51,7 +51,7 @@ ENV SLOTH_VERSION=${SLOTH_VERSION}
 RUN curl -fSL -o "sloth" "https://github.com/slok/sloth/releases/download/${SLOTH_VERSION}/sloth-linux-${PKG_ARCH}" && \
     chmod +x "sloth"
 
-ARG PYRRA_VERSION=0.9.0
+ARG PYRRA_VERSION=0.9.3
 ENV PYRRA_VERSION=${PYRRA_VERSION}
 RUN curl -fSL -o "pyrra.tar.gz" "https://github.com/pyrra-dev/pyrra/releases/download/v${PYRRA_VERSION}/pyrra_${PYRRA_VERSION}_Linux_x86_64.tar.gz" && \
     tar xvzf pyrra.tar.gz && \
