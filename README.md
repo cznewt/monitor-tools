@@ -11,10 +11,17 @@ A collection of tools and scripts for managing monitoring resources as a code. T
 
 The project provides the following Docker images:
 
-- **Monitor Tools**: `ghcr.io/cznewt/monitor-tools:latest`
-  - Base image containing all necessary tools (Jsonnet, Grizzly, Mimirtool, etc.).
-- **Jupyter Monitor Tools**: `ghcr.io/cznewt/jupyter-monitor-tools:latest`
-  - JupyterLab environment pre-configured with Jsonnet language server and monitor tools.
+### Monitor Tools
+
+Base image containing all necessary tools (Jsonnet, Grizzly, Mimirtool, etc.).
+
+- `ghcr.io/cznewt/monitor-tools:latest`
+
+### Jupyter Monitor Tools
+
+JupyterLab environment pre-configured with Jsonnet language server and monitor tools.
+
+- `ghcr.io/cznewt/jupyter-monitor-tools:latest`
 
 ## Usage
 
