@@ -184,6 +184,6 @@ RUN chown ubuntu:ubuntu /scripts -R && \
 
 WORKDIR /source
 
-ENV PATH="${PATH}:/usr/local/go/bin:/scripts:/home/ubuntu/.venv/bin:/home/ubuntu/.local/bin"
+ENV PATH="/usr/local/go/bin:/scripts:/home/ubuntu/.local/bin:/home/ubuntu/.venv/bin:${PATH}"
 
 USER ubuntu
