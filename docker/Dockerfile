@@ -182,3 +182,4 @@ ENV PATH="/usr/local/go/bin:/scripts:/home/ubuntu/.local/bin:/home/ubuntu/.venv/
 USER ubuntu
 
 WORKDIR /home/ubuntu
+
