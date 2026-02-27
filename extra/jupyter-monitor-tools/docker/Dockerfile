@@ -22,11 +22,11 @@ COPY ./files/jupyter /home/ubuntu/.jupyter
 
 RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
-USER ubuntu
+RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-notebook.txt && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
-RUN uv venv && \
-    uv pip install --no-cache-dir -r /requirements-notebook.txt
+USER ubuntu
 
 EXPOSE 8888
 
-CMD ["/home/ubuntu/.venv/bin/jupyter", "lab", "--config=/home/ubuntu/.jupyter/jupyter_notebook_config.py"]
+CMD ["jupyter", "lab", "--config=/home/ubuntu/.jupyter/jupyter_notebook_config.py"]

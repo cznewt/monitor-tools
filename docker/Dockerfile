@@ -161,14 +161,7 @@ RUN mkdir -p /build && \
 
 COPY ./files/requirements.txt /requirements-base.txt
 
-USER ubuntu
-
-WORKDIR /home/ubuntu
-
-RUN uv venv && \
-    uv pip install -r /requirements-base.txt
-
-USER root
+RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-base.txt
 
 COPY ./files/mixins /mixins
 COPY ./files/config /config
@@ -187,3 +180,5 @@ WORKDIR /source
 ENV PATH="/usr/local/go/bin:/scripts:/home/ubuntu/.local/bin:/home/ubuntu/.venv/bin:${PATH}"
 
 USER ubuntu
+
+WORKDIR /home/ubuntu
