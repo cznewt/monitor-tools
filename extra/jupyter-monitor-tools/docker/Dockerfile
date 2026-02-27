@@ -25,8 +25,7 @@ RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 USER ubuntu
 
 RUN uv venv && \
-    uv pip install --no-cache-dir -r /requirements-notebook.txt && \
-    jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+    uv pip install --no-cache-dir -r /requirements-notebook.txt
 
 EXPOSE 8888
 

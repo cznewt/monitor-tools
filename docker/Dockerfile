@@ -186,5 +186,4 @@ WORKDIR /source
 
 ENV PATH="${PATH}:/usr/local/go/bin:/scripts:/home/ubuntu/.venv/bin:/home/ubuntu/.local/bin"
 
-
 USER ubuntu
