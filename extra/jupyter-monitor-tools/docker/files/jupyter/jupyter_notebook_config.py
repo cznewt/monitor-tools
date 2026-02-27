@@ -2,10 +2,15 @@ import os
 
 c.ServerApp.ip = '*'
 if 'JUPYTER_PASSWORD' in os.environ:
-    c.ServerApp.password = os.environ['JUPYTER_PASSWORD']
+    c.PasswordIdentityProvider.hashed_password = os.environ['JUPYTER_PASSWORD']
+
 c.NotebookApp.open_browser = False
 
 c.ServerApp.root_dir = '/source'
+
+c.NotebookApp.terminado_settings = {
+    "shell_command": ["/usr/bin/fish"]
+}
 
 c.LanguageServerApp.language_servers = {
     "jsonnet-language-server": {

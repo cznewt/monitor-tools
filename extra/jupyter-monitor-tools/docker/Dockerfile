@@ -10,7 +10,9 @@ RUN curl -fSL -o "jsonnet-language-server" "https://github.com/grafana/jsonnet-l
     mv "jsonnet-language-server" "/usr/local/bin/jsonnet-language-server"
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
+    apt-add-repository ppa:fish-shell/release-3 && \
+    apt-get update && \
+    apt-get install -y nodejs fish
 
 RUN npm i -g bash-language-server && \
     npm i -g yaml-language-server && \
@@ -20,11 +22,11 @@ COPY ./files/jupyter /home/ubuntu/.jupyter
 
 RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
-RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-notebook.txt
-
-RUN jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
-
 USER ubuntu
+
+RUN uv venv && \
+    uv pip install --no-cache-dir -r /requirements-notebook.txt && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 EXPOSE 8888
 

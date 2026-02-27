@@ -50,6 +50,7 @@ jobs:
       packages: read
     container:
       image: ghcr.io/cznewt/monitor-tools:latest
+      options: --user root
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
