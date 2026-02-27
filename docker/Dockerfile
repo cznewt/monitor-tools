@@ -153,7 +153,7 @@ RUN apt-get update --yes && \
     gnupg \
     python3-pip \
     python3-dev \
-    apt-add-repository \
+    software-properties-common \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /build && \
