@@ -8,6 +8,7 @@
       for name in std.objectFields(config.alertmanager.templates)
     },
   promAlertRuleGroups(mixin, config)::
+    local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
     local namespace = (if std.objectHasAll(config, 'mimirNamespace') then config.mimirNamespace else config.mixinName);
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
     {
@@ -17,9 +18,11 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
+      if group.name not in lokiRuleGroups
       for group in alerts.groups
     },
   promRecordRuleGroups(mixin, config)::
+    local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
     local namespace = (if std.objectHasAll(config, 'mimirNamespace') then config.mimirNamespace else config.mixinName);
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     {
@@ -29,9 +32,11 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
+      if group.name not in lokiRuleGroups
       for group in rules.groups
     },
   promRuleGroups(mixin, config)::
+    local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
     local namespace = (if std.objectHasAll(config, 'mimirNamespace') then config.mimirNamespace else config.mixinName);
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
@@ -42,6 +47,7 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
+      if group.name not in lokiRuleGroups
       for group in alerts.groups
     } +
     {
@@ -51,6 +57,7 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
+      if group.name not in lokiRuleGroups
       for group in rules.groups
     },
 }
