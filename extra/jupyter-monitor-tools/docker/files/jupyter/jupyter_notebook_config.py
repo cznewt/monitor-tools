@@ -1,14 +1,14 @@
 import os
 
-c.ServerApp.ip = '*'
+
 if 'JUPYTER_PASSWORD' in os.environ:
     c.PasswordIdentityProvider.hashed_password = os.environ['JUPYTER_PASSWORD']
 
 c.NotebookApp.open_browser = False
 
+c.ServerApp.ip = '*'
 c.ServerApp.root_dir = '/source'
-
-c.NotebookApp.terminado_settings = {
+c.ServerApp.terminado_settings = {
     "shell_command": ["/usr/bin/fish"]
 }
 
