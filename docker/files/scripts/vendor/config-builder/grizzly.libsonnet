@@ -76,10 +76,10 @@ local utils = (import './utils.libsonnet');
         apiVersion: 'grizzly.grafana.com/v1alpha1',
         kind: 'Dashboard',
         metadata: {
-          folder: folder,
+          folder: utils.slugify(folder),
           name: std.strReplace(name, '.json', ''),
         },
-        spec: mixin.grafanaDashboards[name],
+        spec: mixin.grafanaDashboards[name] { uid: std.strReplace(name, '.json', '') },
       }, indent_array_in_object=true, quote_keys=false)
       for name in std.objectFields(if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {})
     },
