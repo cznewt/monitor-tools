@@ -10,8 +10,8 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name in lokiRuleGroups
       for group in alerts.groups
+      if std.member(lokiRuleGroups, group.name)
     },
   lokiRecordRuleGroups(mixin, config)::
     local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
@@ -24,8 +24,8 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name in lokiRuleGroups
       for group in rules.groups
+      if std.member(lokiRuleGroups, group.name)
     },
   lokiRuleGroups(mixin, config)::
     local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
@@ -39,8 +39,8 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name in lokiRuleGroups
       for group in alerts.groups
+      if std.member(lokiRuleGroups, group.name)
     } +
     {
       [group.name + '.yaml']: std.manifestYamlDoc({
@@ -49,7 +49,7 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name in lokiRuleGroups
       for group in rules.groups
+      if std.member(lokiRuleGroups, group.name)
     },
 }

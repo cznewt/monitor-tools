@@ -18,8 +18,8 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name not in lokiRuleGroups
       for group in alerts.groups
+      if !std.member(lokiRuleGroups, group.name)
     },
   promRecordRuleGroups(mixin, config)::
     local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
@@ -32,8 +32,8 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name not in lokiRuleGroups
       for group in rules.groups
+      if !std.member(lokiRuleGroups, group.name)
     },
   promRuleGroups(mixin, config)::
     local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
@@ -47,8 +47,8 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name not in lokiRuleGroups
       for group in alerts.groups
+      if !std.member(lokiRuleGroups, group.name)
     } +
     {
       [group.name + '.yaml']: std.manifestYamlDoc({
@@ -57,7 +57,7 @@
           group,
         ],
       }, indent_array_in_object=true, quote_keys=false)
-      if group.name not in lokiRuleGroups
       for group in rules.groups
+      if !std.member(lokiRuleGroups, group.name)
     },
 }

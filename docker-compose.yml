@@ -8,6 +8,7 @@ services:
     volumes:
       - ./docker/files/mixins:/mixins
       - ./docker/files/scripts:/scripts
-      - ./docker/files/config:/config
-    environment:
-      - JUPYTER_PASSWORD=localdev
+      - ./docker/files/config_dev:/config
+    env_file: ".env"
+    ports:
+      - 8888:8888
