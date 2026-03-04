@@ -15,7 +15,7 @@ mixins:
         depth: 1
       includePaths:
         - operations/alloy-mixin/**/*
-      newRootPath: operations/alloy-mixin  
+      newRootPath: operations/alloy-mixin
   cert-manager:
     config:
       mimirNamespace: cert-manager
@@ -51,6 +51,8 @@ mixins:
     config:
       mimirNamespace: kubernetes-events
       grafanaDashboardFolder: Platform
+      lokiRuleGroups:
+        - kubernetes-events.rules
     source:
       git:
         url: https://github.com/adinhodovic/kubernetes-events-mixin.git

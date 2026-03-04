@@ -1,11 +1,13 @@
 services:
   monitor-tools:
-    command: sleep infinity
-    build:
-      context: ./docker
-      dockerfile: Dockerfile
-    image: ghcr.io/cznewt/monitor-tools:latest
+    # command: sleep infinity
+    # build:
+    #   context: ./docker
+    #   dockerfile: Dockerfile
+    image: ghcr.io/cznewt/jupyter-monitor-tools:latest
     volumes:
       - ./docker/files/mixins:/mixins
       - ./docker/files/scripts:/scripts
       - ./docker/files/config:/config
+    environment:
+      - JUPYTER_PASSWORD=localdev

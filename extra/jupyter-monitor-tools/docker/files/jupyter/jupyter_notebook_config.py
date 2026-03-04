@@ -4,8 +4,6 @@ import os
 if 'JUPYTER_PASSWORD' in os.environ:
     c.PasswordIdentityProvider.hashed_password = os.environ['JUPYTER_PASSWORD']
 
-c.NotebookApp.open_browser = False
-
 c.ServerApp.ip = '*'
 c.ServerApp.root_dir = '/source'
 c.ServerApp.terminado_settings = {

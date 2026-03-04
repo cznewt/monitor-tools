@@ -29,5 +29,5 @@ USER ubuntu
 
 EXPOSE 8888
 
-CMD ["jupyter", "lab", "--config=/home/ubuntu/.jupyter/jupyter_notebook_config.py"]
+CMD ["jupyter", "lab", "--no-browser", "--config=/home/ubuntu/.jupyter/jupyter_notebook_config.py"]
 
