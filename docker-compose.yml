@@ -9,6 +9,7 @@ services:
       - ./docker/files/mixins:/mixins
       - ./docker/files/scripts:/scripts
       - ./docker/files/config_dev:/config
+      - ./notebooks:/source/notebooks
     env_file: ".env"
     ports:
       - 8888:8888
