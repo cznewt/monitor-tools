@@ -8,7 +8,7 @@ dashboards:
   # Bump `revision` to release a new version of the dashboard.
   node-exporter-full:
     source:
-      grafanaCom:
+      grafana:
         id: 1860
         revision: 41
     config:

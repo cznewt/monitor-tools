@@ -60,9 +60,9 @@ mixins:
 
 ## Static Dashboard Configuration
 
-The `dashboards` section pulls released Grafana dashboards as raw JSON and turns them into Grizzly resources. Each entry must be pinned (revision number for `grafanaCom`, optional `sha256` for `http`) so that builds are reproducible. To release a new version of a dashboard, bump the pin and resync.
+The `dashboards` section pulls released Grafana dashboards as raw JSON and turns them into Grizzly resources. Each entry must be pinned (revision number for `grafana`, optional `sha256` for `http`) so that builds are reproducible. To release a new version of a dashboard, bump the pin and resync.
 
-### Source: `grafanaCom`
+### Source: `grafana`
 
 Fetches a published revision from the Grafana.com community dashboards catalog (`https://grafana.com/grafana/dashboards/<id>`).
 
@@ -70,7 +70,7 @@ Fetches a published revision from the Grafana.com community dashboards catalog (
 dashboards:
   node-exporter-full:
     source:
-      grafanaCom:
+      grafana:
         id: 1860
         revision: 41          # required — acts as the release pin
     config:
@@ -100,7 +100,7 @@ dashboards:
 
 ### Fields
 
-- **source.grafanaCom.id** / **source.grafanaCom.revision**: Dashboard ID and revision number from grafana.com. The revision is the release identifier — never use "latest".
+- **source.grafana.id** / **source.grafana.revision**: Dashboard ID and revision number from grafana.com. The revision is the release identifier — never use "latest".
 - **source.http.url**: Direct URL to dashboard JSON.
 - **source.http.sha256** (optional): SHA-256 of the file. If provided, sync aborts on mismatch.
 - **config.grafanaDashboardFolder** (optional): Target folder in Grafana. A folder resource is generated automatically.

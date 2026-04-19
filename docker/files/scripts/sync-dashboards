@@ -17,21 +17,21 @@ mkdir -p "$BUILD_DIR/dashboards"
 for raw in $dashboards; do
   name=${raw#- }
 
-  grafana_id=$(yq eval ".dashboards.\"${name}\".source.grafanaCom.id" "$CONFIG_FILE")
-  grafana_rev=$(yq eval ".dashboards.\"${name}\".source.grafanaCom.revision" "$CONFIG_FILE")
+  grafana_id=$(yq eval ".dashboards.\"${name}\".source.grafana.id" "$CONFIG_FILE")
+  grafana_rev=$(yq eval ".dashboards.\"${name}\".source.grafana.revision" "$CONFIG_FILE")
   http_url=$(yq eval ".dashboards.\"${name}\".source.http.url" "$CONFIG_FILE")
   expected_sha=$(yq eval ".dashboards.\"${name}\".source.http.sha256" "$CONFIG_FILE")
 
   if [ "$grafana_id" != "null" ] && [ -n "$grafana_id" ]; then
     if [ "$grafana_rev" = "null" ] || [ -z "$grafana_rev" ]; then
-      echo "Error: dashboard '$name' is missing required source.grafanaCom.revision (release pin)."
+      echo "Error: dashboard '$name' is missing required source.grafana.revision (release pin)."
       exit 1
     fi
     url="https://grafana.com/api/dashboards/${grafana_id}/revisions/${grafana_rev}/download"
   elif [ "$http_url" != "null" ] && [ -n "$http_url" ]; then
     url="$http_url"
   else
-    echo "Error: dashboard '$name' must define either source.grafanaCom or source.http."
+    echo "Error: dashboard '$name' must define either source.grafana or source.http."
     exit 1
   fi
 
