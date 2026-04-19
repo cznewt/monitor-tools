@@ -39,6 +39,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Stage repo-root assets into per-app build context where needed.
+      # The jupyter image bakes the notebooks/ tree from the repo root.
+      - name: Stage notebooks into jupyter build context
+        if: inputs.APP_NAME == 'jupyter-monitor-tools'
+        run: |
+          if [ -d notebooks ]; then
+            mkdir -p "${APP_DIR}/files/notebooks"
+            cp -r notebooks/. "${APP_DIR}/files/notebooks/"
+          fi
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign
