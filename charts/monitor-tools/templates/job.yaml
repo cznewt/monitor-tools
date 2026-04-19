@@ -1,0 +1,43 @@
+{{- if .Values.job.enabled }}
+{{- if .Values.job.schedule }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "monitor-tools.fullname" . }}
+  labels:
+    {{- include "monitor-tools.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.job.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.job.successfulJobsHistoryLimit | default 3 }}
+  failedJobsHistoryLimit: {{ .Values.job.failedJobsHistoryLimit | default 1 }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ .Values.job.backoffLimit | default 1 }}
+      ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished | default 300 }}
+      template:
+        metadata:
+          labels:
+            {{- include "monitor-tools.selectorLabels" . | nindent 12 }}
+        spec:
+          restartPolicy: OnFailure
+          {{- include "monitor-tools.podSpec" . | nindent 10 }}
+{{- else }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "monitor-tools.fullname" . }}
+  labels:
+    {{- include "monitor-tools.labels" . | nindent 4 }}
+spec:
+  backoffLimit: {{ .Values.job.backoffLimit | default 1 }}
+  ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished | default 300 }}
+  template:
+    metadata:
+      labels:
+        {{- include "monitor-tools.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      {{- include "monitor-tools.podSpec" . | nindent 6 }}
+{{- end }}
+{{- end }}

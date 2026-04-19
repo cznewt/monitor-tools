@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-jupyter
+  name: {{ include "jupyter-monitor-tools.fullname" . }}
   labels:
-    app: {{ .Release.Name }}-jupyter
+    {{- include "jupyter-monitor-tools.labels" . | nindent 4 }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-jupyter
+      {{- include "jupyter-monitor-tools.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-jupyter
+        {{- include "jupyter-monitor-tools.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: jupyter
@@ -22,5 +22,33 @@ spec:
             - name: http
               containerPort: 8888
               protocol: TCP
+          {{- if or .Values.env .Values.existingSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ include "jupyter-monitor-tools.secretName" . }}
+          {{- end }}
+          {{- if .Values.configs }}
+          volumeMounts:
+            - name: configs
+              mountPath: /config
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.configs }}
+      volumes:
+        - name: configs
+          configMap:
+            name: {{ include "jupyter-monitor-tools.fullname" . }}-configs
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

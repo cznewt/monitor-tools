@@ -1,0 +1,18 @@
+{{- $files := .Files.Glob (.Values.configsDir | default "configs/*.yaml") }}
+{{- if or .Values.configs (and $files (gt (len $files) 0)) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jupyter-monitor-tools.fullname" . }}-configs
+  labels:
+    {{- include "jupyter-monitor-tools.labels" . | nindent 4 }}
+data:
+{{- range $path, $bytes := $files }}
+  {{ base $path }}: |
+{{ $.Files.Get $path | indent 4 }}
+{{- end }}
+{{- range $name, $body := .Values.configs }}
+  {{ $name }}: |
+{{ $body | indent 4 }}
+{{- end }}
+{{- end }}
