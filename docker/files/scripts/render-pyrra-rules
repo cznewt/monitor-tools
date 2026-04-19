@@ -5,7 +5,7 @@ VENDOR_DIR="/scripts/vendor"
 BUILD_DIR="${BUILD_DIR:=/source/default/pyrra/pyrra-slos}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
-pyrra=$(yq eval '.pyrra.slos | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+pyrra=$(yq eval '.pyrra.slos | keys' "$CONFIG_FILE" 2>/dev/null | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
 
 if [ "$pyrra" = "null" ] || [ -z "$pyrra" ]; then
     echo "No pyrra in $CONFIG_FILE config."
