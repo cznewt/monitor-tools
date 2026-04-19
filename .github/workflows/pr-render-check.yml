@@ -8,6 +8,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: cznewt/monitor-tools
   PR_IMAGE_TAG: monitor-tools:pr-${{ github.event.pull_request.number }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   changes:
