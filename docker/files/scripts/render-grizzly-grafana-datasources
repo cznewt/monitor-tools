@@ -5,7 +5,7 @@ VENDOR_DIR="/scripts/vendor"
 SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/grizzly/grafana-datasources}"
 
-grafana=$(yq eval '.grafana.datasources | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+grafana=$(yq eval '.grafana.datasources | keys' "$CONFIG_FILE" 2>/dev/null | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
 
 if [ "$grafana" = "null" ] || [ -z "$grafana" ]; then
     echo "No grafana defined in $CONFIG_FILE config."

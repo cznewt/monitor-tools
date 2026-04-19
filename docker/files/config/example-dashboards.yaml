@@ -18,13 +18,11 @@ dashboards:
         DS_PROMETHEUS: prometheus
   # Generic HTTP source — any URL that returns Grafana dashboard JSON.
   # Optional `sha256` pins the exact bytes for reproducibility.
-  cadvisor:
+  loki-chunks:
     source:
       http:
-        url: https://raw.githubusercontent.com/google/cadvisor/master/deploy/grafana/cadvisor.json
+        url: https://raw.githubusercontent.com/grafana/loki/main/production/loki-mixin-compiled/dashboards/loki-chunks.json
         # sha256: <hex digest of the JSON file>
     config:
-      grafanaDashboardFolder: Platform
-      uid: cadvisor
-      datasources:
-        DS_PROMETHEUS: prometheus
+      grafanaDashboardFolder: Logging
+      uid: loki-chunks

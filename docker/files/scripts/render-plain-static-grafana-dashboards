@@ -7,17 +7,17 @@ BUILD_DIR="${BUILD_DIR:=/build/default/plain/grafana-dashboards}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 
-keys=$(yq eval '.dashboards | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+keys=$(yq eval '.dashboards | keys | .[]' "$CONFIG_FILE" 2>/dev/null)
 
-if [ "$keys" = "null" ] || [ -z "$keys" ]; then
+if [ -z "$keys" ]; then
   echo "No static dashboards defined in $CONFIG_FILE."
   exit 0
 fi
 
 mkdir -p "$BUILD_DIR"
 
-for raw in $keys; do
-  key=${raw#- }
+for key in $keys; do
+  if [ -z "$key" ]; then continue; fi
   jsonFile="$SOURCE_DIR/dashboards/${key}.json"
   if [ ! -f "$jsonFile" ]; then
     echo "Warning: $jsonFile is missing — run sync-dashboards first."

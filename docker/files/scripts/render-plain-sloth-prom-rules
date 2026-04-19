@@ -5,7 +5,7 @@ SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/plain/prom-rules}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
-sloth=$(yq eval '.sloth.slos | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+sloth=$(yq eval '.sloth.slos | keys' "$CONFIG_FILE" 2>/dev/null | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
 
 if [ "$sloth" = "null" ] || [ -z "$sloth" ]; then
     echo "No sloth in $CONFIG_FILE config."

@@ -53,9 +53,11 @@ else
 fi
 
 # alertmanager resources
-printf  "\nProcessing Alertmanager resources with $alertmanager processor...\n"
-if [ "$alertnamanger" = "mimirtool" ]; then 
-  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config render-mimirtool-alertmanager-config
+if [ "$alertmanager" != "null" ] && [ -n "$alertmanager" ]; then
+  printf  "\nProcessing Alertmanager resources with $alertmanager processor...\n"
+  if [ "$alertmanager" = "mimirtool" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config render-mimirtool-alertmanager-config
+  fi
 fi
 
 # pyrra resources
