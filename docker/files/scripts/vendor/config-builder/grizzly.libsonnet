@@ -83,6 +83,39 @@ local utils = (import './utils.libsonnet');
       }, indent_array_in_object=true, quote_keys=false)
       for name in std.objectFields(if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {})
     },
+  staticGrafanaDashboard(name, rawJson, config)::
+    local datasources = if std.objectHas(config, 'datasources') then config.datasources else {};
+    local applied = std.foldl(
+      function(acc, k) std.strReplace(acc, '${' + k + '}', datasources[k]),
+      std.objectFields(datasources),
+      rawJson
+    );
+    local dashboard = std.parseJson(applied);
+    local folder = if std.objectHas(config, 'grafanaDashboardFolder') then config.grafanaDashboardFolder else 'General';
+    local uid = if std.objectHas(config, 'uid') then config.uid else utils.slugify(name);
+    {
+      [name + '.yaml']: std.manifestYamlDoc({
+        apiVersion: 'grizzly.grafana.com/v1alpha1',
+        kind: 'Dashboard',
+        metadata: {
+          [if folder != 'General' then 'folder']: utils.slugify(folder),
+          name: uid,
+        },
+        spec: dashboard { uid: uid },
+      }, indent_array_in_object=true, quote_keys=false),
+    },
+  staticGrafanaDashboardPlain(name, rawJson, config)::
+    local datasources = if std.objectHas(config, 'datasources') then config.datasources else {};
+    local applied = std.foldl(
+      function(acc, k) std.strReplace(acc, '${' + k + '}', datasources[k]),
+      std.objectFields(datasources),
+      rawJson
+    );
+    local dashboard = std.parseJson(applied);
+    local uid = if std.objectHas(config, 'uid') then config.uid else utils.slugify(name);
+    {
+      [name + '.json']: std.manifestJsonEx(dashboard { uid: uid }, '  '),
+    },
   prometheusRuleGroups(mixin, config)::
     local namespace = if std.objectHas(config, 'prometheusNamespace') then config.prometheusNamespace else 'default';
     {

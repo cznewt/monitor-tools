@@ -1,0 +1,54 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+BUILD_DIR="${BUILD_DIR:=/source/default}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+
+dashboards=$(yq eval '.dashboards | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$dashboards" = "null" ] || [ -z "$dashboards" ]; then
+  echo "No dashboards found in $CONFIG_FILE."
+  exit 0
+fi
+
+mkdir -p "$BUILD_DIR/dashboards"
+
+for raw in $dashboards; do
+  name=${raw#- }
+
+  grafana_id=$(yq eval ".dashboards.\"${name}\".source.grafanaCom.id" "$CONFIG_FILE")
+  grafana_rev=$(yq eval ".dashboards.\"${name}\".source.grafanaCom.revision" "$CONFIG_FILE")
+  http_url=$(yq eval ".dashboards.\"${name}\".source.http.url" "$CONFIG_FILE")
+  expected_sha=$(yq eval ".dashboards.\"${name}\".source.http.sha256" "$CONFIG_FILE")
+
+  if [ "$grafana_id" != "null" ] && [ -n "$grafana_id" ]; then
+    if [ "$grafana_rev" = "null" ] || [ -z "$grafana_rev" ]; then
+      echo "Error: dashboard '$name' is missing required source.grafanaCom.revision (release pin)."
+      exit 1
+    fi
+    url="https://grafana.com/api/dashboards/${grafana_id}/revisions/${grafana_rev}/download"
+  elif [ "$http_url" != "null" ] && [ -n "$http_url" ]; then
+    url="$http_url"
+  else
+    echo "Error: dashboard '$name' must define either source.grafanaCom or source.http."
+    exit 1
+  fi
+
+  dest="$BUILD_DIR/dashboards/${name}.json"
+  echo "Fetching dashboard '$name' from $url..."
+  if ! curl -fsSL -o "$dest" "$url"; then
+    echo "Error: failed to download dashboard '$name' from $url."
+    exit 1
+  fi
+
+  if [ "$expected_sha" != "null" ] && [ -n "$expected_sha" ]; then
+    actual_sha=$(sha256sum "$dest" | awk '{print $1}')
+    if [ "$actual_sha" != "$expected_sha" ]; then
+      echo "Error: SHA-256 mismatch for dashboard '$name'."
+      echo "  expected: $expected_sha"
+      echo "  actual:   $actual_sha"
+      exit 1
+    fi
+  fi
+done

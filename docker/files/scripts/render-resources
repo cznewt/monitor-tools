@@ -4,6 +4,7 @@ CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
 VENDOR_DIR="/scripts/vendor"
 
 mixins=$(yq eval ".mixins" "$CONFIG_FILE")
+dashboards=$(yq eval ".dashboards" "$CONFIG_FILE")
 ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
 grafana=$(yq eval ".grafana.render" "$CONFIG_FILE")
 prometheus=$(yq eval ".prometheus.render" "$CONFIG_FILE")
@@ -18,7 +19,7 @@ else
 
   # grafana resources
   printf  "\nProcessing Grafana resources with $grafana processor...\n"
-  if [ "$grafana" = "grizzly" ]; then 
+  if [ "$grafana" = "grizzly" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-folders render-grizzly-grafana-folders
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-grafana-dashboards
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
@@ -35,6 +36,19 @@ else
   fi
   if [ "$prometheus" = "plain" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules
+  fi
+fi
+
+if [ "$dashboards" = "null" ] || [ -z "$dashboards" ]; then
+  printf  "\nNo static dashboards in $CONFIG_FILE, skipping...\n"
+else
+  printf  "\nProcessing static Grafana dashboards from $CONFIG_FILE...\n"
+  if [ "$grafana" = "grizzly" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-static-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards
+  fi
+  if [ "$grafana" = "plain" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards
   fi
 fi
 
