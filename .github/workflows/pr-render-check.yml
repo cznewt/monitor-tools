@@ -1,0 +1,39 @@
+name: PR render check
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - docker/files/config/**
+      - docker/files/mixins/**
+      - docker/files/scripts/**
+      - VERSION
+
+jobs:
+  render-check:
+    name: "Render & lint all configs"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    container:
+      image: ghcr.io/cznewt/monitor-tools:latest
+      options: --user root
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Stage repo configs and scripts into container paths
+        run: |
+          # Mirror what the published image bakes in, so do-all sees PR changes.
+          rm -rf /config /mixins /scripts
+          cp -r docker/files/config /config
+          cp -r docker/files/mixins /mixins
+          cp -r docker/files/scripts /scripts
+          chmod -R +x /scripts
+
+      - name: Run do-all
+        run: do-all
