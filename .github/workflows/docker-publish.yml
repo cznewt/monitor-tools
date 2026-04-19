@@ -23,6 +23,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: cznewt/${{ inputs.APP_NAME }}
   APP_DIR: ${{ inputs.APP_DIR }}
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   build:
