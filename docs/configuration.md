@@ -10,6 +10,7 @@ The configuration file generally contains the following top-level keys:
 - `prometheus`: Settings for Prometheus resource rendering (e.g., `render: mimirtool`).
 - `grafana`: Settings for Grafana resource rendering (e.g., `render: grizzly`).
 - `mixins`: A map of mixin definitions.
+- `libs` (Optional): A map of observ-lib (or any reusable Jsonnet library) definitions vendored alongside mixins.
 - `dashboards` (Optional): A map of static Grafana dashboard releases (from grafana.com or any HTTP URL).
 - `pyrra` (Optional): Configuration for Pyrra SLOs.
 - `sloth` (Optional): Configuration for Sloth SLOs.
@@ -57,6 +58,32 @@ mixins:
 - **config**: Parameters passed to the mixin's Jsonnet code. Common parameters include:
     - `mimirNamespace`: The namespace for Mimir rules.
     - `grafanaDashboardFolder`: The folder name in Grafana.
+
+## Library (observ-lib) Configuration
+
+The `libs` section vendors reusable Jsonnet libraries (the `*-observ-lib` modules from [grafana/jsonnet-libs](https://github.com/grafana/jsonnet-libs), shared helpers, etc.) alongside mixins. Libraries don't render to anything on their own — they're build-time dependencies that mixins `import`.
+
+### Example (`example-observ-lib.yaml`)
+
+```yaml
+libs:
+  windows-observ-lib:
+    source:
+      git:
+        url: https://github.com/grafana/jsonnet-libs.git
+        ref: master
+        depth: 1
+      includePaths:
+        - windows-observ-lib/**/*
+      newRootPath: windows-observ-lib
+```
+
+### Fields
+
+- **source**: Same `git` / `directory` schema as a mixin's source. Use `includePaths` and `newRootPath` to narrow a multi-lib monorepo (like grafana/jsonnet-libs) down to the single subdirectory you want.
+- **No `config:` block**: libraries are pure Jsonnet — they're consumed by mixins, not rendered into Grafana/Prometheus resources directly.
+
+See [docs/mixins.md](mixins.md) for the catalog of common observ-libs.
 
 ## Static Dashboard Configuration
 
