@@ -106,6 +106,24 @@ RUN curl -fSL -o "uv.tar.gz" "https://github.com/astral-sh/uv/releases/download/
     mv "uv-x86_64-unknown-linux-gnu/uv" "uv" && \
     chmod a+x "uv"
 
+ARG K9S_VERSION=0.50.18
+ENV K9S_VERSION=${K9S_VERSION}
+RUN curl -fSL -o "k9s.tar.gz" "https://github.com/derailed/k9s/releases/download/v${K9S_VERSION}/k9s_Linux_${PKG_ARCH}.tar.gz" && \
+    tar xvzf "k9s.tar.gz" k9s && \
+    chmod a+x "k9s"
+
+ARG KTOP_VERSION=0.5.3
+ENV KTOP_VERSION=${KTOP_VERSION}
+RUN curl -fSL -o "ktop.tar.gz" "https://github.com/vladimirvivien/ktop/releases/download/v${KTOP_VERSION}/ktop_v${KTOP_VERSION}_linux_${PKG_ARCH}.tar.gz" && \
+    tar xvzf "ktop.tar.gz" ktop && \
+    chmod a+x "ktop"
+
+ARG GONZO_VERSION=0.3.1
+ENV GONZO_VERSION=${GONZO_VERSION}
+RUN curl -fSL -o "gonzo.tar.gz" "https://github.com/control-theory/gonzo/releases/download/v${GONZO_VERSION}/gonzo-${GONZO_VERSION}-linux-${PKG_ARCH}.tar.gz" && \
+    tar xvzf "gonzo.tar.gz" gonzo && \
+    chmod a+x "gonzo"
+
 RUN curl -fSL -o "yq" "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64" && \
     chmod a+x "yq"
 
@@ -137,6 +155,9 @@ COPY --from=static-downloader /root/just /usr/local/bin/just
 COPY --from=static-downloader /root/go/bin/dashboard-linter /usr/local/bin/dashboard-linter
 COPY --from=static-downloader /root/go/bin/mixtool /usr/local/bin/mixtool
 COPY --from=static-downloader /root/uv /usr/local/bin/uv
+COPY --from=static-downloader /root/k9s /usr/local/bin/k9s
+COPY --from=static-downloader /root/ktop /usr/local/bin/ktop
+COPY --from=static-downloader /root/gonzo /usr/local/bin/gonzo
 COPY --from=static-downloader /usr/local/go /usr/local/go
 
 RUN apt-get update --yes && \
