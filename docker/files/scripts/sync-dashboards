@@ -5,17 +5,17 @@ BUILD_DIR="${BUILD_DIR:=/source/default}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 
-dashboards=$(yq eval '.dashboards | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+dashboards=$(yq eval '.dashboards | keys | .[]' "$CONFIG_FILE" 2>/dev/null)
 
-if [ "$dashboards" = "null" ] || [ -z "$dashboards" ]; then
+if [ -z "$dashboards" ]; then
   echo "No dashboards found in $CONFIG_FILE."
   exit 0
 fi
 
 mkdir -p "$BUILD_DIR/dashboards"
 
-for raw in $dashboards; do
-  name=${raw#- }
+for name in $dashboards; do
+  if [ -z "$name" ]; then continue; fi
 
   grafana_id=$(yq eval ".dashboards.\"${name}\".source.grafana.id" "$CONFIG_FILE")
   grafana_rev=$(yq eval ".dashboards.\"${name}\".source.grafana.revision" "$CONFIG_FILE")

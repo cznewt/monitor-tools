@@ -6,7 +6,7 @@ SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/grizzly/grafana-folders}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
-keys=$(yq eval '.mixins | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+keys=$(yq eval '.mixins | keys' "$CONFIG_FILE" 2>/dev/null | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
 
 for key in $keys; do
   if [ "$key" = "-" ]; then continue; fi
@@ -16,11 +16,11 @@ for key in $keys; do
   -e "(import 'cbm.libsonnet').grizzlyGrafanaFolders('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
 done
 
-dashboards=$(yq eval '.dashboards | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+dashboards=$(yq eval '.dashboards | keys | .[]' "$CONFIG_FILE" 2>/dev/null)
 
-if [ "$dashboards" != "null" ] && [ -n "$dashboards" ]; then
-  for raw in $dashboards; do
-    key=${raw#- }
+if [ -n "$dashboards" ]; then
+  for key in $dashboards; do
+    if [ -z "$key" ]; then continue; fi
     folder=$(yq eval ".dashboards.\"${key}\".config.grafanaDashboardFolder" "$CONFIG_FILE")
     if [ "$folder" = "null" ] || [ -z "$folder" ]; then continue; fi
     echo "Rendering dashboard '$key' grizzly GrafanaFolder to $BUILD_DIR..."
