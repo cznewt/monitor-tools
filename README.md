@@ -149,14 +149,14 @@ The `monitor-tools` chart additionally exposes a `job:` block: set
 
 | Tool | Version | Description |
 | :--- | :--- | :--- |
-| **[Just](https://github.com/casey/just)** | 1.43.0 | Command runner for automation. |
-| **[Vendir](https://github.com/carvel-dev/vendir)** | 0.44.0 | Directory syncing tool. |
-| **[Jsonnet](https://github.com/google/go-jsonnet)** | 0.21.0 | Data templating language. |
+| **[Just](https://github.com/casey/just)** | 1.49.0 | Command runner for automation. |
+| **[Vendir](https://github.com/carvel-dev/vendir)** | 0.45.3 | Directory syncing tool. |
+| **[Jsonnet](https://github.com/google/go-jsonnet)** | 0.22.0 | Data templating language. |
 | **[Grizzly](https://github.com/grafana/grizzly)** | 0.7.1 | Grafana-as-code toolkit. |
-| **[Mimirtool](https://github.com/grafana/mimir)** | 3.0.0 | Mimir & Alertmanager CLI. |
-| **[LogCLI](https://github.com/grafana/loki)** | 3.5.7 | Loki CLI. |
-| **[Sloth](https://github.com/slok/sloth)** | v0.15.0 | SLO management tool. |
-| **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.9.3 | SLO management tool. |
+| **[Mimirtool](https://github.com/grafana/mimir)** | 3.0.5 | Mimir & Alertmanager CLI. |
+| **[LogCLI](https://github.com/grafana/loki)** | 3.7.1 | Loki CLI. |
+| **[Sloth](https://github.com/slok/sloth)** | v0.16.0 | SLO management tool. |
+| **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.9.5 | SLO management tool. |
 
 ### Documentation
 
