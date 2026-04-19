@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image: ${{ steps.filter.outputs.image }}
-      tools: ${{ steps.filter.outputs.tools }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -25,10 +24,7 @@ jobs:
             image:
               - 'docker/Dockerfile'
               - 'docker/files/requirements.txt'
-            tools:
-              - 'docker/files/config/**'
-              - 'docker/files/mixins/**'
-              - 'docker/files/scripts/**'
+              - 'VERSION'
 
   build-image:
     name: "Build PR image"
