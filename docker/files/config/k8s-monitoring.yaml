@@ -85,3 +85,32 @@ mixins:
         url: https://github.com/adinhodovic/opencost-mixin.git
         ref: main
         depth: 1
+dashboards:
+  kubernetes-views-global:
+    source:
+      grafana:
+        id: 15757
+        revision: 43
+    config:
+      grafanaDashboardFolder: Platform
+      uid: kubernetes-views-global
+      datasources:
+        DS_PROMETHEUS: prometheus
+  k8s-node-metrics-multi-clusters:
+    source:
+      grafana:
+        id: 22413
+        revision: 6
+    config:
+      grafanaDashboardFolder: Platform
+      uid: k8s-node-metrics-multi-clusters
+  k8s-dashboard-en:
+    source:
+      grafana:
+        id: 15661
+        revision: 2
+    config:
+      grafanaDashboardFolder: Platform
+      uid: k8s-dashboard-en
+      datasources:
+        DS__VICTORIAMETRICS-PROD-ALL: prometheus
