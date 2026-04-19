@@ -77,6 +77,74 @@ init-all-mixins
 render-all-resources
 ```
 
+### Docker Compose
+
+For local iteration, mount your editable trees over the baked image. The repo
+ships a `docker-compose.yml` for the JupyterLab variant — edit `.env` for any
+apply-time credentials (`GRAFANA_URL`, `GRAFANA_TOKEN`, `MIMIR_ADDRESS`,
+`MIMIR_TENANT_ID`, `LOKI_ADDRESS`, `LOKI_TENANT_ID`, …) and run:
+
+```bash
+docker compose up -d
+# Open http://localhost:8888
+```
+
+To run a one-shot render/apply locally without Jupyter:
+
+```bash
+docker run --rm \
+  --env-file .env \
+  -v "$PWD/docker/files/config:/config" \
+  -v "$PWD/docker/files/mixins:/mixins" \
+  -v "$PWD/docker/files/scripts:/scripts" \
+  ghcr.io/cznewt/monitor-tools:latest \
+  do-all
+```
+
+### Helm
+
+Two charts are published to GHCR as OCI artifacts:
+
+```bash
+# Headless: ConfigMap + Secret + Job (or CronJob) running do-all
+helm install mt oci://ghcr.io/cznewt/charts/monitor-tools \
+  --version 0.2.0 \
+  -f my-values.yaml
+
+# JupyterLab + monitor-tools with the same ConfigMap + Secret wiring
+helm install jmt oci://ghcr.io/cznewt/charts/jupyter-monitor-tools \
+  --version 0.2.0 \
+  -f my-values.yaml
+```
+
+Both charts accept the same shape:
+
+```yaml
+# Inline configs (each entry becomes a file in /config)
+configs:
+  default.yaml: |
+    name: default
+    prometheus: { render: mimirtool }
+    grafana: { render: grizzly }
+    mixins: { ... }
+# OR drop YAMLs into the chart's configs/ directory and they'll be picked up
+# automatically via Files.Glob (configsDir defaults to "configs/*.yaml").
+
+# Apply-time credentials — chart creates a Secret from these
+env:
+  GRAFANA_URL: https://grafana.example.com
+  GRAFANA_TOKEN: <token>
+  MIMIR_ADDRESS: https://mimir.example.com
+  MIMIR_TENANT_ID: tenant-1
+
+# OR reference a pre-existing Secret (skips chart-managed Secret)
+existingSecret: my-monitor-tools-creds
+```
+
+The `monitor-tools` chart additionally exposes a `job:` block: set
+`job.schedule` to render a `CronJob` instead of a one-shot `Job`, and tweak
+`job.command` for `apply-resources`, `do-all && apply-resources`, etc.
+
 ## Tools
 
 | Tool | Version | Description |

@@ -7,10 +7,23 @@ service:
   type: ClusterIP
   port: 8888
 
+# Map of config filename -> raw YAML content. Mounted into /config.
+configs: {}
+
+# Glob (relative to the chart root) of config files to bake into the ConfigMap.
+# Defaults to "configs/*.yaml" — drop your env YAMLs into charts/jupyter-monitor-tools/configs/.
+configsDir: "configs/*.yaml"
+
+# Env vars exposed to the Jupyter container (apply-* scripts read GRAFANA_URL,
+# GRAFANA_TOKEN, MIMIR_ADDRESS, MIMIR_TENANT_ID, LOKI_ADDRESS, LOKI_TENANT_ID, ...).
+env: {}
+  # GRAFANA_URL: https://grafana.example.com
+  # GRAFANA_TOKEN: <token>
+
+# Reference a pre-existing Secret instead of creating one from .env above.
+existingSecret: ""
+
 resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 256Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 256Mi
+nodeSelector: {}
+tolerations: []
+affinity: {}

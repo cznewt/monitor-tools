@@ -3,10 +3,59 @@ image:
   pullPolicy: IfNotPresent
   tag: "latest"
 
+# Map of config filename -> raw YAML content. Mounted into /config.
+# Example:
+#   configs:
+#     default.yaml: |
+#       name: default
+#       prometheus:
+#         render: mimirtool
+#       grafana:
+#         render: grizzly
+#       mixins:
+#         node:
+#           source:
+#             git:
+#               url: https://github.com/prometheus/node_exporter.git
+#               ref: master
+#               depth: 1
+#             includePaths: [docs/node-mixin/**/*]
+#             newRootPath: docs/node-mixin
+#           config:
+#             mimirNamespace: node
+#             grafanaDashboardFolder: Platform
+configs: {}
+
+# Glob (relative to the chart root) of config files to bake into the ConfigMap.
+# Defaults to "configs/*.yaml" — drop your env YAMLs into charts/monitor-tools/configs/.
+# Combined with .Values.configs above (inline values take precedence on collisions).
+configsDir: "configs/*.yaml"
+
+# Env vars exposed to the Job container (apply-* scripts read GRAFANA_URL,
+# GRAFANA_TOKEN, MIMIR_ADDRESS, MIMIR_TENANT_ID, LOKI_ADDRESS, LOKI_TENANT_ID, ...).
+# Either provide values here (chart creates a Secret) ...
+env: {}
+  # GRAFANA_URL: https://grafana.example.com
+  # GRAFANA_TOKEN: <token>
+  # MIMIR_ADDRESS: https://mimir.example.com
+  # MIMIR_TENANT_ID: tenant-1
+
+# ... or reference a pre-existing Secret (must have the same env keys as above).
+existingSecret: ""
+
+job:
+  enabled: true
+  # Command to run inside the container. Defaults to do-all (sync + render).
+  # For periodic re-deploys: ["bash", "-lc", "do-all && apply-resources"].
+  command: ["do-all"]
+  # If set, deploy as a CronJob with this cron expression instead of a one-shot Job.
+  schedule: ""
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 300
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
 resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,49 @@
+name: Publish Helm charts
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - charts/**
+
+env:
+  REGISTRY: ghcr.io
+  CHARTS_NAMESPACE: cznewt/charts
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  publish:
+    name: "Package & push charts to ghcr.io OCI"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+
+      - name: Log in to ghcr.io
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login \
+            ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Lint charts
+        run: |
+          helm lint charts/monitor-tools
+          helm lint charts/jupyter-monitor-tools
+
+      - name: Package and push each chart
+        run: |
+          mkdir -p /tmp/charts
+          for chart in charts/monitor-tools charts/jupyter-monitor-tools; do
+            helm package "$chart" -d /tmp/charts
+          done
+          for pkg in /tmp/charts/*.tgz; do
+            echo "Pushing $pkg to oci://${REGISTRY}/${CHARTS_NAMESPACE}"
+            helm push "$pkg" "oci://${REGISTRY}/${CHARTS_NAMESPACE}"
+          done
