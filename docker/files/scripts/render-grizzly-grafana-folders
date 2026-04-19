@@ -15,3 +15,16 @@ for key in $keys; do
   jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
   -e "(import 'cbm.libsonnet').grizzlyGrafanaFolders('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
 done
+
+dashboards=$(yq eval '.dashboards | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$dashboards" != "null" ] && [ -n "$dashboards" ]; then
+  for raw in $dashboards; do
+    key=${raw#- }
+    folder=$(yq eval ".dashboards.\"${key}\".config.grafanaDashboardFolder" "$CONFIG_FILE")
+    if [ "$folder" = "null" ] || [ -z "$folder" ]; then continue; fi
+    echo "Rendering dashboard '$key' grizzly GrafanaFolder to $BUILD_DIR..."
+    jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+      -e "(import 'cbm.libsonnet').grizzlyDashboardFolders('$key', std.parseYaml(importstr '$CONFIG_FILE'))"
+  done
+fi

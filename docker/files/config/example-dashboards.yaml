@@ -1,0 +1,30 @@
+name: example-dashboards
+prometheus:
+  render: mimirtool
+grafana:
+  render: grizzly
+dashboards:
+  # Pinned to a specific revision from grafana.com/grafana/dashboards/<id>.
+  # Bump `revision` to release a new version of the dashboard.
+  node-exporter-full:
+    source:
+      grafana:
+        id: 1860
+        revision: 41
+    config:
+      grafanaDashboardFolder: Platform
+      uid: node-exporter-full
+      datasources:
+        DS_PROMETHEUS: prometheus
+  # Generic HTTP source — any URL that returns Grafana dashboard JSON.
+  # Optional `sha256` pins the exact bytes for reproducibility.
+  cadvisor:
+    source:
+      http:
+        url: https://raw.githubusercontent.com/google/cadvisor/master/deploy/grafana/cadvisor.json
+        # sha256: <hex digest of the JSON file>
+    config:
+      grafanaDashboardFolder: Platform
+      uid: cadvisor
+      datasources:
+        DS_PROMETHEUS: prometheus

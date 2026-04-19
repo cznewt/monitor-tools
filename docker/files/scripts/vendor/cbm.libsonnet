@@ -19,4 +19,10 @@ local builder = (import 'cb.libsonnet');
     builder.pyrra.pyrraRules(config),
   slothRules(config)::
     builder.sloth.slothRules(config),
+  grizzlyStaticDashboard(name, rawJson, config)::
+    builder.grizzly.staticGrafanaDashboard(name, rawJson, config.dashboards[name].config + {dashboardName: name}),
+  plainStaticDashboard(name, rawJson, config)::
+    builder.grizzly.staticGrafanaDashboardPlain(name, rawJson, config.dashboards[name].config + {dashboardName: name}),
+  grizzlyDashboardFolders(name, config)::
+    builder.grizzly.grafanaFolders(config.dashboards[name].config + {dashboardName: name}),
 }

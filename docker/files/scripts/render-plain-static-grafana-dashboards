@@ -1,0 +1,29 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/plain/grafana-dashboards}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+
+keys=$(yq eval '.dashboards | keys' "$CONFIG_FILE" | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+if [ "$keys" = "null" ] || [ -z "$keys" ]; then
+  echo "No static dashboards defined in $CONFIG_FILE."
+  exit 0
+fi
+
+mkdir -p "$BUILD_DIR"
+
+for raw in $keys; do
+  key=${raw#- }
+  jsonFile="$SOURCE_DIR/dashboards/${key}.json"
+  if [ ! -f "$jsonFile" ]; then
+    echo "Warning: $jsonFile is missing — run sync-dashboards first."
+    continue
+  fi
+  echo "Rendering $jsonFile plain Dashboard to $BUILD_DIR..."
+  jsonnet -c -S -m "$BUILD_DIR" -J "$VENDOR_DIR" \
+    -e "(import 'cbm.libsonnet').plainStaticDashboard('$key', importstr '$jsonFile', std.parseYaml(importstr '$CONFIG_FILE'))"
+done

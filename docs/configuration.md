@@ -10,6 +10,7 @@ The configuration file generally contains the following top-level keys:
 - `prometheus`: Settings for Prometheus resource rendering (e.g., `render: mimirtool`).
 - `grafana`: Settings for Grafana resource rendering (e.g., `render: grizzly`).
 - `mixins`: A map of mixin definitions.
+- `dashboards` (Optional): A map of static Grafana dashboard releases (from grafana.com or any HTTP URL).
 - `pyrra` (Optional): Configuration for Pyrra SLOs.
 - `sloth` (Optional): Configuration for Sloth SLOs.
 
@@ -57,6 +58,61 @@ mixins:
     - `mimirNamespace`: The namespace for Mimir rules.
     - `grafanaDashboardFolder`: The folder name in Grafana.
 
+## Static Dashboard Configuration
+
+The `dashboards` section pulls released Grafana dashboards as raw JSON and turns them into Grizzly resources. Each entry must be pinned (revision number for `grafana`, optional `sha256` for `http`) so that builds are reproducible. To release a new version of a dashboard, bump the pin and resync.
+
+### Source: `grafana`
+
+Fetches a published revision from the Grafana.com community dashboards catalog (`https://grafana.com/grafana/dashboards/<id>`).
+
+```yaml
+dashboards:
+  node-exporter-full:
+    source:
+      grafana:
+        id: 1860
+        revision: 41          # required — acts as the release pin
+    config:
+      grafanaDashboardFolder: Platform
+      uid: node-exporter-full
+      datasources:
+        DS_PROMETHEUS: prometheus
+```
+
+### Source: `http`
+
+Fetches dashboard JSON from any HTTP(S) URL. Use this for self-hosted exports or vendor-published JSON outside grafana.com.
+
+```yaml
+dashboards:
+  cadvisor:
+    source:
+      http:
+        url: https://raw.githubusercontent.com/google/cadvisor/master/deploy/grafana/cadvisor.json
+        sha256: <optional hex digest>   # if set, sync fails on mismatch
+    config:
+      grafanaDashboardFolder: Platform
+      uid: cadvisor
+      datasources:
+        DS_PROMETHEUS: prometheus
+```
+
+### Fields
+
+- **source.grafana.id** / **source.grafana.revision**: Dashboard ID and revision number from grafana.com. The revision is the release identifier — never use "latest".
+- **source.http.url**: Direct URL to dashboard JSON.
+- **source.http.sha256** (optional): SHA-256 of the file. If provided, sync aborts on mismatch.
+- **config.grafanaDashboardFolder** (optional): Target folder in Grafana. A folder resource is generated automatically.
+- **config.uid** (optional): Dashboard UID. Defaults to the slugified dashboard name.
+- **config.datasources** (optional): Map of `${PLACEHOLDER}` → datasource name. Most community dashboards use `${DS_PROMETHEUS}` etc.; this map substitutes them with the real datasource UIDs/names in your Grafana.
+
+### Pipeline
+
+1. **Sync**: `sync-dashboards` (also called by `sync-all-mixins`) downloads each pinned JSON to `/source/<env>/dashboards/<name>.json`.
+2. **Render**: `render-grizzly-static-grafana-dashboards` (and the plain variant) wrap them as Grizzly `Dashboard` resources, applying the datasource substitutions.
+3. **Apply**: handled by the same `apply-grizzly-grafana-dashboards` script as mixin-derived dashboards.
+
 ## SLO Configuration
 
 Service Level Objectives can be defined using Pyrra or Sloth.
@@ -102,3 +158,4 @@ sloth:
 - [example-observ-lib.yaml](../docker/files/config/example-observ-lib.yaml): Example using Grafana's Jsonnet libs.
 - [example-pyrra.yaml](../docker/files/config/example-pyrra.yaml): Pyrra SLO examples.
 - [example-sloth.yaml](../docker/files/config/example-sloth.yaml): Sloth SLO examples.
+- [example-dashboards.yaml](../docker/files/config/example-dashboards.yaml): Static Grafana dashboards from grafana.com and HTTP URLs.
