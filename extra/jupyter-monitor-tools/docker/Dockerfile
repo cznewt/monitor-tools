@@ -22,6 +22,14 @@ COPY ./files/jupyter /home/ubuntu/.jupyter
 
 RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
+# Notebooks baseline (mirrored from repo-root /notebooks at build time by
+# the workflow). On first container start the seed script copies these
+# into the user-writable /source/notebooks; later edits are preserved.
+COPY ./files/notebooks /opt/notebooks
+COPY ./files/seed-notebooks /usr/local/bin/seed-notebooks
+RUN chmod +x /usr/local/bin/seed-notebooks && \
+    chown -R ubuntu:ubuntu /opt/notebooks
+
 RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-notebook.txt && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
@@ -29,5 +37,6 @@ USER ubuntu
 
 EXPOSE 8888
 
+ENTRYPOINT ["/usr/local/bin/seed-notebooks"]
 CMD ["jupyter", "lab", "--no-browser", "--config=/home/ubuntu/.jupyter/jupyter_notebook_config.py"]
 

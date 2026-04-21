@@ -1,0 +1,19 @@
+#!/bin/bash
+# Entrypoint shim: seed user-writable /source/notebooks from the read-only
+# baseline at /opt/notebooks the first time the container starts (when
+# /source/notebooks is empty or missing). Subsequent starts leave user edits
+# alone — set MONITOR_TOOLS_RESEED_NOTEBOOKS=force to overwrite anyway.
+
+set -e
+
+BASELINE="/opt/notebooks"
+TARGET="/source/notebooks"
+
+if [ -d "$BASELINE" ]; then
+  mkdir -p "$TARGET"
+  if [ "${MONITOR_TOOLS_RESEED_NOTEBOOKS:-}" = "force" ] || [ -z "$(ls -A "$TARGET" 2>/dev/null)" ]; then
+    cp -rT "$BASELINE" "$TARGET"
+  fi
+fi
+
+exec "$@"

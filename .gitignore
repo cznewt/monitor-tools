@@ -1,3 +1,5 @@
 .env
 docker/files/config_dev
+extra/jupyter-monitor-tools/docker/files/notebooks/*
+!extra/jupyter-monitor-tools/docker/files/notebooks/.gitkeep
 

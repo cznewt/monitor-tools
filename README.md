@@ -89,6 +89,12 @@ docker compose up -d
 # Open http://localhost:8888
 ```
 
+The Jupyter image bakes the workspace notebooks at `/opt/notebooks` and
+seeds them into `/source/notebooks` on first start. If `/source/notebooks`
+already has content (e.g. it's a PVC or a bind mount with your edits) the
+seed step is skipped — your edits are preserved across image bumps. Set
+`MONITOR_TOOLS_RESEED_NOTEBOOKS=force` to overwrite from the image baseline.
+
 To run a one-shot render/apply locally without Jupyter:
 
 ```bash
