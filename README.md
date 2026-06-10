@@ -163,6 +163,7 @@ The `monitor-tools` chart additionally exposes a `job:` block: set
 | **[LogCLI](https://github.com/grafana/loki)** | 3.7.2 | Loki CLI. |
 | **[Sloth](https://github.com/slok/sloth)** | v0.16.0 | SLO management tool. |
 | **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.10.0 | SLO management tool. |
+| **[Alloy](https://github.com/grafana/alloy)** | 1.16.3 | OpenTelemetry Collector distribution. |
 
 ### Documentation
 

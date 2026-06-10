@@ -140,6 +140,13 @@ RUN git clone --depth 1 --branch v0.1.1 https://github.com/grafana/dashboard-lin
 
 RUN /usr/local/go/bin/go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 
+ARG ALLOY_VERSION=1.16.3
+ENV ALLOY_VERSION=${ALLOY_VERSION}
+RUN curl -fSL -o "alloy.zip" "https://github.com/grafana/alloy/releases/download/v${ALLOY_VERSION}/alloy-linux-amd64.zip" && \
+    unzip "alloy.zip" && \
+    mv "alloy-linux-amd64" "alloy" && \
+    chmod a+x "alloy"
+
 FROM ubuntu:24.04
 
 COPY --from=static-downloader /root/grr /usr/local/bin/grr
@@ -164,6 +171,7 @@ COPY --from=static-downloader /root/uv /usr/local/bin/uv
 COPY --from=static-downloader /root/k9s /usr/local/bin/k9s
 COPY --from=static-downloader /root/ktop /usr/local/bin/ktop
 COPY --from=static-downloader /root/gonzo /usr/local/bin/gonzo
+COPY --from=static-downloader /root/alloy /usr/local/bin/alloy
 COPY --from=static-downloader /usr/local/go /usr/local/go
 
 RUN apt-get update --yes && \

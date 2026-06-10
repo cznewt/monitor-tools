@@ -57,6 +57,11 @@ This document lists the software and tools installed in the `monitor-tools` Dock
 | [ktop](https://github.com/vladimirvivien/ktop) | 0.5.3 | Top-like resource viewer for Kubernetes. |
 | [gonzo](https://github.com/control-theory/gonzo) | 0.4.2 | TUI analyzer for streaming/OTLP logs. |
 
+### Collectors
+| Tool | Version | Description |
+| :--- | :--- | :--- |
+| [Alloy](https://github.com/grafana/alloy) | 1.16.3 | OpenTelemetry Collector distribution; `alloy fmt` / `convert` / `validate` for pipeline config. |
+
 ## Python Environment
 
 The image is based on `quay.io/jupyter/datascience-notebook:notebook-7.4.7` and includes additional packages:

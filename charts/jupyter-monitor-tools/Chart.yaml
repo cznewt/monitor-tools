@@ -2,5 +2,5 @@ apiVersion: v2
 name: jupyter-monitor-tools
 description: JupyterLab + monitor-tools chart with ConfigMap and Secret (or existingSecret) wired into the pod.
 type: application
-version: 0.2.1
-appVersion: "2026.4-r13"
+version: 0.2.2
+appVersion: "2026.4-r14"
