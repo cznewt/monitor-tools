@@ -25,16 +25,16 @@ do-all
 
 | Tool | Version | Description |
 | :--- | :--- | :--- |
-| **[Just](https://github.com/casey/just)** | 1.43.0 | Command runner for automation. |
+| **[Just](https://github.com/casey/just)** | 1.52.0 | Command runner for automation. |
 | **[YQ](https://github.com/mikefarah/yq)** | Latest | YAML processor. |
-| **[Jsonnet](https://github.com/google/go-jsonnet)** | 0.21.0 | Data templating language. |
+| **[Jsonnet](https://github.com/google/go-jsonnet)** | 0.22.0 | Data templating language. |
 | **[Grizzly](https://github.com/grafana/grizzly)** | 0.7.1 | Grafana-as-code toolkit. |
-| **[Mimirtool](https://github.com/grafana/mimir)** | 3.0.0 | Mimir & Alertmanager CLI. |
-| **[LogCLI](https://github.com/grafana/loki)** | 3.5.7 | Loki CLI. |
-| **[Sloth](https://github.com/slok/sloth)** | v0.15.0 | SLO management tool. |
-| **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.9.0 | SLO management tool. |
-| **[Vendir](https://github.com/carvel-dev/vendir)** | 0.44.0 | Directory syncing tool. |
-| **[uv](https://github.com/astral-sh/uv)** | 0.9.28 | Python package installer. |
+| **[Mimirtool](https://github.com/grafana/mimir)** | 3.1.0 | Mimir & Alertmanager CLI. |
+| **[LogCLI](https://github.com/grafana/loki)** | 3.7.2 | Loki CLI. |
+| **[Sloth](https://github.com/slok/sloth)** | v0.16.0 | SLO management tool. |
+| **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.10.0 | SLO management tool. |
+| **[Vendir](https://github.com/carvel-dev/vendir)** | 0.45.4 | Directory syncing tool. |
+| **[uv](https://github.com/astral-sh/uv)** | 0.11.19 | Python package installer. |
 
 ### Documentation
 

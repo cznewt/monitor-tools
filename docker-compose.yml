@@ -13,3 +13,16 @@ services:
     env_file: ".env"
     ports:
       - 8888:8888
+
+  # Optional: Prophet-based anomaly scorer (see extra/anomaly-scorer/).
+  # Uncomment to run alongside Jupyter; point PROMETHEUS_URL at your Prometheus.
+  # anomaly-scorer:
+  #   build:
+  #     context: ./extra/anomaly-scorer/docker
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     PROMETHEUS_URL: "http://prometheus:9090"
+  #     METRIC_QUERY: 'container_memory_working_set_bytes{namespace="production"}'
+  #     ANOMALY_LABELS: "namespace,pod"
+  #   ports:
+  #     - 8000:8000

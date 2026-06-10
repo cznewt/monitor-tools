@@ -3,3 +3,7 @@ docker/files/config_dev
 extra/jupyter-monitor-tools/docker/files/notebooks/*
 !extra/jupyter-monitor-tools/docker/files/notebooks/.gitkeep
 
+# Python bytecode
+__pycache__/
+*.pyc
+

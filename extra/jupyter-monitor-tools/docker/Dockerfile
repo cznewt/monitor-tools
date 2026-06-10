@@ -5,7 +5,7 @@ COPY ./files/requirements.txt /requirements-notebook.txt
 
 USER root
 
-RUN curl -fSL -o "jsonnet-language-server" "https://github.com/grafana/jsonnet-language-server/releases/download/v0.16.0/jsonnet-language-server_0.16.0_linux_amd64" && \
+RUN curl -fSL -o "jsonnet-language-server" "https://github.com/grafana/jsonnet-language-server/releases/download/v0.17.0/jsonnet-language-server_0.17.0_linux_amd64" && \
     chmod a+x "jsonnet-language-server" && \
     mv "jsonnet-language-server" "/usr/local/bin/jsonnet-language-server"
 
