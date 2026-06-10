@@ -155,14 +155,14 @@ The `monitor-tools` chart additionally exposes a `job:` block: set
 
 | Tool | Version | Description |
 | :--- | :--- | :--- |
-| **[Just](https://github.com/casey/just)** | 1.49.0 | Command runner for automation. |
-| **[Vendir](https://github.com/carvel-dev/vendir)** | 0.45.3 | Directory syncing tool. |
+| **[Just](https://github.com/casey/just)** | 1.52.0 | Command runner for automation. |
+| **[Vendir](https://github.com/carvel-dev/vendir)** | 0.45.4 | Directory syncing tool. |
 | **[Jsonnet](https://github.com/google/go-jsonnet)** | 0.22.0 | Data templating language. |
 | **[Grizzly](https://github.com/grafana/grizzly)** | 0.7.1 | Grafana-as-code toolkit. |
-| **[Mimirtool](https://github.com/grafana/mimir)** | 3.0.5 | Mimir & Alertmanager CLI. |
-| **[LogCLI](https://github.com/grafana/loki)** | 3.7.1 | Loki CLI. |
+| **[Mimirtool](https://github.com/grafana/mimir)** | 3.1.0 | Mimir & Alertmanager CLI. |
+| **[LogCLI](https://github.com/grafana/loki)** | 3.7.2 | Loki CLI. |
 | **[Sloth](https://github.com/slok/sloth)** | v0.16.0 | SLO management tool. |
-| **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.9.5 | SLO management tool. |
+| **[Pyrra](https://github.com/pyrra-dev/pyrra)** | 0.10.0 | SLO management tool. |
 
 ### Documentation
 

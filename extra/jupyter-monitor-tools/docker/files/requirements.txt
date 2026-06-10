@@ -6,6 +6,8 @@ pandas-datareader
 papermill
 seaborn
 statsmodels
+prophet
+requests
 notebook
 jupyterthemes
 jupyterlab-lsp
