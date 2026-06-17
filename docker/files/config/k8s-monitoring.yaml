@@ -85,6 +85,46 @@ mixins:
         url: https://github.com/adinhodovic/opencost-mixin.git
         ref: main
         depth: 1
+  loki:
+    config:
+      mimirNamespace: loki
+      grafanaDashboardFolder: Monitoring
+    source:
+      git: {url: https://github.com/grafana/loki.git, ref: main, depth: 1}
+      includePaths: [production/loki-mixin/**/*]
+      newRootPath: production/loki-mixin
+  mimir:
+    config:
+      mimirNamespace: mimir
+      grafanaDashboardFolder: Monitoring
+    source:
+      git: {url: https://github.com/grafana/mimir.git, ref: main, depth: 1}
+      includePaths: [operations/mimir-mixin/**/*]
+      newRootPath: operations/mimir-mixin
+  tempo:
+    config:
+      mimirNamespace: tempo
+      grafanaDashboardFolder: Monitoring
+    source:
+      git: {url: https://github.com/grafana/tempo.git, ref: main, depth: 1}
+      includePaths: [operations/tempo-mixin/**/*]
+      newRootPath: operations/tempo-mixin
+  node-exporter:
+    config:
+      mimirNamespace: node-exporter
+      grafanaDashboardFolder: Monitoring
+    source:
+      git: {url: https://github.com/prometheus/node_exporter.git, ref: master, depth: 1}
+      includePaths: [docs/node-mixin/**/*]
+      newRootPath: docs/node-mixin
+  alertmanager:
+    config:
+      mimirNamespace: alertmanager
+      grafanaDashboardFolder: Monitoring
+    source:
+      git: {url: https://github.com/prometheus/alertmanager.git, ref: main, depth: 1}
+      includePaths: [doc/alertmanager-mixin/**/*]
+      newRootPath: doc/alertmanager-mixin
 dashboards:
   kubernetes-views-global:
     source:
