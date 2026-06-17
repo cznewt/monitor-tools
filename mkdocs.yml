@@ -9,6 +9,7 @@ nav:
   - Usage:
     - Scripts: scripts.md
     - Configuration: configuration.md
+    - Examples: examples.md
   - Reference:
     - Software: software.md
 

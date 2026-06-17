@@ -15,6 +15,52 @@ The configuration file generally contains the following top-level keys:
 - `pyrra` (Optional): Configuration for Pyrra SLOs.
 - `sloth` (Optional): Configuration for Sloth SLOs.
 
+## Prometheus Rendering
+
+The `prometheus:` block selects how a config's mixin rule groups (recording + alerting) are rendered. Set `render` to one of:
+
+- `mimirtool`: render Mimir/Cortex rule-group files (and plain Prometheus rule files), applied to a Mimir / Grafana Cloud ruler with `mimirtool`.
+- `plain`: render plain Prometheus rule-group files only.
+- `configmap`: wrap each mixin's rule groups in a Kubernetes ConfigMap, ready to `kubectl apply`. A config-reloader sidecar (e.g. [kiwigrid/k8s-sidecar](https://github.com/kiwigrid/k8s-sidecar)) that watches the configured labels mounts the rules into Prometheus via `rule_files`.
+
+### `render: configmap`
+
+```yaml
+prometheus:
+  render: configmap
+  namespace: monitoring        # namespace stamped on every ConfigMap (default: default)
+  labels:                      # labels the sidecar selects ConfigMaps on
+    prometheus_rule: "1"
+```
+
+One ConfigMap is rendered per mixin (named after the mixin) into `/build/<env>/configmap/prom-rules/`. Its recording and alerting groups are stored under `data` as a single `{ groups: [...] }` Prometheus rule file:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: base
+  namespace: monitoring
+  labels:
+    prometheus_rule: "1"
+data:
+  base.yaml: |
+    groups:
+      - name: base
+        rules:
+          - alert: Watchdog
+            expr: vector(1)
+            labels:
+              severity: info
+            annotations:
+              summary: This is an alert meant to ensure that the entire alerting pipeline is functional.
+```
+
+- **namespace** (optional): namespace set on every rendered ConfigMap. Defaults to `default`.
+- **labels** (optional): map of labels added to each ConfigMap's `metadata.labels`. These are what your sidecar (or operator) selects on; quote numeric-looking values (`"1"`) so they stay strings.
+
+Applying the ConfigMaps is left to your deployment flow (`kubectl apply`, Argo CD, Flux, …) — the image does not ship `kubectl`. `lint-resources` validates the embedded rules with `promtool`. See [Examples](examples.md) for the full sidecar wiring.
+
 ## Mixin Configuration
 
 Mixins are the core building blocks. Each mixin entry under `mixins` defines where to get the mixin and how to configure it.

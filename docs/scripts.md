@@ -62,6 +62,7 @@ Common Env: `CONFIG_FILE`, `SOURCE_DIR`, `BUILD_DIR`
 ### Prometheus & Mimir
 - `render-mimirtool-mimir-rules`: Renders Mimir alerting and recording rules.
 - `render-plain-prom-rules`: Renders plain Prometheus rules.
+- `render-configmap-prom-rules`: Renders Prometheus rules wrapped as Kubernetes ConfigMaps (one per mixin) for the sidecar flow, stamping `prometheus.namespace` / `prometheus.labels`.
 - `render-mimirtool-alertmanager-config`: Renders Alertmanager configuration for Mimir.
 
 ### SLOs (Pyrra & Sloth)
@@ -82,6 +83,7 @@ Common Env: `BUILD_DIR`
 - `lint-lokitool-loki-rules`: Lints Loki rules using `lokitool`.
 - `lint-plain-grafana-dashboards`: Lints plain Grafana dashboard JSONs.
 - `lint-plain-prom-rules`: Lints plain Prometheus rules.
+- `lint-configmap-prom-rules`: Extracts the rules embedded in each rendered ConfigMap and validates them with `promtool check rules`.
 - `lint-mimirtool-alertmanager-config`: Lints Alertmanager configuration.
 
 ## Applying Resources

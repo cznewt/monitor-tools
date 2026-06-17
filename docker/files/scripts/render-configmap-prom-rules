@@ -1,0 +1,31 @@
+#!/bin/bash
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+VENDOR_DIR="/scripts/vendor"
+SOURCE_DIR="${SOURCE_DIR:=/source/default}"
+BUILD_DIR="${BUILD_DIR:=/build/default/configmap/prom-rules}"
+
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+keys=$(yq eval '.mixins | keys' "$CONFIG_FILE" 2>/dev/null | grep -v '^\[' | grep -v '^\]' | awk '{$1=$1};1')
+
+for key in $keys; do
+  if [ "$key" = "-" ]; then continue; fi
+  mixinDir="$SOURCE_DIR/mixins/$key-mixin"
+  if [ -d "$mixinDir/vendor" ]; then
+      echo "Rendering $mixinDir ConfigMap PrometheusRules with vendor to $BUILD_DIR..."
+      jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR -J "$mixinDir/vendor" \
+      -e "(import 'cbm.libsonnet').configmapPrometheusRules('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+  else
+      echo "Rendering $mixinDir ConfigMap PrometheusRules to $BUILD_DIR..."
+      jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR \
+      -e "(import 'cbm.libsonnet').configmapPrometheusRules('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+  fi
+  # go-jsonnet escapes the embedded rule file into a single-line quoted string;
+  # re-style it as idiomatic k8s YAML (plain scalars + a `|` literal block for
+  # the rules) so the rendered ConfigMap is readable and diff-friendly.
+  out_file="$BUILD_DIR/$key.yaml"
+  if [ -f "$out_file" ]; then
+    yq -i '.. style=""' "$out_file"
+    yq -i '.data[] style="literal"' "$out_file"
+  fi
+done
