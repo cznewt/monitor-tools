@@ -1,0 +1,25 @@
+#!/bin/bash
+
+BUILD_DIR="${BUILD_DIR:=/build/default/configmap/prom-rules}"
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+
+tmp_dir=$(mktemp -d)
+trap 'rm -rf "$tmp_dir"' EXIT
+status=0
+
+for yaml_file in $yaml_files; do
+  echo "Linting ConfigMap PromRules $yaml_file..."
+  # Each ConfigMap data entry is a self-contained Prometheus rule file; pull it
+  # back out and run promtool over it so the embedded rules are validated.
+  keys=$(yq eval '.data | keys | .[]' "$yaml_file")
+  for key in $keys; do
+    rule_file="$tmp_dir/$(basename "${yaml_file%.yaml}")-$key"
+    yq eval ".data[\"$key\"]" "$yaml_file" > "$rule_file"
+    promtool check rules "$rule_file" || status=1
+  done
+done
+
+exit $status

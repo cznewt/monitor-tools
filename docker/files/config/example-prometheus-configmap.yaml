@@ -1,0 +1,25 @@
+# Render Prometheus rules as Kubernetes ConfigMaps instead of pushing them to a
+# rules backend. Apply the rendered ConfigMaps to your cluster and a
+# config-reloader sidecar (e.g. kiwigrid/k8s-sidecar) that watches the labels
+# below mounts each rule file into Prometheus via rule_files.
+#
+#   prometheus.namespace -> namespace stamped on every ConfigMap
+#   prometheus.labels    -> labels the sidecar selects ConfigMaps on
+#
+# One ConfigMap is rendered per mixin; its data holds that mixin's recording +
+# alerting groups as a single `{ groups: [...] }` Prometheus rule file.
+name: example-prometheus-configmap
+
+prometheus:
+  render: configmap
+  namespace: monitoring
+  labels:
+    prometheus_rule: "1"
+
+mixins:
+  base:
+    config:
+      mimirNamespace: base
+    source:
+      directory:
+        path: /mixins/base-mixin

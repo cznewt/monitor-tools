@@ -5,6 +5,19 @@ local builder = (import 'cb.libsonnet');
     builder.plain.grafanaDashboards(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
   plainPrometheusRules(name, mixin, config)::
     builder.plain.promRuleGroups(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
+  configmapPrometheusRules(name, mixin, config)::
+    builder.configmap.prometheusRuleGroups(
+      mixin + {_config+:: config.mixins[name].config},
+      config.mixins[name].config + {
+        mixinName: name,
+        prometheusNamespace:
+          if std.objectHasAll(config, 'prometheus') && std.objectHasAll(config.prometheus, 'namespace')
+          then config.prometheus.namespace else 'default',
+        prometheusLabels:
+          if std.objectHasAll(config, 'prometheus') && std.objectHasAll(config.prometheus, 'labels')
+          then config.prometheus.labels else {},
+      },
+    ),
   grizzlyGrafanaFolders(name, mixin, config)::
     builder.grizzly.grafanaFolders(config.mixins[name].config + {mixinName: name}),
   grizzlyGrafanaDashboards(name, mixin, config)::

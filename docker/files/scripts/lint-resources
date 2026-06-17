@@ -20,6 +20,9 @@ fi
 # prometheus resources
 if [ "$prometheus" = "null" ] || [ -z "$prometheus" ]; then
     echo "No prometheus defined in $CONFIG_FILE config."
+elif [ "$prometheus" = "configmap" ]; then
+  printf  "\nLinting Prometheus resources with $prometheus processor...\n"
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/configmap/prom-rules lint-configmap-prom-rules
 else
   printf  "\nLinting Prometheus resources with $prometheus processor...\n"
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules lint-mimirtool-mimir-rules

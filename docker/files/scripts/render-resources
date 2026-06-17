@@ -37,6 +37,9 @@ else
   if [ "$prometheus" = "plain" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules
   fi
+  if [ "$prometheus" = "configmap" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/prom-rules render-configmap-prom-rules
+  fi
 fi
 
 if [ "$dashboards" = "null" ] || [ -z "$dashboards" ]; then
