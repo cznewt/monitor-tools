@@ -135,7 +135,7 @@ dashboards:
       grafanaDashboardFolder: Platform
       uid: kubernetes-views-global
       datasources:
-        DS_PROMETHEUS: prometheus
+        DS_PROMETHEUS: global-monitor-mimir-server
   k8s-node-metrics-multi-clusters:
     source:
       grafana:
@@ -153,4 +153,4 @@ dashboards:
       grafanaDashboardFolder: Platform
       uid: k8s-dashboard-en
       datasources:
-        DS__VICTORIAMETRICS-PROD-ALL: prometheus
+        DS__VICTORIAMETRICS-PROD-ALL: global-monitor-mimir-server
