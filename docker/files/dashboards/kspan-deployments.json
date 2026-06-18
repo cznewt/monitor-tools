@@ -1,0 +1,198 @@
+{
+  "uid": "kspan-deployments",
+  "title": "kspan / Workload Events",
+  "tags": [
+    "kspan",
+    "events",
+    "deployments",
+    "mixin"
+  ],
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "cluster",
+        "type": "constant",
+        "query": "monitoring-lab",
+        "current": {
+          "text": "monitoring-lab",
+          "value": "monitoring-lab"
+        },
+        "hide": 2
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "text",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "### kspan / Workload & Deployment Events \u2014 from the cluster-events (eventhandler) stream in Loki. kspan turns these same k8s events into tempo spans."
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Events (5m)",
+      "datasource": {
+        "type": "loki",
+        "uid": "global-monitor-loki-server"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 2
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "global-monitor-loki-server"
+          },
+          "expr": "sum(count_over_time({job=\"integrations/kubernetes/eventhandler\"} | reason=~\"ScalingReplicaSet|SuccessfulCreate|SuccessfulDelete|Created|Started|Killing|Scheduled|Pulled|Completed|BackOff|Unhealthy\" [5m]))",
+          "queryType": "instant"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Warning events (5m)",
+      "datasource": {
+        "type": "loki",
+        "uid": "global-monitor-loki-server"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 2
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "global-monitor-loki-server"
+          },
+          "expr": "sum(count_over_time({job=\"integrations/kubernetes/eventhandler\", level=\"Warning\"} [5m]))",
+          "queryType": "instant"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Events/s by reason",
+      "datasource": {
+        "type": "loki",
+        "uid": "global-monitor-loki-server"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "global-monitor-loki-server"
+          },
+          "expr": "sum by (reason) (rate({job=\"integrations/kubernetes/eventhandler\"} | reason=~\"ScalingReplicaSet|SuccessfulCreate|SuccessfulDelete|Created|Started|Killing|Scheduled|Pulled|Completed|BackOff|Unhealthy\" [$__auto]))",
+          "queryType": "range"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Events/s by namespace",
+      "datasource": {
+        "type": "loki",
+        "uid": "global-monitor-loki-server"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "stacking": {
+              "mode": "normal"
+            }
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "global-monitor-loki-server"
+          },
+          "expr": "sum by (namespace) (rate({job=\"integrations/kubernetes/eventhandler\"} | reason=~\"ScalingReplicaSet|SuccessfulCreate|SuccessfulDelete|Created|Started|Killing|Scheduled|Pulled|Completed|BackOff|Unhealthy\" [$__auto]))",
+          "queryType": "range"
+        }
+      ]
+    },
+    {
+      "type": "logs",
+      "title": "Recent workload events",
+      "datasource": {
+        "type": "loki",
+        "uid": "global-monitor-loki-server"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "options": {
+        "showTime": true,
+        "wrapLogMessage": true,
+        "dedupStrategy": "none",
+        "enableLogDetails": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "global-monitor-loki-server"
+          },
+          "expr": "{job=\"integrations/kubernetes/eventhandler\"} | reason=~\"ScalingReplicaSet|SuccessfulCreate|SuccessfulDelete|Created|Started|Killing|Scheduled|Pulled|Completed|BackOff|Unhealthy\"",
+          "queryType": "range"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "content": "### Pyroscope \u2014 Continuous Profiling\nFlame graphs in **Explore \u2192 pyroscope-monolith**. Profiles auto-collected from all pods by the alloy-profiles eBPF agent; server-side ingestion + query telemetry below.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(pyroscope_distributor_received_compressed_bytes_sum{cluster=\"$cluster\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Ingest bytes/s",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(pyroscope_distributor_received_compressed_bytes_count{cluster=\"$cluster\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Profiles received/s",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(pyroscope_write_sent_profiles_total{cluster=\"$cluster\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "title": "alloy profiles sent/s",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 3
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(pyroscope_query_frontend_queries_in_progress{cluster=\"$cluster\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Queries in progress",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "Bps"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 7
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(pyroscope_distributor_received_compressed_bytes_sum{cluster=\"$cluster\"}[5m])) by (type)",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Ingest bytes/s by type",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 7
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(pyroscope_distributor_received_compressed_bytes_count{cluster=\"$cluster\"}[5m])) by (type)",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Profiles received/s by type",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "s"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "histogram_quantile(0.99, sum(rate(pyroscope_head_block_duration_seconds_bucket{cluster=\"$cluster\"}[5m])) by (le))",
+          "legendFormat": "p99",
+          "refId": "A"
+        }
+      ],
+      "title": "Head block flush duration p99",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(pyroscope_write_sent_profiles_total{cluster=\"$cluster\"}[5m])) by (instance)",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "alloy profiles sent/s by agent",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-pyroscope-datasource",
+        "uid": "global-monitor-pyroscope-server"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-pyroscope-datasource",
+            "uid": "global-monitor-pyroscope-server"
+          },
+          "labelSelector": "{}",
+          "profileTypeId": "process_cpu:cpu:nanoseconds:cpu:nanoseconds",
+          "queryType": "profile",
+          "refId": "A"
+        }
+      ],
+      "title": "Process CPU (all services)",
+      "type": "flamegraph"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "pyroscope",
+    "profiling",
+    "mixin"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "monitoring-lab",
+          "value": "monitoring-lab"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "global-monitor-mimir-server"
+        },
+        "name": "cluster",
+        "query": "label_values(pyroscope_distributor_received_compressed_bytes_sum,cluster)",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "title": "Pyroscope / Continuous Profiling",
+  "uid": "pyroscope-overview"
+}

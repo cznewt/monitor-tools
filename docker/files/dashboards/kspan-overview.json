@@ -1,0 +1,371 @@
+{
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(controller_runtime_active_workers{pod=~\"kspan.*\",cluster=\"$cluster\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Active workers",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(workqueue_depth{pod=~\"kspan.*\",cluster=\"$cluster\"})",
+          "refId": "A"
+        }
+      ],
+      "title": "Workqueue depth",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(controller_runtime_reconcile_total{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Reconcile rate (/s)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps"
+        }
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(controller_runtime_reconcile_errors_total{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m]))",
+          "refId": "A"
+        }
+      ],
+      "title": "Reconcile errors (/s)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(controller_runtime_reconcile_total{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m])) by (result)",
+          "legendFormat": "{{result}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Reconciliations by result",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(workqueue_adds_total{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m])) by (name)",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Workqueue add rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(workqueue_depth{pod=~\"kspan.*\",cluster=\"$cluster\"}) by (name)",
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Workqueue depth over time",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m])) by (le,name))",
+          "legendFormat": "queue {{name}}",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "histogram_quantile(0.99, sum(rate(workqueue_work_duration_seconds_bucket{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m])) by (le,name))",
+          "legendFormat": "work {{name}}",
+          "refId": "B"
+        }
+      ],
+      "title": "Workqueue latency p99 (queue+work)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 20
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(rate(rest_client_requests_total{pod=~\"kspan.*\",cluster=\"$cluster\"}[5m])) by (code)",
+          "legendFormat": "{{code}}",
+          "refId": "A"
+        }
+      ],
+      "title": "REST client requests by code",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "global-monitor-mimir-server"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "global-monitor-mimir-server"
+          },
+          "expr": "sum(go_memstats_heap_inuse_bytes{pod=~\"kspan.*\",cluster=\"$cluster\"})",
+          "legendFormat": "heap inuse",
+          "refId": "A"
+        }
+      ],
+      "title": "Go memory (kspan)",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "kspan",
+    "events",
+    "mixin"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "monitoring-lab",
+          "value": "monitoring-lab"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "global-monitor-mimir-server"
+        },
+        "includeAll": false,
+        "name": "cluster",
+        "query": "label_values(controller_runtime_reconcile_total,cluster)",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timezone": "",
+  "title": "kspan / Event Spans Controller",
+  "uid": "kspan-overview"
+}

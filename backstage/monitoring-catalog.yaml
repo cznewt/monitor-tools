@@ -1,0 +1,116 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  description: Platform / SRE team owning the monitor-lab observability stack
+spec:
+  type: team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: monitoring
+  description: monitor-lab observability stack (LGTM+ — logs, metrics, traces, profiles)
+  links:
+    - url: https://grafana.monlab.newt.cz
+      title: Grafana
+      icon: dashboard
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: grafana
+  description: Grafana — dashboards, exploration and alerting UI
+  tags: [observability, visualization]
+  links:
+    - { url: "https://grafana.monlab.newt.cz", title: Grafana }
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  providesApis: [backstage-graphql]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mimir
+  description: Grafana Mimir — long-term metrics storage (Prometheus-compatible)
+  tags: [observability, metrics]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loki
+  description: Grafana Loki 3.4 (tsdb/v13) — log aggregation
+  tags: [observability, logs]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tempo
+  description: Grafana Tempo 2.6 — distributed tracing + service-graph metrics-generator
+  tags: [observability, traces]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pyroscope
+  description: Grafana Pyroscope — continuous profiling (eBPF)
+  tags: [observability, profiling]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: alertmanager
+  description: Prometheus Alertmanager (3-node HA + karma)
+  tags: [observability, alerting]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: opencost
+  description: OpenCost — Kubernetes cost allocation
+  tags: [observability, cost]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: kspan
+  description: kspan — turns Kubernetes events into OpenTelemetry spans
+  tags: [observability, events, traces]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: k8s-monitoring
+  description: Grafana Alloy (k8s-monitoring) — metrics/logs/traces/profiles collector
+  tags: [observability, collector, alloy]
+spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: backstage-graphql
+  description: Backstage catalog GraphQL API (queried by the Grafana Infinity datasource)
+  tags: [graphql]
+spec:
+  type: graphql
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  definition: |
+    type Query { catalog: Catalog }
+    type Catalog { entities: [Entity] }
+    type Entity { name: String }

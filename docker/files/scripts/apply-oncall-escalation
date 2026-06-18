@@ -1,0 +1,81 @@
+#!/bin/bash
+# Enforce Grafana OnCall escalation pipelines declaratively from the `.oncall`
+# section of a monitor-tools config file, via the OnCall HTTP API.
+#
+# Resources handled (idempotent, keyed by name):
+#   oncall.escalation_chains[]            -> /escalation_chains/   (+ .policies[] -> /escalation_policies/)
+#   oncall.integrations[]                 -> /integrations/        (alert sources; prints the webhook URL)
+#   oncall.integrations[].escalation_chain-> default route -> chain (/routes/)
+#
+# Env:
+#   ONCALL_API_URL    e.g. http://oncall-engine.global-control-oncall.svc:8080/api/v1
+#   ONCALL_API_TOKEN  an OnCall API token (Authorization header value)
+#   CONFIG_FILE       config file to read (default /config/default.yaml)
+set -euo pipefail
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+: "${ONCALL_API_URL:?ONCALL_API_URL not set (e.g. http://oncall-engine:8080/api/v1)}"
+: "${ONCALL_API_TOKEN:?ONCALL_API_TOKEN not set}"
+[ -f "$CONFIG_FILE" ] || { echo "Error: $CONFIG_FILE does not exist."; exit 1; }
+
+if [ "$(yq eval '.oncall // "null"' "$CONFIG_FILE")" = "null" ]; then
+  echo "No oncall section in $CONFIG_FILE."; exit 0
+fi
+
+AUTH=(-fsS -H "Authorization: $ONCALL_API_TOKEN" -H "Content-Type: application/json")
+
+api_id() {  # resource name -> first matching id (empty if none)
+  curl "${AUTH[@]}" -G "$ONCALL_API_URL/$1/" --data-urlencode "name=$2" 2>/dev/null \
+    | jq -r '.results[0].id // empty'
+}
+upsert() {  # resource name payload-json -> id (create or update by name)
+  local res="$1" name="$2" payload="$3" id
+  id=$(api_id "$res" "$name")
+  if [ -n "$id" ]; then
+    curl "${AUTH[@]}" -X PUT "$ONCALL_API_URL/$res/$id/" -d "$payload" >/dev/null
+  else
+    id=$(curl "${AUTH[@]}" -X POST "$ONCALL_API_URL/$res/" -d "$payload" | jq -r '.id')
+  fi
+  printf '%s' "$id"
+}
+
+echo "Applying OnCall escalation from $CONFIG_FILE to $ONCALL_API_URL..."
+
+# 1) Escalation chains (+ their policy steps)
+chains=$(yq eval '.oncall.escalation_chains | length // 0' "$CONFIG_FILE")
+for i in $(seq 0 $((chains-1))); do
+  name=$(yq eval ".oncall.escalation_chains[$i].name" "$CONFIG_FILE")
+  cid=$(upsert escalation_chains "$name" "$(jq -nc --arg n "$name" '{name:$n}')")
+  echo "  escalation_chain '$name' -> $cid"
+  # Replace policy steps for a clean, declarative apply
+  for pid in $(curl "${AUTH[@]}" -G "$ONCALL_API_URL/escalation_policies/" --data-urlencode "escalation_chain_id=$cid" | jq -r '.results[].id'); do
+    curl "${AUTH[@]}" -X DELETE "$ONCALL_API_URL/escalation_policies/$pid/" >/dev/null || true
+  done
+  pol=$(yq eval ".oncall.escalation_chains[$i].policies | length // 0" "$CONFIG_FILE")
+  for j in $(seq 0 $((pol-1))); do
+    step=$(yq eval -o=json ".oncall.escalation_chains[$i].policies[$j]" "$CONFIG_FILE")
+    payload=$(echo "$step" | jq -c --arg c "$cid" --argjson p "$j" '. + {escalation_chain_id:$c, position:$p}')
+    curl "${AUTH[@]}" -X POST "$ONCALL_API_URL/escalation_policies/" -d "$payload" >/dev/null
+  done
+done
+
+# 2) Integrations (alert sources) + default route -> escalation chain
+ints=$(yq eval '.oncall.integrations | length // 0' "$CONFIG_FILE")
+for i in $(seq 0 $((ints-1))); do
+  name=$(yq eval ".oncall.integrations[$i].name" "$CONFIG_FILE")
+  type=$(yq eval ".oncall.integrations[$i].type" "$CONFIG_FILE")
+  chain=$(yq eval ".oncall.integrations[$i].escalation_chain // \"\"" "$CONFIG_FILE")
+  iid=$(upsert integrations "$name" "$(jq -nc --arg n "$name" --arg t "$type" '{name:$n, type:$t}')")
+  hook=$(curl "${AUTH[@]}" "$ONCALL_API_URL/integrations/$iid/" | jq -r '.link // .integration_url // empty')
+  echo "  integration '$name' ($type) -> $iid"
+  echo "    webhook URL (point Alertmanager receiver here): $hook"
+  if [ -n "$chain" ]; then
+    cid=$(api_id escalation_chains "$chain")
+    rid=$(curl "${AUTH[@]}" -G "$ONCALL_API_URL/routes/" --data-urlencode "integration_id=$iid" \
+          | jq -r '[.results[] | select(.is_the_last_route==true)][0].id // (.results[0].id // empty)')
+    [ -n "$rid" ] && [ -n "$cid" ] && \
+      curl "${AUTH[@]}" -X PUT "$ONCALL_API_URL/routes/$rid/" -d "$(jq -nc --arg c "$cid" '{escalation_chain_id:$c}')" >/dev/null
+  fi
+done
+
+echo "OnCall escalation applied."

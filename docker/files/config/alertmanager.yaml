@@ -1,0 +1,35 @@
+name: monlab-escalation
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      receiver: 'null'
+      group_by: [alertname, cluster, namespace]
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 4h
+      routes:
+        # critical -> page (fast repeat) and also continue to ticketing
+        - matchers: ['severity="critical"']
+          receiver: oncall-page
+          group_wait: 10s
+          repeat_interval: 1h
+          continue: true
+        # warning -> ticket
+        - matchers: ['severity="warning"']
+          receiver: oncall-ticket
+        # info -> swallow
+        - matchers: ['severity="info"']
+          receiver: 'null'
+    receivers:
+      - name: 'null'
+      - name: oncall-page
+        webhook_configs:
+          - url: 'http://oncall-server.global-control-oncall.svc:8080/integrations/v1/alertmanager/PAGE_TOKEN/'
+            send_resolved: true
+      - name: oncall-ticket
+        webhook_configs:
+          - url: 'http://oncall-server.global-control-oncall.svc:8080/integrations/v1/alertmanager/TICKET_TOKEN/'
+            send_resolved: true
+  templates: {}
