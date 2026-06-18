@@ -201,9 +201,11 @@ RUN uv pip install --system --break-system-packages --no-cache-dir -r /requireme
 COPY ./files/mixins /mixins
 COPY ./files/config /config
 COPY ./files/scripts /scripts
+COPY ./files/docs /docs
 COPY ./files/justfile /home/ubuntu/justfile
 
 RUN chown ubuntu:ubuntu /scripts -R && \
+    chown ubuntu:ubuntu /docs -R && \
     chown ubuntu:ubuntu /config -R && \
     chown ubuntu:ubuntu /mixins -R && \
     chown ubuntu:ubuntu /home/ubuntu/justfile -R && \

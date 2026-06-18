@@ -1,0 +1,21 @@
+#!/bin/bash
+# Build a static documentation site (mkdocs) from the rendered monitoring
+# resources: an alert catalog (from the rendered ruler rules), the runbooks
+# shipped with each mixin, and the configured inventory.
+#
+# Run after `render-all-resources` so /build is populated.
+#
+# Env:
+#   CONFIG_DIR   active config dir   (default /config)
+#   DOCS_SRC     mkdocs template dir (default /docs)
+#   OUTPUT_DIR   site output dir     (default /build/docs-site)
+set -euo pipefail
+
+CONFIG_DIR="${CONFIG_DIR:=/config}"
+DOCS_SRC="${DOCS_SRC:=/docs}"
+OUTPUT_DIR="${OUTPUT_DIR:=/build/docs-site}"
+export CONFIG_DIR
+
+echo "Rendering docs site from $CONFIG_DIR (template $DOCS_SRC) -> $OUTPUT_DIR ..."
+( cd "$DOCS_SRC" && mkdocs build --clean -d "$OUTPUT_DIR" )
+echo "Docs site built to $OUTPUT_DIR (entry: $OUTPUT_DIR/index.html)."
