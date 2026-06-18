@@ -29,19 +29,6 @@
   },
   "panels": [
     {
-      "type": "text",
-      "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "options": {
-        "mode": "markdown",
-        "content": "### kspan / Workload & Deployment Events \u2014 from the cluster-events (eventhandler) stream in Loki. kspan turns these same k8s events into tempo spans."
-      }
-    },
-    {
       "type": "stat",
       "title": "Events (5m)",
       "datasource": {
@@ -52,7 +39,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 2
+        "y": 0
       },
       "targets": [
         {
@@ -77,7 +64,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 2
+        "y": 0
       },
       "targets": [
         {
@@ -102,7 +89,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 6
+        "y": 4
       },
       "fieldConfig": {
         "defaults": {
@@ -138,7 +125,7 @@
         "h": 6,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 4
       },
       "fieldConfig": {
         "defaults": {
@@ -174,7 +161,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 10
       },
       "options": {
         "showTime": true,
