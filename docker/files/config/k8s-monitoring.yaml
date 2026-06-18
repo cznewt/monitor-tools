@@ -113,6 +113,7 @@ mixins:
     config:
       mimirNamespace: node-exporter
       grafanaDashboardFolder: Monitoring
+      nodeExporterSelector: job="integrations/node_exporter"
     source:
       git: {url: https://github.com/prometheus/node_exporter.git, ref: master, depth: 1}
       includePaths: [docs/node-mixin/**/*]
@@ -154,3 +155,19 @@ dashboards:
       uid: k8s-dashboard-en
       datasources:
         DS__VICTORIAMETRICS-PROD-ALL: global-monitor-mimir-server
+  sloth-slo-detail:
+    source:
+      grafana: {id: 14348, revision: 2}
+    config:
+      grafanaDashboardFolder: Monitoring
+      uid: sloth-slo-detail
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  sloth-high-level-slos:
+    source:
+      grafana: {id: 14643, revision: 1}
+    config:
+      grafanaDashboardFolder: Monitoring
+      uid: sloth-high-level-slos
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
