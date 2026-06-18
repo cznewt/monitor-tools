@@ -1,0 +1,181 @@
+{
+  "panels": [
+    {
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "content": "### Backstage Catalog \u2014 App Graph (Infinity)\nComponents / APIs / Resources only (Location, Group, System, Domain dropped). Edges = `relations[]` between kept kinds. Source: catalog API via the **backstage-graphql** Infinity datasource.",
+        "mode": "markdown"
+      },
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "backstage-graphql-infinity"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "id",
+              "text": "id",
+              "type": "string"
+            },
+            {
+              "selector": "title",
+              "text": "title",
+              "type": "string"
+            },
+            {
+              "selector": "subtitle",
+              "text": "subTitle",
+              "type": "string"
+            },
+            {
+              "selector": "mainstat",
+              "text": "mainStat",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "backstage-graphql-infinity"
+          },
+          "format": "table",
+          "parser": "backend",
+          "refId": "nodes",
+          "root_selector": "$[kind in [\"Component\",\"API\",\"Resource\"]].($n:=$; {\"id\": $lowercase($n.kind) & \":\" & ($n.metadata.namespace ? $n.metadata.namespace : \"default\") & \"/\" & $n.metadata.name,\"title\": $n.metadata.name,\"subtitle\": $n.kind,\"mainstat\": ($n.spec.type ? $n.spec.type : ($n.spec.lifecycle ? $n.spec.lifecycle : $n.kind))})",
+          "source": "url",
+          "type": "json",
+          "url": "/api/catalog/entities",
+          "url_options": {
+            "method": "GET"
+          }
+        },
+        {
+          "columns": [
+            {
+              "selector": "id",
+              "text": "id",
+              "type": "string"
+            },
+            {
+              "selector": "source",
+              "text": "source",
+              "type": "string"
+            },
+            {
+              "selector": "target",
+              "text": "target",
+              "type": "string"
+            },
+            {
+              "selector": "mainstat",
+              "text": "mainStat",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "backstage-graphql-infinity"
+          },
+          "format": "table",
+          "parser": "backend",
+          "refId": "edges",
+          "root_selector": "$[kind in [\"Component\",\"API\",\"Resource\"]].($e:=$; $e.relations[target.kind in [\"component\",\"api\",\"resource\"]].{\"id\": $e.metadata.name & \"-\" & type & \"-\" & target.name,\"source\": $lowercase($e.kind) & \":\" & ($e.metadata.namespace ? $e.metadata.namespace : \"default\") & \"/\" & $e.metadata.name,\"target\": $lowercase(target.kind) & \":\" & target.namespace & \"/\" & target.name,\"mainstat\": type})",
+          "source": "url",
+          "type": "json",
+          "url": "/api/catalog/entities",
+          "url_options": {
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Backstage Catalog \u2014 App Graph (Components / APIs / Resources)",
+      "type": "nodeGraph"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "backstage-graphql-infinity"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "name",
+              "text": "name",
+              "type": "string"
+            },
+            {
+              "selector": "system",
+              "text": "system",
+              "type": "string"
+            },
+            {
+              "selector": "type",
+              "text": "type",
+              "type": "string"
+            },
+            {
+              "selector": "lifecycle",
+              "text": "lifecycle",
+              "type": "string"
+            },
+            {
+              "selector": "owner",
+              "text": "owner",
+              "type": "string"
+            }
+          ],
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "backstage-graphql-infinity"
+          },
+          "format": "table",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "$[kind=\"Component\"].{\"name\": metadata.name, \"system\": spec.system, \"type\": spec.type, \"lifecycle\": spec.lifecycle, \"owner\": spec.owner}",
+          "source": "url",
+          "type": "json",
+          "url": "/api/catalog/entities",
+          "url_options": {
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Components",
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": [
+    "backstage",
+    "catalog",
+    "infinity"
+  ],
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "title": "Backstage / App Graph (Infinity)",
+  "uid": "backstage-app-graph"
+}
