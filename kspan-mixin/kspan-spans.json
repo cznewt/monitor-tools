@@ -1,0 +1,134 @@
+{
+  "uid": "kspan-spans",
+  "title": "kspan / Workload Spans",
+  "tags": [
+    "kspan",
+    "spans",
+    "traces",
+    "tempo",
+    "mixin"
+  ],
+  "schemaVersion": 39,
+  "refresh": "30s",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "cluster",
+        "type": "constant",
+        "query": "monitoring-lab",
+        "current": {
+          "text": "monitoring-lab",
+          "value": "monitoring-lab"
+        },
+        "hide": 2
+      },
+      {
+        "name": "service",
+        "label": "App / service",
+        "type": "query",
+        "datasource": {
+          "type": "tempo",
+          "uid": "global-monitor-tempo-server"
+        },
+        "query": {
+          "type": "tagValues",
+          "tag": "resource.service.name"
+        },
+        "refresh": 2,
+        "sort": 1,
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "current": {
+          "text": "kspan",
+          "value": "kspan"
+        }
+      },
+      {
+        "name": "span",
+        "label": "Span name",
+        "type": "query",
+        "datasource": {
+          "type": "tempo",
+          "uid": "global-monitor-tempo-server"
+        },
+        "query": {
+          "type": "tagValues",
+          "tag": "name"
+        },
+        "refresh": 2,
+        "sort": 1,
+        "includeAll": true,
+        "allValue": ".*",
+        "multi": true,
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        }
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "table",
+      "title": "kspan spans ($service / $span)",
+      "datasource": {
+        "type": "tempo",
+        "uid": "global-monitor-tempo-server"
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "tempo",
+            "uid": "global-monitor-tempo-server"
+          },
+          "queryType": "traceqlSearch",
+          "query": "{ resource.service.name =~ \"$service\" && name =~ \"$span\" }",
+          "tableType": "spans",
+          "limit": 100
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "type": "traces",
+      "title": "Recent kspan traces ($service / $span)",
+      "datasource": {
+        "type": "tempo",
+        "uid": "global-monitor-tempo-server"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "tempo",
+            "uid": "global-monitor-tempo-server"
+          },
+          "queryType": "traceqlSearch",
+          "query": "{ resource.service.name =~ \"$service\" && name =~ \"$span\" }",
+          "tableType": "traces",
+          "limit": 50
+        }
+      ]
+    }
+  ]
+}

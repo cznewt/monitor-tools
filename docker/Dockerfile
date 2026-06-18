@@ -147,6 +147,11 @@ RUN curl -fSL -o "alloy.zip" "https://github.com/grafana/alloy/releases/download
     mv "alloy-linux-amd64" "alloy" && \
     chmod a+x "alloy"
 
+ARG KUBECTL_VERSION=1.34.4
+ENV KUBECTL_VERSION=${KUBECTL_VERSION}
+RUN curl -fSL -o "kubectl" "https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/${PKG_ARCH}/kubectl" && \
+    chmod a+x "kubectl"
+
 FROM ubuntu:24.04
 
 COPY --from=static-downloader /root/grr /usr/local/bin/grr
@@ -161,6 +166,7 @@ COPY --from=static-downloader /root/sloth /usr/local/bin/sloth
 COPY --from=static-downloader /root/logcli /usr/local/bin/logcli
 COPY --from=static-downloader /root/pint /usr/local/bin/pint
 COPY --from=static-downloader /root/grafanactl /usr/local/bin/grafanactl
+COPY --from=static-downloader /root/kubectl /usr/local/bin/kubectl
 COPY --from=static-downloader /root/promtool /usr/local/bin/promtool
 COPY --from=static-downloader /root/amtool /usr/local/bin/amtool
 COPY --from=static-downloader /root/pyrra /usr/local/bin/pyrra

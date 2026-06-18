@@ -1,0 +1,72 @@
+# Self-hosted monitoring docs (docs.monlab.newt.cz)
+#
+# An nginx pod that serves a static mkdocs site built by `render-docs`:
+#   - alert catalog (from the rendered ruler rules), deep-linked to ...
+#   - runbooks: the mixin runbooks + a clone of prometheus-operator/runbooks
+#               restructured into /mixins/<group>/runbooks/<Alert>.md
+#   - deployed inventory
+#
+# The build runs in an initContainer (jupyter-monitor-tools image): it clones
+# the upstream runbooks, runs `do-all` (render only) to populate /build, then
+# `render-docs` -> /docs-site (served by nginx).
+#
+# NOTE: until an image carrying the deep-linking gen_pages.py ships (>= r18),
+# the docs-site mounts a patched gen_pages.py via the `docs-genpages` ConfigMap
+# (kubectl create configmap docs-genpages --from-file=gen_pages.py=docker/files/docs/gen_pages.py).
+# Once the image has it, drop that volume + mount.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: docs-site, namespace: global-monitor-jupyter}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: docs-site}}
+  template:
+    metadata: {labels: {app: docs-site}}
+    spec:
+      initContainers:
+      - name: build
+        image: ghcr.io/cznewt/jupyter-monitor-tools:2026.4-r16
+        command: ["bash", "-lc"]
+        args:
+        - |
+          git clone --depth 1 https://github.com/prometheus-operator/runbooks /tmp/po 2>&1 | tail -1
+          for g in /tmp/po/content/runbooks/*/; do gn=$(basename "$g"); mkdir -p "/mixins/$gn/runbooks"; cp "$g"*.md "/mixins/$gn/runbooks/" 2>/dev/null; done
+          echo "runbook groups now: $(ls -d /mixins/*/runbooks 2>/dev/null | wc -l), files: $(find /mixins/*/runbooks -name '*.md' 2>/dev/null | wc -l)"
+          CONFIG_DIR=/config do-all || true
+          CONFIG_DIR=/config OUTPUT_DIR=/docs-site render-docs
+        volumeMounts:
+        - {name: config, mountPath: /config}
+        - {name: site, mountPath: /docs-site}
+        - {name: build, mountPath: /build}
+        - {name: source, mountPath: /source}
+        - {name: genpages, mountPath: /docs/gen_pages.py, subPath: gen_pages.py}   # temp override; remove once baked into the image
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports: [{containerPort: 80}]
+        volumeMounts: [{name: site, mountPath: /usr/share/nginx/html, readOnly: true}]
+      volumes:
+      - {name: config, configMap: {name: docs-config}}        # CONFIG_DIR (k8s-monitoring.yaml)
+      - {name: genpages, configMap: {name: docs-genpages}}    # temp gen_pages.py override
+      - {name: site, emptyDir: {}}
+      - {name: build, emptyDir: {}}
+      - {name: source, emptyDir: {}}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: docs-site, namespace: global-monitor-jupyter}
+spec: {selector: {app: docs-site}, ports: [{port: 80, targetPort: 80}]}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: docs-site
+  namespace: global-monitor-jupyter
+  annotations: {cert-manager.io/cluster-issuer: letsencrypt}
+spec:
+  ingressClassName: nginx
+  tls: [{hosts: [docs.monlab.newt.cz], secretName: docs-site-tls}]
+  rules:
+  - host: docs.monlab.newt.cz
+    http: {paths: [{path: /, pathType: Prefix, backend: {service: {name: docs-site, port: {number: 80}}}}]}

@@ -3,8 +3,14 @@
 Builds the documentation pages at `mkdocs build` time from the rendered
 monitor-tools output:
 
-  * Alert catalog  <- /build/*/mimirtool/mimir-rules/*.yaml  (rendered ruler rules)
   * Runbooks       <- /mixins/*/runbooks/*.md and /source/*/mixins/*/runbooks/*.md
+                      (this includes any runbooks dropped in before the build,
+                      e.g. a clone of prometheus-operator/runbooks restructured
+                      into /mixins/<group>/runbooks/<Alert>.md)
+  * Alert catalog  <- /build/*/mimirtool/mimir-rules/*.yaml  (rendered ruler rules)
+                      each alert deep-links to its self-hosted runbook when the
+                      alert name matches a runbook page, else to the upstream
+                      runbook_url annotation.
   * Inventory      <- the active config files in $CONFIG_DIR
 
 Run `render-all-resources` first so /build is populated.
@@ -23,7 +29,27 @@ def esc(s):
     return (s or "").replace("|", "\\|").replace("\n", " ").strip()
 
 
-# ---- Alert catalog from rendered ruler rules ----
+# ---- Runbooks -> pages + an alert-name -> local-page map ----
+runbook_pages = {}   # AlertName -> "runbooks/<group>/<AlertName>.md"
+seen = set()
+for rb in sorted(glob.glob("/mixins/*/runbooks/*.md") + glob.glob("/source/*/mixins/*/runbooks/*.md")):
+    name = os.path.basename(rb)[:-3]
+    if name.startswith("_"):          # skip Hugo _index.md section files
+        continue
+    try:
+        group = rb.split("/mixins/")[1].split("/")[0].replace("-mixin", "")
+    except Exception:
+        continue
+    if (group, name) in seen:
+        continue
+    seen.add((group, name))
+    path = f"runbooks/{group}/{name}.md"
+    with mkdocs_gen_files.open(path, "w") as f:
+        f.write(open(rb).read())
+    nav["Runbooks", group, name] = path
+    runbook_pages.setdefault(name, path)   # first match wins
+
+# ---- Alert catalog (deep-link to the local runbook when we have one) ----
 alerts = {}
 for rf in sorted(glob.glob("/build/*/mimirtool/mimir-rules/*.yaml")):
     mixin = os.path.basename(rf)[:-5]
@@ -44,8 +70,11 @@ for rf in sorted(glob.glob("/build/*/mimirtool/mimir-rules/*.yaml")):
             ))
 
 total = sum(len(v) for v in alerts.values())
+local = sum(1 for v in alerts.values() for a in v if a[0] in runbook_pages)
 with mkdocs_gen_files.open("alerts/index.md", "w") as f:
-    print(f"# Alert catalog\n\n**{total}** alerting rules across **{len(alerts)}** mixins.\n", file=f)
+    print(f"# Alert catalog\n", file=f)
+    print(f"**{total}** alerting rules across **{len(alerts)}** mixins — "
+          f"**{local}** deep-link to a self-hosted runbook, the rest to upstream.\n", file=f)
 nav["Alerts", "Overview"] = "alerts/index.md"
 for mixin in sorted(alerts):
     path = f"alerts/{mixin}.md"
@@ -54,25 +83,14 @@ for mixin in sorted(alerts):
         print("| Alert | Severity | Summary | Runbook |", file=f)
         print("|---|---|---|---|", file=f)
         for a, sev, summ, rb in alerts[mixin]:
-            rbl = f"[runbook]({rb})" if rb else ""
-            print(f"| `{a}` | {sev} | {summ} | {rbl} |", file=f)
+            if a in runbook_pages:
+                link = f"[runbook](../{runbook_pages[a]})"
+            elif rb:
+                link = f"[upstream ↗]({rb})"
+            else:
+                link = ""
+            print(f"| `{a}` | {sev} | {summ} | {link} |", file=f)
     nav["Alerts", mixin] = path
-
-# ---- Runbooks shipped with the mixins ----
-seen = set()
-for rb in sorted(glob.glob("/mixins/*/runbooks/*.md") + glob.glob("/source/*/mixins/*/runbooks/*.md")):
-    try:
-        mixin = rb.split("/mixins/")[1].split("/")[0].replace("-mixin", "")
-    except Exception:
-        continue
-    name = os.path.basename(rb)[:-3]
-    if (mixin, name) in seen:
-        continue
-    seen.add((mixin, name))
-    path = f"runbooks/{mixin}/{name}.md"
-    with mkdocs_gen_files.open(path, "w") as f:
-        f.write(open(rb).read())
-    nav["Runbooks", mixin, name] = path
 
 # ---- Inventory from the active config ----
 with mkdocs_gen_files.open("inventory.md", "w") as f:
