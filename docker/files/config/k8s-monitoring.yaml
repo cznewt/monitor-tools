@@ -174,7 +174,7 @@ dashboards:
   pyroscope-overview:
     source:
       http:
-        url: https://raw.githubusercontent.com/cznewt/monitor-tools/feat/prometheus-configmap-render/pyroscope-mixin/pyroscope-overview.json
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/pyroscope-mixin/pyroscope-overview.json
         sha256: 72c6d410677101f3317f74473930b17dd76e77a8c578c4d81e7e189f820c5a0b
     config:
       grafanaDashboardFolder: Monitoring
@@ -182,7 +182,7 @@ dashboards:
   kspan-overview:
     source:
       http:
-        url: https://raw.githubusercontent.com/cznewt/monitor-tools/feat/prometheus-configmap-render/kspan-mixin/kspan-overview.json
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-overview.json
         sha256: 1f2924784316f5ef96cf3ec6698c9168990bc9e19a2f3582ecccc70436e17b6e
     config:
       grafanaDashboardFolder: Monitoring
@@ -190,7 +190,7 @@ dashboards:
   kspan-deployments:
     source:
       http:
-        url: https://raw.githubusercontent.com/cznewt/monitor-tools/feat/prometheus-configmap-render/kspan-mixin/kspan-deployments.json
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-deployments.json
         sha256: 0d8c34ae62252a3eaace636e9ec543e67b65df8ff46ab550e53ff7fa7850ed38
     config:
       grafanaDashboardFolder: Monitoring
@@ -198,7 +198,7 @@ dashboards:
   backstage-app-graph:
     source:
       http:
-        url: https://raw.githubusercontent.com/cznewt/monitor-tools/feat/prometheus-configmap-render/backstage-mixin/backstage-app-graph.json
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/backstage-mixin/backstage-app-graph.json
         sha256: 8f679ddf3617a87861234f956572ee7edfd62cc7b9d64e0de8061fc9cdd08cd9
     config:
       grafanaDashboardFolder: Platform
