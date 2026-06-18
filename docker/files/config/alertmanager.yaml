@@ -26,10 +26,10 @@ alertmanager:
       - name: 'null'
       - name: oncall-page
         webhook_configs:
-          - url: 'http://oncall-engine.global-control-oncall.svc:8080/integrations/v1/alertmanager/PAGE_TOKEN/'
+          - url: 'http://oncall-server.global-control-oncall.svc:8080/integrations/v1/alertmanager/PAGE_TOKEN/'
             send_resolved: true
       - name: oncall-ticket
         webhook_configs:
-          - url: 'http://oncall-engine.global-control-oncall.svc:8080/integrations/v1/alertmanager/TICKET_TOKEN/'
+          - url: 'http://oncall-server.global-control-oncall.svc:8080/integrations/v1/alertmanager/TICKET_TOKEN/'
             send_resolved: true
   templates: {}
