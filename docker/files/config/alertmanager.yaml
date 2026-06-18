@@ -12,24 +12,25 @@ alertmanager:
       routes:
         # critical -> page (fast repeat) and also continue to ticketing
         - matchers: ['severity="critical"']
-          receiver: oncall-page
+          receiver: page
           group_wait: 10s
           repeat_interval: 1h
           continue: true
         # warning -> ticket
         - matchers: ['severity="warning"']
-          receiver: oncall-ticket
+          receiver: ticket
         # info -> swallow
         - matchers: ['severity="info"']
           receiver: 'null'
     receivers:
       - name: 'null'
-      - name: oncall-page
-        webhook_configs:
-          - url: 'http://oncall-server.global-control-oncall.svc:8080/integrations/v1/alertmanager/PAGE_TOKEN/'
+      - name: page
+        pagerduty_configs:
+          - routing_key: CHANGEME-pagerduty-routing-key
             send_resolved: true
-      - name: oncall-ticket
-        webhook_configs:
-          - url: 'http://oncall-server.global-control-oncall.svc:8080/integrations/v1/alertmanager/TICKET_TOKEN/'
+      - name: ticket
+        slack_configs:
+          - api_url: https://hooks.slack.com/services/CHANGEME
+            channel: '#alerts'
             send_resolved: true
   templates: {}
