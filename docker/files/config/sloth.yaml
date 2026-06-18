@@ -1,0 +1,38 @@
+name: monlab-sloth
+sloth:
+  render: mimirtool
+  slos:
+    ingress-nginx:
+      version: prometheus/v1
+      service: ingress-nginx
+      labels:
+        cluster: monitoring-lab
+      slos:
+        - name: requests-availability
+          objective: 99
+          description: Ingress-nginx request availability (non-5xx)
+          sli:
+            events:
+              error_query: sum(rate(nginx_ingress_controller_requests{cluster="monitoring-lab",status=~"5.."}[{{.window}}]))
+              total_query: sum(rate(nginx_ingress_controller_requests{cluster="monitoring-lab"}[{{.window}}]))
+          alerting:
+            name: IngressNginxHighErrorRate
+            page_alert: {labels: {severity: critical}}
+            ticket_alert: {labels: {severity: warning}}
+    kubernetes:
+      version: prometheus/v1
+      service: kube-apiserver
+      labels:
+        cluster: monitoring-lab
+      slos:
+        - name: apiserver-availability
+          objective: 99.5
+          description: Kubernetes apiserver request availability (non-5xx)
+          sli:
+            events:
+              error_query: sum(rate(apiserver_request_total{cluster="monitoring-lab",code=~"5.."}[{{.window}}]))
+              total_query: sum(rate(apiserver_request_total{cluster="monitoring-lab"}[{{.window}}]))
+          alerting:
+            name: KubeApiserverHighErrorRate
+            page_alert: {labels: {severity: critical}}
+            ticket_alert: {labels: {severity: warning}}
