@@ -1,0 +1,22 @@
+name: monlab-oncall
+# Grafana OnCall escalation pipelines, enforced by `apply-oncall-escalation`
+# (needs ONCALL_API_URL + ONCALL_API_TOKEN). Each integration prints a webhook URL —
+# point the matching Alertmanager receiver in alertmanager.yaml at it.
+oncall:
+  escalation_chains:
+    - name: platform-oncall            # critical / page
+      policies:
+        - type: notify_on_call_from_schedule   # set notify_schedule: <id> once a schedule exists
+        - type: wait
+          duration: 300                         # 5 min unacked ...
+        - type: notify_persons                  # ... then escalate (set persons_to_notify: [<user-id>])
+    - name: platform-ticket            # warning / ticket
+      policies:
+        - type: notify_persons                  # set persons_to_notify: [<user-id>]
+  integrations:
+    - name: mimir-alertmanager-page
+      type: alertmanager
+      escalation_chain: platform-oncall
+    - name: mimir-alertmanager-ticket
+      type: alertmanager
+      escalation_chain: platform-ticket
