@@ -7,4 +7,5 @@ mkdocs-material
 mkdocs-gen-files
 mkdocs-literate-nav
 monitoring-utils @ git+https://github.com/cznewt/monitoring-utils.git@master#subdirectory=monitoring-utils
+libmetric @ git+https://github.com/cznewt/python-libmetric.git@master
 
