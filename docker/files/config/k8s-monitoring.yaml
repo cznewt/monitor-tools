@@ -140,6 +140,13 @@ mixins:
       git: {url: 'https://github.com/prometheus/alertmanager.git', ref: main, depth: 1}
       includePaths: [doc/alertmanager-mixin/**/*]
       newRootPath: doc/alertmanager-mixin
+  reference:
+    config:
+      mimirNamespace: reference
+      grafanaDashboardFolder: Reference
+    source:
+      directory:
+        path: /mixins/reference-mixin
 dashboards:
   kubernetes-views-global:
     source:
