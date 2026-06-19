@@ -10,10 +10,8 @@
 # the upstream runbooks, runs `do-all` (render only) to populate /build, then
 # `render-docs` -> /docs-site (served by nginx).
 #
-# NOTE: until an image carrying the deep-linking gen_pages.py ships (>= r18),
-# the docs-site mounts a patched gen_pages.py via the `docs-genpages` ConfigMap
-# (kubectl create configmap docs-genpages --from-file=gen_pages.py=docker/files/docs/gen_pages.py).
-# Once the image has it, drop that volume + mount.
+# The deep-linking gen_pages.py is baked into the image (>= r18), so no override
+# is needed. The initContainer clones prometheus-operator/runbooks each start.
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -26,7 +24,7 @@ spec:
     spec:
       initContainers:
       - name: build
-        image: ghcr.io/cznewt/jupyter-monitor-tools:2026.4-r16
+        image: ghcr.io/cznewt/jupyter-monitor-tools:2026.4-r18
         command: ["bash", "-lc"]
         args:
         - |
@@ -40,7 +38,6 @@ spec:
         - {name: site, mountPath: /docs-site}
         - {name: build, mountPath: /build}
         - {name: source, mountPath: /source}
-        - {name: genpages, mountPath: /docs/gen_pages.py, subPath: gen_pages.py}   # temp override; remove once baked into the image
       containers:
       - name: nginx
         image: nginx:alpine
@@ -48,7 +45,6 @@ spec:
         volumeMounts: [{name: site, mountPath: /usr/share/nginx/html, readOnly: true}]
       volumes:
       - {name: config, configMap: {name: docs-config}}        # CONFIG_DIR (k8s-monitoring.yaml)
-      - {name: genpages, configMap: {name: docs-genpages}}    # temp gen_pages.py override
       - {name: site, emptyDir: {}}
       - {name: build, emptyDir: {}}
       - {name: source, emptyDir: {}}
