@@ -185,6 +185,7 @@ RUN apt-get update --yes && \
     curl \
     ssh-client \
     git \
+    make \
     wget \
     jq \
     vim \
