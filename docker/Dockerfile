@@ -140,7 +140,7 @@ RUN git clone --depth 1 --branch v0.1.1 https://github.com/grafana/dashboard-lin
 
 RUN /usr/local/go/bin/go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 
-ARG ALLOY_VERSION=1.16.3
+ARG ALLOY_VERSION=1.17.0
 ENV ALLOY_VERSION=${ALLOY_VERSION}
 RUN curl -fSL -o "alloy.zip" "https://github.com/grafana/alloy/releases/download/v${ALLOY_VERSION}/alloy-linux-amd64.zip" && \
     unzip "alloy.zip" && \

@@ -25,12 +25,14 @@ local g = import 'g.libsonnet';
         rows.alertListBasic
       ),
 
-    'reference-panel-canvas.json':
-      dashboards.base('Panel / Canvas', tags=['reference', 'reference-panel'])
-      + self.referenceLinks('canvas', 'canvas')
-      + g.dashboard.withPanels(
-        rows.canvasHomeSolarDay
-      ),
+    // canvas panel dropped: cznewt/monitoring-utils canvas ext is incompatible
+    // with grafonnet v11.4.0 (the render harness). Re-enable once that's fixed.
+    //'reference-panel-canvas.json':
+    //  dashboards.base('Panel / Canvas', tags=['reference', 'reference-panel'])
+    //  + self.referenceLinks('canvas', 'canvas')
+    //  + g.dashboard.withPanels(
+    //    rows.canvasHomeSolarDay
+    //  ),
 
     'reference-panel-pie-chart.json':
       dashboards.base('Panel / Pie chart', tags=['reference', 'reference-panel'])
