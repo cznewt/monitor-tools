@@ -22,6 +22,7 @@ else
   if [ "$grafana" = "grizzly" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-folders render-grizzly-grafana-folders
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-library-panels render-grizzly-grafana-library-panels
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
   fi
   if [ "$grafana" = "plain" ]; then

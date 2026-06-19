@@ -15,6 +15,7 @@ if [ "$grafana" = "null" ] || [ -z "$grafana" ]; then
 else
   printf "\nLinting Grafana resources with $grafana processor...\n"
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards lint-plain-grafana-dashboards
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-library-panels lint-grizzly-grafana-library-panels
 fi
 
 # prometheus resources

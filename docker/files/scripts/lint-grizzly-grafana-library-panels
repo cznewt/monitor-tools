@@ -1,0 +1,23 @@
+#!/bin/bash
+
+BUILD_DIR="${BUILD_DIR:=/build/default/grizzly/grafana-library-panels}"
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml" 2>/dev/null)
+
+# Library panels are optional; nothing rendered is not a lint failure.
+if [ -z "$yaml_files" ]; then echo "No grizzly GrafanaLibraryPanels in '$BUILD_DIR', skipping."; exit 0; fi
+
+# There is no dedicated library-element linter; validate that each rendered
+# resource is a well-formed grizzly LibraryElement with spec.uid == metadata.name.
+rc=0
+for yaml_file in $yaml_files; do
+  echo "Linting $yaml_file grizzly GrafanaLibraryPanels..."
+  kind=$(yq eval '.kind' "$yaml_file" 2>/dev/null)
+  name=$(yq eval '.metadata.name' "$yaml_file" 2>/dev/null)
+  uid=$(yq eval '.spec.uid' "$yaml_file" 2>/dev/null)
+  model=$(yq eval '.spec.model | type' "$yaml_file" 2>/dev/null)
+  if [ "$kind" != "LibraryElement" ]; then echo "  ERROR: kind is '$kind', expected LibraryElement"; rc=1; fi
+  if [ "$name" != "$uid" ]; then echo "  ERROR: metadata.name '$name' != spec.uid '$uid'"; rc=1; fi
+  if [ "$model" != "!!map" ]; then echo "  ERROR: spec.model is not an object ($model)"; rc=1; fi
+done
+exit $rc

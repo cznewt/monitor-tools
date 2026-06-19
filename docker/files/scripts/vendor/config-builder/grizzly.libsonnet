@@ -83,6 +83,39 @@ local utils = (import './utils.libsonnet');
       }, indent_array_in_object=true, quote_keys=false)
       for name in std.objectFields(if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {})
     },
+  grafanaLibraryPanels(mixin, config)::
+    local folder = if std.objectHas(config, 'grafanaDashboardFolder') then config.grafanaDashboardFolder else 'General';
+    local panels = if std.objectHasAll(mixin, 'grafanaLibraryPanels') then mixin.grafanaLibraryPanels else {};
+    // Each entry may be a grafonnet librarypanel object ({ uid, name, type,
+    // model }) or a bare panel (used directly as the model). The library
+    // element uid is metadata.name and must equal spec.uid; the folder is
+    // carried in spec.folderUid (grizzly LibraryElement has no metadata.folder).
+    local element(name, p) =
+      local model = if std.objectHas(p, 'model') then p.model else p;
+      local uid = if std.objectHas(p, 'uid') then p.uid else utils.slugify(name);
+      local panelType =
+        if std.objectHas(p, 'type') then p.type
+        else if std.objectHas(model, 'type') then model.type
+        else 'timeseries';
+      {
+        apiVersion: 'grizzly.grafana.com/v1alpha1',
+        kind: 'LibraryElement',
+        metadata: {
+          name: uid,
+        },
+        spec: {
+          uid: uid,
+          name: if std.objectHas(p, 'name') then p.name else name,
+          kind: if std.objectHas(p, 'kind') then p.kind else 1,
+          type: panelType,
+          [if folder != 'General' then 'folderUid']: utils.slugify(folder),
+          model: model,
+        },
+      };
+    {
+      [name + '.yaml']: std.manifestYamlDoc(element(name, panels[name]), indent_array_in_object=true, quote_keys=false)
+      for name in std.objectFields(panels)
+    },
   staticGrafanaDashboard(name, rawJson, config)::
     local datasources = if std.objectHas(config, 'datasources') then config.datasources else {};
     local applied = std.foldl(

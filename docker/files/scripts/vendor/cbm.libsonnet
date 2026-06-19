@@ -22,6 +22,8 @@ local builder = (import 'cb.libsonnet');
     builder.grizzly.grafanaFolders(config.mixins[name].config + {mixinName: name}),
   grizzlyGrafanaDashboards(name, mixin, config)::
     builder.grizzly.grafanaDashboards(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
+  grizzlyGrafanaLibraryPanels(name, mixin, config)::
+    builder.grizzly.grafanaLibraryPanels(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
   lokitoolLokiRules(name, mixin, config)::
     builder.lokitool.lokiRuleGroups(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
   mimirtoolMimirRules(name, mixin, config)::
