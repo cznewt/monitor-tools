@@ -1,0 +1,384 @@
+{
+  "links": [
+    {
+      "asDropdown": true,
+      "includeVars": true,
+      "tags": [
+        "env-level"
+      ],
+      "title": "Environment dashboards",
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "resource"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Platform resources",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "platform"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Platform services",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "runbook"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Monitoring runbooks",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "base"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Base services",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 8
+      },
+      "id": 5,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "monitor"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Monitoring services",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "analysis"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Time-series analysis",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 8
+      },
+      "id": 7,
+      "options": {
+        "showHeadings": false,
+        "showSearch": true,
+        "showStarred": false,
+        "tags": [
+          "reference"
+        ]
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Reference dashboards",
+      "type": "dashlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Cluster"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/basecluster/base-cluster?var-cluster=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 8,
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "count(node_os_info{cluster=~\".+\"}) by (cluster)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "count(ALERTS{alertstate=\"firing\", cluster=~\".+\"}) by (cluster)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "title": "Clusters",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "cluster",
+                "Value #A",
+                "Value #B"
+              ]
+            }
+          }
+        },
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "cluster"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+
+            },
+            "indexByName": {
+              "Value #A": 1,
+              "Value #B": 2,
+              "cluster": 0
+            },
+            "renameByName": {
+              "Value #A": "Nodes",
+              "Value #B": "Alerts",
+              "cluster": "Cluster"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 9,
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "count(up{cluster=~\".+\", app_part_of=~\".+\"}) by ( app_part_of)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "count(ALERTS{alertstate=\"firing\", cluster=~\".+\", app_part_of=~\".+\"}) by ( app_part_of)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "title": "Applications",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "app_part_of",
+                "Value #A",
+                "Value #B"
+              ]
+            }
+          }
+        },
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "app_part_of"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+
+            },
+            "indexByName": {
+              "Value #A": 1,
+              "Value #B": 2,
+              "app_part_of": 0
+            },
+            "renameByName": {
+              "Value #A": "Workloads",
+              "Value #B": "Alerts",
+              "app_part_of": "App"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 36,
+  "tags": [
+    "env-level"
+  ],
+  "templating": {
+    "list": [
+      {
+        "label": "Metrics",
+        "name": "datasource",
+        "query": "prometheus",
+        "type": "datasource"
+      },
+      {
+        "label": "Alerts",
+        "name": "am_datasource",
+        "query": "camptocamp-prometheus-alertmanager-datasource",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Base / Home",
+  "uid": "home"
+}

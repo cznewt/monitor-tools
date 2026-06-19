@@ -1,0 +1,596 @@
+{
+  "links": [
+    {
+      "asDropdown": true,
+      "includeVars": true,
+      "tags": [
+        "cluster-level"
+      ],
+      "title": "Cluster dashboards",
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "count(up{cluster=~\".+\", cluster=~\"$cluster\", app_part_of=~\".+\"}) by (app_part_of)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "count(ALERTS{alertstate=\"firing\", cluster=~\".+\", cluster=~\"$cluster\", app_part_of=~\".+\"}) by ( app_part_of)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "title": "Workload",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "app_part_of",
+                "Value #A",
+                "Value #B"
+              ]
+            }
+          }
+        },
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "app_part_of"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+
+            },
+            "indexByName": {
+              "Value #A": 1,
+              "Value #B": 2,
+              "app_part_of": 0
+            },
+            "renameByName": {
+              "Value #A": "Pods",
+              "Value #B": "Alerts",
+              "app_part_of": "App"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "green",
+                "value": 30
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Node"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/linuxserver/linux-server?var-cluster=${cluster}&var-node=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "CPU|Memory"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "basic"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "sum by (cluster, node, release) (node_uname_info{cluster=~\".+\", cluster=~\"$cluster\"})",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "sum by (cluster, node) (\n  (100 - 100 * rate(node_cpu_seconds_total{cluster=~\".+\", cluster=~\"$cluster\", mode=\"idle\"}[5m]))\n  / ignoring(cpu) group_left\n  count without (cpu)( node_cpu_seconds_total{cluster=~\".+\", cluster=~\"$cluster\", mode=\"idle\"})\n)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "100 -\n(\n  100 *\n  avg(node_memory_MemAvailable_bytes{cluster=~\".+\", cluster=~\"$cluster\"}) by (cluster, node)\n  /\n  avg(node_memory_MemTotal_bytes{cluster=~\".+\", cluster=~\"$cluster\"}) by (cluster, node)\n)\n",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "expr": "max by (cluster, node) (time() - node_boot_time_seconds{cluster=~\".+\", cluster=~\"$cluster\"})",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "title": "Linux servers",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "cluster",
+                "node",
+                "release",
+                "Value #B",
+                "Value #C",
+                "Value #D"
+              ]
+            }
+          }
+        },
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "node"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Value #A": true,
+              "cluster 2": true,
+              "cluster 3": true,
+              "cluster 4": true
+            },
+            "indexByName": {
+              "Value #B": 3,
+              "Value #C": 4,
+              "Value #D": 5,
+              "cluster": 0,
+              "node": 1,
+              "release": 2
+            },
+            "renameByName": {
+              "Value #B": "CPU",
+              "Value #C": "Memory",
+              "Value #D": "Uptime",
+              "cluster": "Cluster",
+              "node": "Node",
+              "release": "Release"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Alert"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/runbook${__value.raw}/runbook${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Node"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/linux-server/linux-server?var-cluster=${cluster}&var-node=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Namespace"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/k8sresourcenamespace/k8sresourcenamespace?var-cluster=${cluster}&var-namespace=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Pod"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/k8sresourcenamespace/k8sresourcenamespace?var-cluster=${cluster}&var-namespace=${__data.fields[\"namespace\"]}&var-pod=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 3,
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": "$am_datasource",
+          "filters": "severity=\"critical\",cluster=~\"$cluster\""
+        }
+      ],
+      "title": "Critial alerts",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "alertname",
+                "summary",
+                "severity",
+                "namespace",
+                "pod",
+                "node"
+              ]
+            }
+          }
+        },
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "alertname"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+
+            },
+            "indexByName": {
+              "alertname": 0,
+              "instance": 5,
+              "namespace": 3,
+              "pod": 4,
+              "severity": 2,
+              "summary": 1
+            },
+            "renameByName": {
+              "alertname": "Alert",
+              "namespace": "Namespace",
+              "node": "Node",
+              "pod": "Pod",
+              "severity": "Severity",
+              "summary": "Summary"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Alert"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/runbook${__value.raw}/runbook${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Node"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/linux-server/linux-server?var-cluster=${cluster}&var-node=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Namespace"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/k8sresourcenamespace/k8sresourcenamespace?var-cluster=${cluster}&var-namespace=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Pod"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "${__value.raw}",
+                    "url": "/d/k8sresourcenamespace/k8sresourcenamespace?var-cluster=${cluster}&var-namespace=${__data.fields[\"namespace\"]}&var-pod=${__value.raw}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 4,
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": "$am_datasource",
+          "filters": "severity!=\"critical\",cluster=~\"$cluster\""
+        }
+      ],
+      "title": "Warnings",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "alertname",
+                "summary",
+                "severity",
+                "namespace",
+                "pod",
+                "node"
+              ]
+            }
+          }
+        },
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "alertname"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+
+            },
+            "indexByName": {
+              "alertname": 0,
+              "instance": 5,
+              "namespace": 3,
+              "pod": 4,
+              "severity": 2,
+              "summary": 1
+            },
+            "renameByName": {
+              "alertname": "Alert",
+              "namespace": "Namespace",
+              "node": "Node",
+              "pod": "Pod",
+              "severity": "Severity",
+              "summary": "Summary"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 36,
+  "tags": [
+    "cluster-level"
+  ],
+  "templating": {
+    "list": [
+      {
+        "label": "Metrics",
+        "name": "datasource",
+        "query": "prometheus",
+        "type": "datasource"
+      },
+      {
+        "label": "Alerts",
+        "name": "am_datasource",
+        "query": "camptocamp-prometheus-alertmanager-datasource",
+        "type": "datasource"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "label": "Cluster",
+        "name": "cluster",
+        "query": "label_values(node_dmi_info{cluster=~\".+\"}, cluster)",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Base / Cluster",
+  "uid": "cluster"
+}

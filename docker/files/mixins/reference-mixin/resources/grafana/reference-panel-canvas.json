@@ -1,0 +1,302 @@
+{
+  "links": [
+    {
+      "targetBlank": true,
+      "title": "Grafonnet API",
+      "type": "link",
+      "url": "https://grafana.github.io/grafonnet/API/panel/canvas/index.html"
+    },
+    {
+      "targetBlank": true,
+      "title": "Grafana docs",
+      "type": "link",
+      "url": "https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/canvas/"
+    },
+    {
+      "tags": [
+        "reference"
+      ],
+      "title": "Reference",
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "#### Home Solar Energy Demo (Day)\n\nThis demo show cases an example off grid home solar system with batteries. In this example we set a background animated gif to represent our home solar system. We then overlayed metric values to represent the solar output, battery charging rate, and house energy drain.\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "kwatt",
+          "unitScale": true
+        },
+        "overrides": [
+
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 14,
+        "x": 10,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "inlineEditing": true,
+        "panZoom": false,
+        "root": {
+          "background": {
+            "color": {
+              "fixed": "transparent"
+            },
+            "image": {
+              "field": "",
+              "fixed": "https://www.sunnova.com/-/media/Marketing-Components/Infographic/Solar-Storage-For-Non-Export-Markets/Solar-Storage-Export-Outage-Day.ashx",
+              "mode": "fixed"
+            },
+            "size": "original"
+          },
+          "border": {
+            "color": {
+              "fixed": "red"
+            },
+            "width": 0
+          },
+          "constraint": {
+            "horizontal": "left",
+            "vertical": "top"
+          },
+          "elements": [
+            {
+              "background": {
+                "color": {
+                  "fixed": "super-light-blue"
+                },
+                "image": {
+                  "fixed": ""
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "dark-green"
+                }
+              },
+              "config": {
+                "align": "center",
+                "color": {
+                  "fixed": "dark-blue"
+                },
+                "size": 16,
+                "text": {
+                  "field": "solar_output",
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "valign": "middle"
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "name": "Solar output",
+              "placement": {
+                "height": 30,
+                "left": 752,
+                "top": 253,
+                "width": 75
+              },
+              "type": "metric-value"
+            },
+            {
+              "background": {
+                "color": {
+                  "fixed": "#ffffff"
+                },
+                "image": {
+                  "fixed": ""
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "dark-green"
+                }
+              },
+              "config": {
+                "align": "center",
+                "color": {
+                  "fixed": "#000000"
+                },
+                "valign": "middle"
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "name": "Hide logo",
+              "placement": {
+                "height": 93,
+                "left": 27,
+                "top": 467,
+                "width": 222
+              },
+              "type": "rectangle"
+            },
+            {
+              "background": {
+                "color": {
+                  "fixed": "super-light-green"
+                },
+                "image": {
+                  "fixed": ""
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "dark-green"
+                }
+              },
+              "config": {
+                "align": "center",
+                "color": {
+                  "fixed": "dark-green"
+                },
+                "size": 16,
+                "text": {
+                  "field": "battery_charge",
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "valign": "middle"
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "name": "Battery charge",
+              "placement": {
+                "height": 30,
+                "left": 648,
+                "top": 349,
+                "width": 75
+              },
+              "type": "metric-value"
+            },
+            {
+              "background": {
+                "color": {
+                  "fixed": "super-light-red"
+                },
+                "image": {
+                  "fixed": ""
+                }
+              },
+              "border": {
+                "color": {
+                  "fixed": "dark-green"
+                }
+              },
+              "config": {
+                "align": "center",
+                "color": {
+                  "fixed": "dark-red"
+                },
+                "size": 16,
+                "text": {
+                  "field": "house_draw",
+                  "fixed": "",
+                  "mode": "field"
+                },
+                "valign": "middle"
+              },
+              "constraint": {
+                "horizontal": "left",
+                "vertical": "top"
+              },
+              "name": "House draw",
+              "placement": {
+                "height": 30,
+                "left": 747,
+                "top": 352,
+                "width": 75
+              },
+              "type": "metric-value"
+            }
+          ],
+          "name": "Element 1659400716798",
+          "placement": {
+            "height": 100,
+            "left": 0,
+            "top": 0,
+            "width": 100
+          },
+          "type": "frame"
+        },
+        "showAdvancedTypes": false
+      },
+      "pluginVersion": "v10.4.0",
+      "targets": [
+        {
+          "datasource": "test_datasource",
+          "scenarioId": "csv_content",
+          "stringInput": "house_draw, battery_charge, solar_output\n1.1, 2.2, 3.3\n"
+        }
+      ],
+      "title": "",
+      "type": "canvas"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 36,
+  "tags": [
+    "reference",
+    "reference-panel"
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Panel / Canvas",
+  "uid": "panel-canvas"
+}
