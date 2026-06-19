@@ -1,0 +1,57 @@
+name: "unpoller"
+rules:
+- alert: "UnpollerDeviceDown"
+  annotations:
+    description: "The UniFi device has stopped reporting metrics for over 15 minutes. It may be offline or unpoller has lost connectivity to the controller."
+    summary: "UniFi device is not reporting metrics."
+  expr: "absent_over_time(unpoller_device_info[15m])"
+  for: "5m"
+  labels:
+    severity: "critical"
+- alert: "UnpollerDeviceHighCPU"
+  annotations:
+    description: "Device {{ $labels.name }} ({{ $labels.site_name }}) has CPU utilization at {{ $value | humanizePercentage }} for over 15 minutes."
+    summary: "UniFi device {{ $labels.name }} CPU usage is above 90%."
+  expr: "unpoller_device_cpu_utilization_ratio > 0.9"
+  for: "15m"
+  labels:
+    severity: "warning"
+- alert: "UnpollerDeviceHighMemory"
+  annotations:
+    description: "Device {{ $labels.name }} ({{ $labels.site_name }}) has memory utilization at {{ $value | humanizePercentage }} for over 15 minutes."
+    summary: "UniFi device {{ $labels.name }} memory usage is above 90%."
+  expr: "unpoller_device_memory_utilization_ratio > 0.9"
+  for: "15m"
+  labels:
+    severity: "warning"
+- alert: "UnpollerDeviceRestarted"
+  annotations:
+    description: "Device {{ $labels.name }} ({{ $labels.site_name }}) uptime is {{ $value | humanizeDuration }}, indicating a recent restart."
+    summary: "UniFi device {{ $labels.name }} has recently restarted."
+  expr: "unpoller_device_uptime_seconds < 300"
+  labels:
+    severity: "info"
+- alert: "UnpollerHighClientDropRate"
+  annotations:
+    description: "AP {{ $labels.name }} ({{ $labels.site_name }}) is dropping {{ $value | humanize }} packets/s (combined rx+tx) for over 10 minutes."
+    summary: "UniFi AP {{ $labels.name }} is dropping packets at a high rate."
+  expr: "sum by (name, site_name) (rate(unpoller_device_vap_receive_dropped_total[5m]) + rate(unpoller_device_vap_transmit_dropped_total[5m])) > 50"
+  for: "10m"
+  labels:
+    severity: "warning"
+- alert: "UnpollerHighVAPErrorRate"
+  annotations:
+    description: "AP {{ $labels.name }} ({{ $labels.site_name }}) is experiencing {{ $value | humanize }} errors/s (combined rx+tx) for over 10 minutes."
+    summary: "UniFi AP {{ $labels.name }} has a high VAP error rate."
+  expr: "sum by (name, site_name) (rate(unpoller_device_vap_receive_errors_total[5m]) + rate(unpoller_device_vap_transmit_errors_total[5m])) > 10"
+  for: "10m"
+  labels:
+    severity: "warning"
+- alert: "UnpollerAccessPointNoClients"
+  annotations:
+    description: "AP {{ $labels.name }} ({{ $labels.site_name }}) has had zero connected clients for over 30 minutes."
+    summary: "UniFi AP {{ $labels.name }} has no connected clients."
+  expr: "sum by (name, site_name) (unpoller_device_stations) == 0"
+  for: "30m"
+  labels:
+    severity: "info"

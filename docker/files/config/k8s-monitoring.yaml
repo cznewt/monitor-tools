@@ -4,6 +4,22 @@ prometheus:
 grafana:
   render: grizzly
 mixins:
+  base:
+    config:
+      mimirNamespace: base
+      grafanaDashboardFolder: Base
+      serverLinuxLink: '/d/dashboardlink'
+      baseClusterLink: '/d/dashboardlink'
+    source:
+      directory:
+        path: /mixins/base-mixin
+  unpoller:
+    config:
+      mimirNamespace: unpoller
+      grafanaDashboardFolder: Network
+    source:
+      directory:
+        path: /mixins/unpoller-mixin
   alloy:
     config:
       mimirNamespace: alloy
@@ -81,16 +97,14 @@ mixins:
       mimirNamespace: opencost
       grafanaDashboardFolder: Monitoring
     source:
-      git:
-        url: https://github.com/adinhodovic/opencost-mixin.git
-        ref: main
-        depth: 1
+      directory:
+        path: /mixins/opencost-mixin
   loki:
     config:
       mimirNamespace: loki
       grafanaDashboardFolder: Monitoring
     source:
-      git: {url: https://github.com/grafana/loki.git, ref: main, depth: 1}
+      git: {url: 'https://github.com/grafana/loki.git', ref: main, depth: 1}
       includePaths: [production/loki-mixin/**/*]
       newRootPath: production/loki-mixin
   mimir:
@@ -98,7 +112,7 @@ mixins:
       mimirNamespace: mimir
       grafanaDashboardFolder: Monitoring
     source:
-      git: {url: https://github.com/grafana/mimir.git, ref: main, depth: 1}
+      git: {url: 'https://github.com/grafana/mimir.git', ref: main, depth: 1}
       includePaths: [operations/mimir-mixin/**/*]
       newRootPath: operations/mimir-mixin
   tempo:
@@ -106,7 +120,7 @@ mixins:
       mimirNamespace: tempo
       grafanaDashboardFolder: Monitoring
     source:
-      git: {url: https://github.com/grafana/tempo.git, ref: main, depth: 1}
+      git: {url: 'https://github.com/grafana/tempo.git', ref: main, depth: 1}
       includePaths: [operations/tempo-mixin/**/*]
       newRootPath: operations/tempo-mixin
   node-exporter:
@@ -115,7 +129,7 @@ mixins:
       grafanaDashboardFolder: Monitoring
       nodeExporterSelector: job="integrations/node_exporter"
     source:
-      git: {url: https://github.com/prometheus/node_exporter.git, ref: master, depth: 1}
+      git: {url: 'https://github.com/prometheus/node_exporter.git', ref: master, depth: 1}
       includePaths: [docs/node-mixin/**/*]
       newRootPath: docs/node-mixin
   alertmanager:
@@ -123,7 +137,7 @@ mixins:
       mimirNamespace: alertmanager
       grafanaDashboardFolder: Monitoring
     source:
-      git: {url: https://github.com/prometheus/alertmanager.git, ref: main, depth: 1}
+      git: {url: 'https://github.com/prometheus/alertmanager.git', ref: main, depth: 1}
       includePaths: [doc/alertmanager-mixin/**/*]
       newRootPath: doc/alertmanager-mixin
 dashboards:

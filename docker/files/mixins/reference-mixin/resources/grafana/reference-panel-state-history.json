@@ -1,0 +1,39 @@
+{
+  "links": [
+    {
+      "targetBlank": true,
+      "title": "Grafonnet API",
+      "type": "link",
+      "url": "https://grafana.github.io/grafonnet/API/panel/stateHistory/index.html"
+    },
+    {
+      "targetBlank": true,
+      "title": "Grafana docs",
+      "type": "link",
+      "url": "https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/state-history/"
+    },
+    {
+      "tags": [
+        "reference"
+      ],
+      "title": "Reference",
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+
+  ],
+  "refresh": "5m",
+  "schemaVersion": 36,
+  "tags": [
+    "reference",
+    "reference-panel"
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Panel / Table",
+  "uid": "panel-table"
+}

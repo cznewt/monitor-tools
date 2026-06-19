@@ -7,3 +7,4 @@ extra/jupyter-monitor-tools/docker/files/notebooks/*
 __pycache__/
 *.pyc
 
+docker/files/mixins/*/vendor/

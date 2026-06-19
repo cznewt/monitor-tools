@@ -1,0 +1,100 @@
+{
+  "links": [
+    {
+      "targetBlank": true,
+      "title": "Grafonnet API",
+      "type": "link",
+      "url": "https://grafana.github.io/grafonnet/API/panel/alertList/index.html"
+    },
+    {
+      "targetBlank": true,
+      "title": "Grafana docs",
+      "type": "link",
+      "url": "https://grafana.com/docs/grafana/latest/panels-visualizations/visualizations/alert-list/"
+    },
+    {
+      "tags": [
+        "reference"
+      ],
+      "title": "Reference",
+      "type": "dashboards"
+    }
+  ],
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "content": "#### Alert lists\n\nUse alert lists to display your alerts. You can configure the list to show the current state.\n",
+        "mode": "markdown"
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "alertInstanceLabelFilter": "{severity=\"critical\"}"
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "Critical alerts",
+      "type": "alertlist"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "alertInstanceLabelFilter": "{alertname=~\".+\"}",
+        "stateFilter": {
+          "normal": true
+        }
+      },
+      "pluginVersion": "v10.4.0",
+      "title": "All alerts",
+      "type": "alertlist"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 36,
+  "tags": [
+    "reference",
+    "reference-panel"
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timezone": "utc",
+  "title": "Panel / Alert list",
+  "uid": "panel-alert-list"
+}

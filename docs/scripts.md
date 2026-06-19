@@ -56,6 +56,7 @@ Common Env: `CONFIG_FILE`, `SOURCE_DIR`, `BUILD_DIR`
 ### Grafana
 - `render-grizzly-grafana-folders`: Renders Grafana folders using Grizzly.
 - `render-grizzly-grafana-dashboards`: Renders Grafana dashboards using Grizzly.
+- `render-grizzly-grafana-library-panels`: Renders Grafana library panels (library elements) using Grizzly, from each mixin's `grafanaLibraryPanels`.
 - `render-plain-grafana-dashboards`: Renders raw JSON Grafana dashboards.
 - `render-grizzly-grafana-datasources`: Renders Grafana datasources using Grizzly.
 
@@ -82,6 +83,7 @@ Common Env: `BUILD_DIR`
 - `lint-mimirtool-mimir-rules`: Lints Mimir rules using `mimirtool`.
 - `lint-lokitool-loki-rules`: Lints Loki rules using `lokitool`.
 - `lint-plain-grafana-dashboards`: Lints plain Grafana dashboard JSONs.
+- `lint-grizzly-grafana-library-panels`: Validates each rendered library element is a well-formed grizzly `LibraryElement` (`spec.uid == metadata.name`, object `spec.model`).
 - `lint-plain-prom-rules`: Lints plain Prometheus rules.
 - `lint-configmap-prom-rules`: Extracts the rules embedded in each rendered ConfigMap and validates them with `promtool check rules`.
 - `lint-mimirtool-alertmanager-config`: Lints Alertmanager configuration.
@@ -92,6 +94,7 @@ Pushes the rendered and linted resources to the respective services.
 
 - `apply-grizzly-grafana-folders`: Pushes Grafana folders via Grizzly. (Env: `BUILD_DIR`, `GRAFANA_URL`, `GRAFANA_TOKEN`)
 - `apply-grizzly-grafana-dashboards`: Pushes Grafana dashboards via Grizzly. (Env: `BUILD_DIR`, `GRAFANA_URL`, `GRAFANA_TOKEN`)
+- `apply-grizzly-grafana-library-panels`: Pushes Grafana library panels via Grizzly. (Env: `BUILD_DIR`, `GRAFANA_URL`, `GRAFANA_TOKEN`)
 - `apply-grizzly-grafana-datasources`: Pushes Grafana datasources via Grizzly. (Env: `BUILD_DIR`, `GRAFANA_URL`, `GRAFANA_TOKEN`)
 - `apply-mimirtool-mimir-rules`: Pushes rules to Mimir via `mimirtool`. (Env: `BUILD_DIR`, `MIMIR_ADDRESS`, `MIMIR_TENANT_ID`)
 - `apply-lokitool-loki-rules`: Pushes rules to Loki via `lokitool`. (Env: `BUILD_DIR`, `LOKI_ADDRESS`, `LOKI_TENANT_ID`)

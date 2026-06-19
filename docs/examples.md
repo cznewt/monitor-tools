@@ -84,6 +84,58 @@ Finally, wire the sidecar to the same namespace + labels so it mounts the rules 
 
 Prometheus then loads them via `rule_files: ["/etc/prometheus/rules/*.yaml"]`.
 
+## Grafana library panels
+
+Grafana has no file/sidecar provisioner for **library panels** (library elements) — unlike dashboards and datasources, they exist only in the Grafana DB and must be managed through the API. `monitor-tools` renders them as grizzly `LibraryElement` resources and pushes them with `grr`, so a panel can be authored once with grafonnet and reused across dashboards.
+
+A mixin exposes them under `grafanaLibraryPanels`, keyed by name. Build the panel model with grafonnet and wrap it with `g.librarypanel` (add `kind`, which grafonnet omits — `1` = panel, `2` = variable):
+
+```jsonnet
+// mixin.libsonnet
+local g = import 'g.libsonnet';
+local lp = g.librarypanel;
+local ts = g.panel.timeSeries;
+local prometheus = g.query.prometheus;
+
+{
+  grafanaLibraryPanels+:: {
+    'requests-per-second':
+      lp.withUid('lib-requests-per-second')
+      + lp.withName('Requests per second')
+      + lp.withType('timeseries')
+      + lp.withModel(
+        ts.new('Requests per second')
+        + ts.standardOptions.withUnit('reqps')
+        + ts.queryOptions.withTargets([
+          prometheus.new('${datasource}', 'sum(rate(http_requests_total[5m]))')
+          + prometheus.withLegendFormat('rps'),
+        ])
+      ),
+  },
+}
+```
+
+Each entry may also be a bare panel object (used directly as the model, with `uid` derived from the key and `kind` defaulting to `1`). The panel's folder follows the mixin's `grafanaDashboardFolder` (rendered into `spec.folderUid`). With `grafana.render: grizzly`, `render-resources` writes one resource per panel under `/build/<env>/grizzly/grafana-library-panels/`:
+
+```yaml
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: LibraryElement
+metadata:
+  name: lib-requests-per-second   # == spec.uid
+spec:
+  uid: lib-requests-per-second
+  name: Requests per second
+  kind: 1
+  type: timeseries
+  folderUid: monitoring
+  model:
+    type: timeseries
+    title: Requests per second
+    # ...full grafonnet panel model...
+```
+
+`apply-resources` then applies folders → library panels → dashboards (so a dashboard embedding a library panel resolves it). Library panels are optional: a mixin without `grafanaLibraryPanels` renders nothing and is skipped.
+
 ## More configs
 
 | Config | Demonstrates |

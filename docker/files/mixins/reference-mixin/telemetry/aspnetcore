@@ -1,0 +1,1428 @@
+# HELP signalr_connections_current_total Current Connections
+# TYPE signalr_connections_current_total gauge
+signalr_connections_current_total 0
+# HELP http_client_requests_errors_total Total HTTP requests sent errors.
+# TYPE http_client_requests_errors_total counter
+http_client_requests_errors_total 1
+# HELP sqlclient_active_connection_pools_total Number of active connection pools
+# TYPE sqlclient_active_connection_pools_total gauge
+sqlclient_active_connection_pools_total 1
+# HELP grpc_server_messages_received_total Total Messages Received
+# TYPE grpc_server_messages_received_total gauge
+grpc_server_messages_received_total 0
+# HELP runtime_gc_size_loh_bytes GC size in bytes (LOH)
+# TYPE runtime_gc_size_loh_bytes gauge
+runtime_gc_size_loh_bytes 36934920
+# HELP signalr_connections_duration_milliseconds Average Connection Duration
+# TYPE signalr_connections_duration_milliseconds gauge
+signalr_connections_duration_milliseconds 0
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1643697376.0865705
+# HELP efcore_execution_strategy_operation_failures_per_second Execution Strategy Operation Failures
+# TYPE efcore_execution_strategy_operation_failures_per_second gauge
+efcore_execution_strategy_operation_failures_per_second 0
+# HELP net_security_tls_handshakes_current_total Current TLS handshakes
+# TYPE net_security_tls_handshakes_current_total gauge
+net_security_tls_handshakes_current_total 1
+# HELP efcore_compiled_query_cache_hit_ratio Query Cache Hit Rate
+# TYPE efcore_compiled_query_cache_hit_ratio gauge
+efcore_compiled_query_cache_hit_ratio -1
+# HELP http_client_http20_connections_current_total Current Http 2.0 Connections
+# TYPE http_client_http20_connections_current_total gauge
+http_client_http20_connections_current_total 1
+# HELP grpc_client_calls_total Total Calls
+# TYPE grpc_client_calls_total gauge
+grpc_client_calls_total 0
+# HELP net_security_tls_12_sessions_total TLS 1.2 Sessions Active
+# TYPE net_security_tls_12_sessions_total gauge
+net_security_tls_12_sessions_total 1
+# HELP net_security_handshakes_tls11_duration_milliseconds TLS 1.1 Handshake Duration
+# TYPE net_security_handshakes_tls11_duration_milliseconds gauge
+net_security_handshakes_tls11_duration_milliseconds 0
+# HELP runtime_il_jitted_bytes IL Bytes Jitted
+# TYPE runtime_il_jitted_bytes gauge
+runtime_il_jitted_bytes 9592772
+# HELP runtime_gc_fragmentation_ratio GC Fragmentation
+# TYPE runtime_gc_fragmentation_ratio gauge
+runtime_gc_fragmentation_ratio 52.37592057721034
+# HELP sqlclient_commands_duration_seconds The duration of DB requests processed by an application.
+# TYPE sqlclient_commands_duration_seconds histogram
+sqlclient_commands_duration_seconds_sum 38.22900790000006
+sqlclient_commands_duration_seconds_count 5755
+sqlclient_commands_duration_seconds_bucket{le="0.001"} 1936
+sqlclient_commands_duration_seconds_bucket{le="0.002"} 4362
+sqlclient_commands_duration_seconds_bucket{le="0.004"} 4885
+sqlclient_commands_duration_seconds_bucket{le="0.008"} 5145
+sqlclient_commands_duration_seconds_bucket{le="0.016"} 5361
+sqlclient_commands_duration_seconds_bucket{le="0.032"} 5502
+sqlclient_commands_duration_seconds_bucket{le="0.064"} 5636
+sqlclient_commands_duration_seconds_bucket{le="0.128"} 5703
+sqlclient_commands_duration_seconds_bucket{le="0.256"} 5742
+sqlclient_commands_duration_seconds_bucket{le="0.512"} 5751
+sqlclient_commands_duration_seconds_bucket{le="1.024"} 5755
+sqlclient_commands_duration_seconds_bucket{le="2.048"} 5755
+sqlclient_commands_duration_seconds_bucket{le="4.096"} 5755
+sqlclient_commands_duration_seconds_bucket{le="8.192"} 5755
+sqlclient_commands_duration_seconds_bucket{le="16.384"} 5755
+sqlclient_commands_duration_seconds_bucket{le="32.768"} 5755
+sqlclient_commands_duration_seconds_bucket{le="+Inf"} 5755
+# HELP sqlclient_transactions_rollback_total Total rollback transactions.
+# TYPE sqlclient_transactions_rollback_total counter
+sqlclient_transactions_rollback_total 0
+# HELP process_working_set_bytes Process working set
+# TYPE process_working_set_bytes gauge
+process_working_set_bytes 2318569472
+# HELP runtime_memory_working_set_megabytes Working Set in megabytes
+# TYPE runtime_memory_working_set_megabytes gauge
+runtime_memory_working_set_megabytes 2317
+# HELP process_num_threads Total number of threads
+# TYPE process_num_threads gauge
+process_num_threads 83
+# HELP net_sockets_incoming_connections_total Incoming Connections Established
+# TYPE net_sockets_incoming_connections_total gauge
+net_sockets_incoming_connections_total 1
+# HELP runtime_time_in_gc_ratio % Time in GC since last GC
+# TYPE runtime_time_in_gc_ratio gauge
+runtime_time_in_gc_ratio 1
+# HELP efcore_active_dbcontexts_total Active DbContexts
+# TYPE efcore_active_dbcontexts_total gauge
+efcore_active_dbcontexts_total 2
+# HELP runtime_exceptions_total Exception Count
+# TYPE runtime_exceptions_total gauge
+runtime_exceptions_total 0
+# HELP net_sockets_datagrams_sent Datagrams Sent
+# TYPE net_sockets_datagrams_sent gauge
+net_sockets_datagrams_sent 1
+# HELP runtime_gc_gen2_count GC Count (Gen 2)
+# TYPE runtime_gc_gen2_count gauge
+runtime_gc_gen2_count 0
+# HELP sqlclient_connections_opened_total Total opened DB connections
+# TYPE sqlclient_connections_opened_total counter
+sqlclient_connections_opened_total 5794
+# HELP sqlclient_soft_connects_per_second Connections got from connection pool
+# TYPE sqlclient_soft_connects_per_second gauge
+sqlclient_soft_connects_per_second 0
+# HELP kestrel_connections_total Total Requests
+# TYPE kestrel_connections_total gauge
+kestrel_connections_total 0
+# HELP net_security_tls_handshakes_failed_total Total TLS handshakes failed
+# TYPE net_security_tls_handshakes_failed_total gauge
+net_security_tls_handshakes_failed_total 1
+# HELP runtime_threadpool_completed_items_total ThreadPool Completed Work Item Count
+# TYPE runtime_threadpool_completed_items_total gauge
+runtime_threadpool_completed_items_total 19
+# HELP sqlclient_inactive_connection_pool_groups_total Number of unique connection strings waiting for pruning
+# TYPE sqlclient_inactive_connection_pool_groups_total gauge
+sqlclient_inactive_connection_pool_groups_total 1
+# HELP efcore_transaction_rollback_total Total rollback transactions.
+# TYPE efcore_transaction_rollback_total counter
+efcore_transaction_rollback_total 0
+# HELP http_client_http11_requests_queue_duration_milliseconds HTTP 1.1 Requests Queue Duration
+# TYPE http_client_http11_requests_queue_duration_milliseconds gauge
+http_client_http11_requests_queue_duration_milliseconds 2.307
+# HELP kestrel_tls_handshakes_current_total Number of currently active TLS handshakes
+# TYPE kestrel_tls_handshakes_current_total gauge
+kestrel_tls_handshakes_current_total 0
+# HELP sqlclient_reclaimed_connections_total Number of reclaimed connections from GC
+# TYPE sqlclient_reclaimed_connections_total gauge
+sqlclient_reclaimed_connections_total 0
+# HELP process_open_handles Number of open handles
+# TYPE process_open_handles gauge
+process_open_handles 1752
+# HELP sqlclient_stasis_connections_total Number of connections currently waiting to be ready
+# TYPE sqlclient_stasis_connections_total gauge
+sqlclient_stasis_connections_total 1
+# HELP runtime_allocation_rate_bytes Allocation Rate in bytes
+# TYPE runtime_allocation_rate_bytes gauge
+runtime_allocation_rate_bytes 596016
+# HELP signalr_connections_started_total Total Connections Started
+# TYPE signalr_connections_started_total gauge
+signalr_connections_started_total 0
+# HELP efcore_optimistic_concurrency_failures_total Optimistic Concurrency Failures (Total)
+# TYPE efcore_optimistic_concurrency_failures_total gauge
+efcore_optimistic_concurrency_failures_total 1
+# HELP net_security_handshakes_duration_milliseconds TLS Handshake Duration
+# TYPE net_security_handshakes_duration_milliseconds gauge
+net_security_handshakes_duration_milliseconds 1.2696
+# HELP kestrel_connections_queue_total Length of Kestrel Connection Queue
+# TYPE kestrel_connections_queue_total gauge
+kestrel_connections_queue_total 0
+# HELP runtime_methods_jitted_total Number of Methods Jitted
+# TYPE runtime_methods_jitted_total gauge
+runtime_methods_jitted_total 70239
+# HELP kestrel_requests_queue_total Length total HTTP request queue
+# TYPE kestrel_requests_queue_total gauge
+kestrel_requests_queue_total 0
+# HELP grpc_server_calls_failed_total Total Calls Failed
+# TYPE grpc_server_calls_failed_total gauge
+grpc_server_calls_failed_total 0
+# HELP efcore_dbcontext_created_total Total created DBContexts
+# TYPE efcore_dbcontext_created_total counter
+efcore_dbcontext_created_total 5561
+# HELP efcore_execution_strategy_operation_failures_total Execution Strategy Operation Failures (Total)
+# TYPE efcore_execution_strategy_operation_failures_total gauge
+efcore_execution_strategy_operation_failures_total 1
+# HELP grpc_server_calls_current_total Current Calls
+# TYPE grpc_server_calls_current_total gauge
+grpc_server_calls_current_total 0
+# HELP grpc_server_messages_sent_total Total Messages Sent
+# TYPE grpc_server_messages_sent_total gauge
+grpc_server_messages_sent_total 0
+# HELP net_dns_lookups_duration_milliseconds Average DNS Lookup Duration
+# TYPE net_dns_lookups_duration_milliseconds gauge
+net_dns_lookups_duration_milliseconds 0
+# HELP runtime_gc_gen0_count GC Count (Gen 0)
+# TYPE runtime_gc_gen0_count gauge
+runtime_gc_gen0_count 0
+# HELP dotnet_collection_count_total GC collection count
+# TYPE dotnet_collection_count_total counter
+dotnet_collection_count_total{generation="1"} 47
+dotnet_collection_count_total{generation="0"} 85
+dotnet_collection_count_total{generation="2"} 22
+# HELP runtime_threadpool_queue_length ThreadPool Queue Length
+# TYPE runtime_threadpool_queue_length gauge
+runtime_threadpool_queue_length 1
+# HELP sqlclient_connections_errors_total Total DB connections errors
+# TYPE sqlclient_connections_errors_total counter
+# HELP net_sockets_bytes_sent Bytes Sent
+# TYPE net_sockets_bytes_sent gauge
+net_sockets_bytes_sent 33310239
+# HELP http_client_requests_started_per_second Requests Started Rate
+# TYPE http_client_requests_started_per_second gauge
+http_client_requests_started_per_second 1
+# HELP sqlclient_pooled_connections_total Number of connections are managed by connection pooler
+# TYPE sqlclient_pooled_connections_total gauge
+sqlclient_pooled_connections_total 2
+# HELP grpc_client_calls_failed_total Total Calls Failed
+# TYPE grpc_client_calls_failed_total gauge
+grpc_client_calls_failed_total 0
+# HELP sqlclient_inactive_connection_pools_total Number of inactive connection pools
+# TYPE sqlclient_inactive_connection_pools_total gauge
+sqlclient_inactive_connection_pools_total 1
+# HELP sqlclient_connections_closed_total Total closed DB connections
+# TYPE sqlclient_connections_closed_total counter
+sqlclient_connections_closed_total 5794
+# HELP grpc_client_messages_sent_total Total Messages Sent
+# TYPE grpc_client_messages_sent_total gauge
+grpc_client_messages_sent_total 0
+# HELP sqlclient_soft_disconnects_per_second Connections returned to the connection pool
+# TYPE sqlclient_soft_disconnects_per_second gauge
+sqlclient_soft_disconnects_per_second 0
+# HELP sqlclient_transactions_errors_total Total DB transaction errors
+# TYPE sqlclient_transactions_errors_total counter
+# HELP grpc_client_calls_deadline_exceeded_total Total Calls Deadline Exceeded
+# TYPE grpc_client_calls_deadline_exceeded_total gauge
+grpc_client_calls_deadline_exceeded_total 0
+# HELP efcore_command_duration_seconds The duration of DB requests processed by an application.
+# TYPE efcore_command_duration_seconds histogram
+efcore_command_duration_seconds_sum 45.267610300000094
+efcore_command_duration_seconds_count 5755
+efcore_command_duration_seconds_bucket{le="0.001"} 1284
+efcore_command_duration_seconds_bucket{le="0.002"} 4128
+efcore_command_duration_seconds_bucket{le="0.004"} 4843
+efcore_command_duration_seconds_bucket{le="0.008"} 5117
+efcore_command_duration_seconds_bucket{le="0.016"} 5333
+efcore_command_duration_seconds_bucket{le="0.032"} 5470
+efcore_command_duration_seconds_bucket{le="0.064"} 5609
+efcore_command_duration_seconds_bucket{le="0.128"} 5690
+efcore_command_duration_seconds_bucket{le="0.256"} 5733
+efcore_command_duration_seconds_bucket{le="0.512"} 5748
+efcore_command_duration_seconds_bucket{le="1.024"} 5755
+efcore_command_duration_seconds_bucket{le="2.048"} 5755
+efcore_command_duration_seconds_bucket{le="4.096"} 5755
+efcore_command_duration_seconds_bucket{le="8.192"} 5755
+efcore_command_duration_seconds_bucket{le="16.384"} 5755
+efcore_command_duration_seconds_bucket{le="32.768"} 5755
+efcore_command_duration_seconds_bucket{le="+Inf"} 5755
+# HELP process_private_memory_bytes Process private memory size
+# TYPE process_private_memory_bytes gauge
+process_private_memory_bytes 2401837056
+# HELP aspnetcore_requests_total Total Requests
+# TYPE aspnetcore_requests_total gauge
+aspnetcore_requests_total 5152
+# HELP net_security_handshakes_tls13_duration_milliseconds TLS 1.3 Handshake Duration
+# TYPE net_security_handshakes_tls13_duration_milliseconds gauge
+net_security_handshakes_tls13_duration_milliseconds 0
+# HELP runtime_gc_gen1_count GC Count (Gen 1)
+# TYPE runtime_gc_gen1_count gauge
+runtime_gc_gen1_count 0
+# HELP runtime_gc_size_gen1_bytes GC size in bytes (Gen 1)
+# TYPE runtime_gc_size_gen1_bytes gauge
+runtime_gc_size_gen1_bytes 63065104
+# HELP net_sockets_outgoing_connections_total Outgoing Connections Established
+# TYPE net_sockets_outgoing_connections_total gauge
+net_sockets_outgoing_connections_total 1848
+# HELP net_sockets_datagrams_received Datagrams Received
+# TYPE net_sockets_datagrams_received gauge
+net_sockets_datagrams_received 1
+# HELP sqlclient_active_soft_connections_total Active connections got from connection pool
+# TYPE sqlclient_active_soft_connections_total gauge
+sqlclient_active_soft_connections_total 1
+# HELP efcore_transaction_started_total Total started transactions.
+# TYPE efcore_transaction_started_total counter
+efcore_transaction_started_total 0
+# HELP sqlclient_free_connections_total Number of free-ready connections
+# TYPE sqlclient_free_connections_total gauge
+sqlclient_free_connections_total 2
+# HELP grpc_server_calls_total Total Calls
+# TYPE grpc_server_calls_total gauge
+grpc_server_calls_total 0
+# HELP runtime_gc_size_poh_bytes GC size in bytes (POH)
+# TYPE runtime_gc_size_poh_bytes gauge
+runtime_gc_size_poh_bytes 1739128
+# HELP kestrel_tls_handshakes_failed_total Total number of failed TLS handshakes
+# TYPE kestrel_tls_handshakes_failed_total gauge
+kestrel_tls_handshakes_failed_total 0
+# HELP efcore_connection_opened_total Total opened DB connections
+# TYPE efcore_connection_opened_total counter
+efcore_connection_opened_total 5794
+# HELP efcore_connection_closed_total Total closed DB connections
+# TYPE efcore_connection_closed_total counter
+efcore_connection_closed_total 5794
+# HELP efcore_connection_errors_total Total DB connections errors
+# TYPE efcore_connection_errors_total counter
+efcore_connection_errors_total 0
+# HELP runtime_threadpool_threads_total ThreadPool Thread Count
+# TYPE runtime_threadpool_threads_total gauge
+runtime_threadpool_threads_total 8
+# HELP efcore_queries_per_second Queries
+# TYPE efcore_queries_per_second gauge
+efcore_queries_per_second 0
+# HELP http_client_requests_started_total Requests Started
+# TYPE http_client_requests_started_total gauge
+http_client_requests_started_total 1848
+# HELP net_security_tls_handshakes_per_second TLS handshakes completed
+# TYPE net_security_tls_handshakes_per_second gauge
+net_security_tls_handshakes_per_second 1
+# HELP net_security_tls_13_sessions_total TLS 1.3 Sessions Active
+# TYPE net_security_tls_13_sessions_total gauge
+net_security_tls_13_sessions_total 1
+# HELP runtime_gc_size_gen0_bytes GC size in bytes (Gen 0)
+# TYPE runtime_gc_size_gen0_bytes gauge
+runtime_gc_size_gen0_bytes 72610272
+# HELP efcore_transaction_committed_total Total committed transactions.
+# TYPE efcore_transaction_committed_total counter
+efcore_transaction_committed_total 221
+# HELP runtime_active_timers_total Number of Active Timers
+# TYPE runtime_active_timers_total gauge
+runtime_active_timers_total 19
+# HELP http_client_http20_requests_queue_duration_milliseconds HTTP 2.0 Requests Queue Duration
+# TYPE http_client_http20_requests_queue_duration_milliseconds gauge
+http_client_http20_requests_queue_duration_milliseconds 0
+# HELP grpc_server_calls_unimplemented_total Total Calls Unimplemented
+# TYPE grpc_server_calls_unimplemented_total gauge
+grpc_server_calls_unimplemented_total 0
+# HELP http_client_http11_connections_current_total Current Http 1.1 Connections
+# TYPE http_client_http11_connections_current_total gauge
+http_client_http11_connections_current_total 1
+# HELP kestrel_tls_handshakes_per_second Number of TLS Handshakes made between update intervals
+# TYPE kestrel_tls_handshakes_per_second gauge
+kestrel_tls_handshakes_per_second 0
+# HELP runtime_assemblies_total Number of Assemblies Loaded
+# TYPE runtime_assemblies_total gauge
+runtime_assemblies_total 315
+# HELP sqlclient_active_connections_total Number of active connections
+# TYPE sqlclient_active_connections_total gauge
+sqlclient_active_connections_total 1
+# HELP http_client_requests_aborted_per_second Requests Failed Rate
+# TYPE http_client_requests_aborted_per_second gauge
+http_client_requests_aborted_per_second 0
+# HELP sqlclient_active_connection_pool_groups_total Number of active unique connection strings
+# TYPE sqlclient_active_connection_pool_groups_total gauge
+sqlclient_active_connection_pool_groups_total 1
+# HELP sqlclient_commands_errors_total Total DB command errors
+# TYPE sqlclient_commands_errors_total counter
+sqlclient_commands_errors_total{code="3980"} 3
+# HELP dotnet_total_memory_bytes Total known allocated memory
+# TYPE dotnet_total_memory_bytes gauge
+dotnet_total_memory_bytes 795789688
+# HELP runtime_gc_heap_size_megabytes GC Heap Size in megabytes
+# TYPE runtime_gc_heap_size_megabytes gauge
+runtime_gc_heap_size_megabytes 793
+# HELP efcore_queries_total Queries (Total)
+# TYPE efcore_queries_total gauge
+efcore_queries_total 5573
+# HELP grpc_client_messages_received_total Total Messages Received
+# TYPE grpc_client_messages_received_total gauge
+grpc_client_messages_received_total 0
+# HELP sqlclient_non_pooled_connections_total Number of connections are not using connection pooling
+# TYPE sqlclient_non_pooled_connections_total gauge
+sqlclient_non_pooled_connections_total 1
+# HELP net_security_tls_10_sessions_total TLS 1.0 Sessions Active
+# TYPE net_security_tls_10_sessions_total gauge
+net_security_tls_10_sessions_total 1
+# HELP grpc_client_calls_current_total Current Calls
+# TYPE grpc_client_calls_current_total gauge
+grpc_client_calls_current_total 0
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 316.515625
+# HELP http_client_requests_current_total Current Requests
+# TYPE http_client_requests_current_total gauge
+http_client_requests_current_total 1
+# HELP kestrel_tls_handshakes_total Total number of TLS handshakes made
+# TYPE kestrel_tls_handshakes_total gauge
+kestrel_tls_handshakes_total 0
+# HELP efcore_savechanges_total SaveChanges (Total)
+# TYPE efcore_savechanges_total gauge
+efcore_savechanges_total 136
+# HELP sqlclient_hard_connects_per_second Actual connections are made to servers
+# TYPE sqlclient_hard_connects_per_second gauge
+sqlclient_hard_connects_per_second 0
+# HELP sqlclient_active_hard_connections_total Actual active connections are made to servers
+# TYPE sqlclient_active_hard_connections_total gauge
+sqlclient_active_hard_connections_total 2
+# HELP aspnetcore_requests_per_second Request Rate
+# TYPE aspnetcore_requests_per_second gauge
+aspnetcore_requests_per_second 0
+# HELP net_sockets_bytes_received Bytes Received
+# TYPE net_sockets_bytes_received gauge
+net_sockets_bytes_received 15584931
+# HELP net_security_handshakes_tls10_duration_milliseconds TLS 1.0 Handshake Duration
+# TYPE net_security_handshakes_tls10_duration_milliseconds gauge
+net_security_handshakes_tls10_duration_milliseconds 0
+# HELP kestrel_requests_upgraded_total Current Upgraded Requests (WebSockets)
+# TYPE kestrel_requests_upgraded_total gauge
+kestrel_requests_upgraded_total 0
+# HELP net_security_handshakes_tls12_duration_milliseconds TLS 1.2 Handshake Duration
+# TYPE net_security_handshakes_tls12_duration_milliseconds gauge
+net_security_handshakes_tls12_duration_milliseconds 1.2696
+# HELP net_security_tls_handshakes_total Total TLS handshakes completed
+# TYPE net_security_tls_handshakes_total gauge
+net_security_tls_handshakes_total 1846
+# HELP http_client_requests_duration_seconds Time between first byte of request headers sent to last byte of response received.
+# TYPE http_client_requests_duration_seconds histogram
+http_client_requests_duration_seconds_sum{code="200",host="accesspointms.rc.ppl.cz"} 2.8553543000000006
+http_client_requests_duration_seconds_count{code="200",host="accesspointms.rc.ppl.cz"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.016"} 60
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.032"} 111
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.064"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.128"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.256"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="0.512"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="1.024"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="2.048"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="4.096"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="8.192"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="16.384"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="32.768"} 133
+http_client_requests_duration_seconds_bucket{code="200",host="accesspointms.rc.ppl.cz",le="+Inf"} 133
+http_client_requests_duration_seconds_sum{code="200",host="authservice-test.ppl.cz"} 6.6527801
+http_client_requests_duration_seconds_count{code="200",host="authservice-test.ppl.cz"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.004"} 1
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.008"} 1
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.016"} 2
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.032"} 7
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.064"} 15
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.128"} 30
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.256"} 39
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="0.512"} 44
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="1.024"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="2.048"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="4.096"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="8.192"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="16.384"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="32.768"} 46
+http_client_requests_duration_seconds_bucket{code="200",host="authservice-test.ppl.cz",le="+Inf"} 46
+http_client_requests_duration_seconds_sum{code="202",host="sdiscoveryms.rc.ppl.cz"} 10.090804399999996
+http_client_requests_duration_seconds_count{code="202",host="sdiscoveryms.rc.ppl.cz"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.016"} 218
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.032"} 454
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.064"} 494
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.128"} 497
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.256"} 498
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="0.512"} 498
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="1.024"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="2.048"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="4.096"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="8.192"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="16.384"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="32.768"} 499
+http_client_requests_duration_seconds_bucket{code="202",host="sdiscoveryms.rc.ppl.cz",le="+Inf"} 499
+http_client_requests_duration_seconds_sum{code="200",host="carriersms.rc.ppl.cz"} 1.2865746999999998
+http_client_requests_duration_seconds_count{code="200",host="carriersms.rc.ppl.cz"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.016"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.032"} 3
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.064"} 7
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.128"} 9
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.256"} 11
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="0.512"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="1.024"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="2.048"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="4.096"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="8.192"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="16.384"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="32.768"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="carriersms.rc.ppl.cz",le="+Inf"} 12
+http_client_requests_duration_seconds_sum{code="200",host="customerms.rc.ppl.cz"} 6.123987999999999
+http_client_requests_duration_seconds_count{code="200",host="customerms.rc.ppl.cz"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.016"} 12
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.032"} 78
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.064"} 105
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.128"} 110
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.256"} 119
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="0.512"} 121
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="1.024"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="2.048"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="4.096"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="8.192"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="16.384"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="32.768"} 122
+http_client_requests_duration_seconds_bucket{code="200",host="customerms.rc.ppl.cz",le="+Inf"} 122
+http_client_requests_duration_seconds_sum{code="201",host="datastoragems.rc.ppl.cz"} 5.6985338
+http_client_requests_duration_seconds_count{code="201",host="datastoragems.rc.ppl.cz"} 19
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.016"} 0
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.032"} 1
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.064"} 4
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.128"} 11
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.256"} 14
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="0.512"} 18
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="1.024"} 18
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="2.048"} 18
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="4.096"} 19
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="8.192"} 19
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="16.384"} 19
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="32.768"} 19
+http_client_requests_duration_seconds_bucket{code="201",host="datastoragems.rc.ppl.cz",le="+Inf"} 19
+http_client_requests_duration_seconds_sum{code="200",host="sdiscoveryms.rc.ppl.cz"} 1.1810048
+http_client_requests_duration_seconds_count{code="200",host="sdiscoveryms.rc.ppl.cz"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.016"} 74
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.032"} 82
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.064"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.128"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.256"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="0.512"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="1.024"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="2.048"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="4.096"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="8.192"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="16.384"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="32.768"} 86
+http_client_requests_duration_seconds_bucket{code="200",host="sdiscoveryms.rc.ppl.cz",le="+Inf"} 86
+http_client_requests_duration_seconds_sum{code="200",host="addressvalidationms.rc.ppl.cz"} 7.712661499999999
+http_client_requests_duration_seconds_count{code="200",host="addressvalidationms.rc.ppl.cz"} 19
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.016"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.032"} 1
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.064"} 2
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.128"} 6
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.256"} 11
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="0.512"} 15
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="1.024"} 18
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="2.048"} 18
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="4.096"} 19
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="8.192"} 19
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="16.384"} 19
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="32.768"} 19
+http_client_requests_duration_seconds_bucket{code="200",host="addressvalidationms.rc.ppl.cz",le="+Inf"} 19
+http_client_requests_duration_seconds_sum{code="200",host="cdlms.rc.ppl.cz"} 28.758386500000036
+http_client_requests_duration_seconds_count{code="200",host="cdlms.rc.ppl.cz"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.016"} 123
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.032"} 467
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.064"} 647
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.128"} 697
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.256"} 720
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="0.512"} 728
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="1.024"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="2.048"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="4.096"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="8.192"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="16.384"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="32.768"} 729
+http_client_requests_duration_seconds_bucket{code="200",host="cdlms.rc.ppl.cz",le="+Inf"} 729
+http_client_requests_duration_seconds_sum{code="202",host="msgms.rc.ppl.cz"} 3.1874362000000005
+http_client_requests_duration_seconds_count{code="202",host="msgms.rc.ppl.cz"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.016"} 6
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.032"} 21
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.064"} 24
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.128"} 27
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.256"} 28
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="0.512"} 29
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="1.024"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="2.048"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="4.096"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="8.192"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="16.384"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="32.768"} 31
+http_client_requests_duration_seconds_bucket{code="202",host="msgms.rc.ppl.cz",le="+Inf"} 31
+http_client_requests_duration_seconds_sum{code="404",host="customerms.rc.ppl.cz"} 2.2121135999999995
+http_client_requests_duration_seconds_count{code="404",host="customerms.rc.ppl.cz"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.001"} 0
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.002"} 0
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.004"} 0
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.008"} 0
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.016"} 30
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.032"} 70
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.064"} 84
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.128"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.256"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="0.512"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="1.024"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="2.048"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="4.096"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="8.192"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="16.384"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="32.768"} 88
+http_client_requests_duration_seconds_bucket{code="404",host="customerms.rc.ppl.cz",le="+Inf"} 88
+# HELP aspnetcore_requests_current_total Current Requests
+# TYPE aspnetcore_requests_current_total gauge
+aspnetcore_requests_current_total 1
+# HELP signalr_connections_timed_out_total Total Connections Timed Out
+# TYPE signalr_connections_timed_out_total gauge
+signalr_connections_timed_out_total 0
+# HELP sqlclient_hard_disconnects_per_second Actual disconnections are made to servers
+# TYPE sqlclient_hard_disconnects_per_second gauge
+sqlclient_hard_disconnects_per_second 0
+# HELP efcore_query_warnings_total Total query warnings
+# TYPE efcore_query_warnings_total counter
+# HELP net_dns_lookups_requested_total DNS Lookups Requested
+# TYPE net_dns_lookups_requested_total gauge
+net_dns_lookups_requested_total 1856
+# HELP efcore_savechanges_per_second SaveChanges
+# TYPE efcore_savechanges_per_second gauge
+efcore_savechanges_per_second 0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 2216567468032
+# HELP net_security_tls_11_sessions_total TLS 1.1 Sessions Active
+# TYPE net_security_tls_11_sessions_total gauge
+net_security_tls_11_sessions_total 1
+# HELP grpc_server_deadline_exceeded_total Total Calls Deadline Exceeded
+# TYPE grpc_server_deadline_exceeded_total gauge
+grpc_server_deadline_exceeded_total 0
+# HELP efcore_optimistic_concurrency_failures_per_second Optimistic Concurrency Failures
+# TYPE efcore_optimistic_concurrency_failures_per_second gauge
+efcore_optimistic_concurrency_failures_per_second 0
+# HELP runtime_gc_size_gen2_bytes GC size in bytes (Gen 2)
+# TYPE runtime_gc_size_gen2_bytes gauge
+runtime_gc_size_gen2_bytes 598419000
+# HELP aspnetcore_requests_errors_total Total HTTP requests received errors.
+# TYPE aspnetcore_requests_errors_total counter
+aspnetcore_requests_errors_total 10234
+# HELP http_client_requests_aborted_total Total Requests Aborted
+# TYPE http_client_requests_aborted_total gauge
+http_client_requests_aborted_total 0
+# HELP sqlclient_transactions_committed_total Total committed transactions.
+# TYPE sqlclient_transactions_committed_total counter
+sqlclient_transactions_committed_total 221
+# HELP efcore_command_errors_total Total DB requests errors
+# TYPE efcore_command_errors_total counter
+efcore_command_errors_total{type="command"} 3
+# HELP aspnetcore_requests_duration_seconds The duration of HTTP requests processed by an ASP.NET Core application.
+# TYPE aspnetcore_requests_duration_seconds histogram
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Cargolist/Courier"} 0.08205180000000001
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Cargolist/Courier"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.016"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.032"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.064"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.128"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.256"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="0.512"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="1.024"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="2.048"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="4.096"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="8.192"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="16.384"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="32.768"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/Courier",le="+Inf"} 2
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint"} 7.465213
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.128"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.256"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="0.512"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="1.024"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="2.048"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="4.096"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="8.192"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="16.384"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="32.768"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="accessPointEvent/{externalNumber}/deliveryToAccessPoint",le="+Inf"} 4
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/LabelPrinted"} 0.6087325
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/LabelPrinted"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.032"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.064"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.128"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.256"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.512"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="1.024"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="2.048"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="4.096"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="8.192"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="16.384"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="32.768"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/LabelPrinted",le="+Inf"} 10
+aspnetcore_requests_duration_seconds_sum{code="400",method="POST",route="event/{shipmentId}/pickup"} 10.241224500000007
+aspnetcore_requests_duration_seconds_count{code="400",method="POST",route="event/{shipmentId}/pickup"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.064"} 27
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.128"} 58
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.256"} 78
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="0.512"} 83
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="1.024"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="2.048"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="4.096"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="8.192"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="16.384"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="32.768"} 84
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/pickup",le="+Inf"} 84
+aspnetcore_requests_duration_seconds_sum{code="201",method="POST",route="Dormant"} 1.3227389
+aspnetcore_requests_duration_seconds_count{code="201",method="POST",route="Dormant"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.128"} 4
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.256"} 5
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="0.512"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="1.024"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="2.048"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="4.096"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="8.192"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="16.384"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="32.768"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Dormant",le="+Inf"} 7
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Order"} 6.1452463
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Order"} 18
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.064"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.128"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.256"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="0.512"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="1.024"} 16
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="2.048"} 18
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="4.096"} 18
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="8.192"} 18
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="16.384"} 18
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="32.768"} 18
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order",le="+Inf"} 18
+aspnetcore_requests_duration_seconds_sum{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue"} 116.88007970000001
+aspnetcore_requests_duration_seconds_count{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue"} 248
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.032"} 19
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.064"} 118
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.128"} 153
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.256"} 196
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="0.512"} 224
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="1.024"} 234
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="2.048"} 235
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="4.096"} 235
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="8.192"} 246
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="16.384"} 248
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="32.768"} 248
+aspnetcore_requests_duration_seconds_bucket{code="409",method="POST",route="accessPointEvent/{externalNumber}/notDeliveryOverDue",le="+Inf"} 248
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Order/{orderId:int:min(1)}"} 0.5356758
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Order/{orderId:int:min(1)}"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.128"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.256"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="0.512"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="1.024"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="2.048"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="4.096"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="8.192"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="16.384"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="32.768"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Order/{orderId:int:min(1)}",le="+Inf"} 1
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint"} 5.7211674
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.256"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="0.512"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="1.024"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="2.048"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="4.096"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="8.192"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="16.384"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="32.768"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/deliveryToAccessPoint",le="+Inf"} 9
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/delivery"} 1.3292492999999999
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/delivery"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.256"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="0.512"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="1.024"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="2.048"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="4.096"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="8.192"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="16.384"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="32.768"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/delivery",le="+Inf"} 6
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Cargolist"} 1.1352692000000002
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Cargolist"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.016"} 23
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.032"} 37
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.064"} 38
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.128"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.256"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="0.512"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="1.024"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="2.048"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="4.096"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="8.192"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="16.384"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="32.768"} 43
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist",le="+Inf"} 43
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}"} 0.9072221
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.016"} 28
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.032"} 32
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.064"} 34
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.128"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.256"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="0.512"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="1.024"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="2.048"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="4.096"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="8.192"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="16.384"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="32.768"} 39
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing/Driver/{driverId:int:min(1)}",le="+Inf"} 39
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Dormant/{dormantNumber}"} 0.4578006
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Dormant/{dormantNumber}"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.016"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.032"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.064"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.128"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.256"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="0.512"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="1.024"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="2.048"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="4.096"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="8.192"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="16.384"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="32.768"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Dormant/{dormantNumber}",le="+Inf"} 9
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Package/{shipmentId}"} 11.17577790000002
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Package/{shipmentId}"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.016"} 177
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.032"} 360
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.064"} 376
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.128"} 398
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.256"} 408
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="0.512"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="1.024"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="2.048"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="4.096"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="8.192"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="16.384"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="32.768"} 409
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package/{shipmentId}",le="+Inf"} 409
+aspnetcore_requests_duration_seconds_sum{code="400",method="POST",route="Notification/request"} 0.053066
+aspnetcore_requests_duration_seconds_count{code="400",method="POST",route="Notification/request"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.008"} 5
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.016"} 5
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.032"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.064"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.128"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.256"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="0.512"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="1.024"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="2.048"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="4.096"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="8.192"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="16.384"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="32.768"} 6
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="Notification/request",le="+Inf"} 6
+aspnetcore_requests_duration_seconds_sum{code="404",method="POST",route="event/{shipmentId}/voiceCall"} 23.41992770000001
+aspnetcore_requests_duration_seconds_count{code="404",method="POST",route="event/{shipmentId}/voiceCall"} 412
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.064"} 369
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.128"} 398
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.256"} 402
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="0.512"} 409
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="1.024"} 411
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="2.048"} 412
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="4.096"} 412
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="8.192"} 412
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="16.384"} 412
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="32.768"} 412
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/voiceCall",le="+Inf"} 412
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful"} 0.6615180999999999
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.032"} 14
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.064"} 20
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.128"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.256"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="0.512"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="1.024"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="2.048"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="4.096"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="8.192"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="16.384"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="32.768"} 21
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/CommunicationSuccessful",le="+Inf"} 21
+aspnetcore_requests_duration_seconds_sum{code="404",method="POST",route="event/{shipmentId}/LabelPrinted"} 0.4111204
+aspnetcore_requests_duration_seconds_count{code="404",method="POST",route="event/{shipmentId}/LabelPrinted"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.064"} 5
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.128"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.256"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="0.512"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="1.024"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="2.048"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="4.096"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="8.192"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="16.384"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="32.768"} 7
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="event/{shipmentId}/LabelPrinted",le="+Inf"} 7
+aspnetcore_requests_duration_seconds_sum{code="401",method="GET",route=""} 0.0163008
+aspnetcore_requests_duration_seconds_count{code="401",method="GET",route=""} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.002"} 2
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.004"} 2
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.008"} 2
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.016"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.032"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.064"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.128"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.256"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="0.512"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="1.024"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="2.048"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="4.096"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="8.192"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="16.384"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="32.768"} 3
+aspnetcore_requests_duration_seconds_bucket{code="401",method="GET",route="",le="+Inf"} 3
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful"} 0.0528816
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.016"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.032"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.064"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.128"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.256"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="0.512"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="1.024"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="2.048"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="4.096"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="8.192"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="16.384"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="32.768"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/CommunicationSuccessful",le="+Inf"} 3
+aspnetcore_requests_duration_seconds_sum{code="201",method="POST",route="Package"} 16.663386
+aspnetcore_requests_duration_seconds_count{code="201",method="POST",route="Package"} 12
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.128"} 0
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.256"} 2
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="0.512"} 3
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="1.024"} 7
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="2.048"} 11
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="4.096"} 11
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="8.192"} 12
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="16.384"} 12
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="32.768"} 12
+aspnetcore_requests_duration_seconds_bucket{code="201",method="POST",route="Package",le="+Inf"} 12
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="FailedRequest"} 0.34156230000000015
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="FailedRequest"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.004"} 88
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.008"} 98
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.016"} 98
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.032"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.064"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.128"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.256"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="0.512"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="1.024"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="2.048"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="4.096"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="8.192"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="16.384"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="32.768"} 99
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="FailedRequest",le="+Inf"} 99
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup"} 0.6011365000000001
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.032"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.064"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.128"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.256"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="0.512"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="1.024"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="2.048"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="4.096"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="8.192"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="16.384"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="32.768"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/reportPickup",le="+Inf"} 12
+aspnetcore_requests_duration_seconds_sum{code="404",method="POST",route="Document/{dataGuid}"} 0.2817601
+aspnetcore_requests_duration_seconds_count{code="404",method="POST",route="Document/{dataGuid}"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.016"} 23
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.032"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.064"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.128"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.256"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="0.512"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="1.024"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="2.048"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="4.096"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="8.192"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="16.384"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="32.768"} 24
+aspnetcore_requests_duration_seconds_bucket{code="404",method="POST",route="Document/{dataGuid}",le="+Inf"} 24
+aspnetcore_requests_duration_seconds_sum{code="404",method="GET",route=""} 0.0038052
+aspnetcore_requests_duration_seconds_count{code="404",method="GET",route=""} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.004"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.008"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.016"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.032"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.064"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.256"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="0.512"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="1.024"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="2.048"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="4.096"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="8.192"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="16.384"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="32.768"} 1
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="",le="+Inf"} 1
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup"} 0.29557289999999997
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.032"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.064"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.128"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.256"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="0.512"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="1.024"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="2.048"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="4.096"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="8.192"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="16.384"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="32.768"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/confirmPickup",le="+Inf"} 5
+aspnetcore_requests_duration_seconds_sum{code="404",method="GET",route="Package/{shipmentId}"} 0.24910739999999998
+aspnetcore_requests_duration_seconds_count{code="404",method="GET",route="Package/{shipmentId}"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.016"} 2
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.032"} 4
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.064"} 5
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.128"} 5
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.256"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="0.512"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="1.024"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="2.048"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="4.096"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="8.192"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="16.384"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="32.768"} 6
+aspnetcore_requests_duration_seconds_bucket{code="404",method="GET",route="Package/{shipmentId}",le="+Inf"} 6
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Routing"} 4.921076300000001
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Routing"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.032"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.064"} 7
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.128"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.256"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="0.512"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="1.024"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="2.048"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="4.096"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="8.192"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="16.384"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="32.768"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Routing",le="+Inf"} 11
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup"} 0.0460569
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.064"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.256"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="0.512"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="1.024"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="2.048"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="4.096"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="8.192"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="16.384"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="32.768"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="OrderEvent/{orderId:int:min(1)}/rejectPickup",le="+Inf"} 1
+aspnetcore_requests_duration_seconds_sum{code="400",method="POST",route="event/{shipmentId}/delivery"} 5.3081332
+aspnetcore_requests_duration_seconds_count{code="400",method="POST",route="event/{shipmentId}/delivery"} 76
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.032"} 19
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.064"} 63
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.128"} 73
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.256"} 73
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="0.512"} 75
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="1.024"} 75
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="2.048"} 76
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="4.096"} 76
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="8.192"} 76
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="16.384"} 76
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="32.768"} 76
+aspnetcore_requests_duration_seconds_bucket{code="400",method="POST",route="event/{shipmentId}/delivery",le="+Inf"} 76
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/pickup"} 2.1794392
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/pickup"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.128"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.256"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="0.512"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="1.024"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="2.048"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="4.096"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="8.192"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="16.384"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="32.768"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/pickup",le="+Inf"} 1
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="Document/{dataGuid}"} 0.019583
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="Document/{dataGuid}"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.032"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.064"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.256"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="0.512"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="1.024"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="2.048"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="4.096"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="8.192"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="16.384"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="32.768"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="Document/{dataGuid}",le="+Inf"} 1
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item"} 0.0667775
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.016"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.032"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.064"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.128"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.256"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="0.512"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="1.024"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="2.048"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="4.096"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="8.192"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="16.384"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="32.768"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Cargolist/{cargolistId:long:min(1)}/Item",le="+Inf"} 4
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="Package"} 10.075609400000001
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="Package"} 30
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.032"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.064"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.128"} 13
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.256"} 17
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="0.512"} 25
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="1.024"} 29
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="2.048"} 29
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="4.096"} 30
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="8.192"} 30
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="16.384"} 30
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="32.768"} 30
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="Package",le="+Inf"} 30
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck"} 0.4952002
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.032"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.064"} 3
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.128"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.256"} 4
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="0.512"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="1.024"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="2.048"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="4.096"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="8.192"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="16.384"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="32.768"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId:minlength(1)}/DpsCheck",le="+Inf"} 5
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/notdelivery"} 0.1205938
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/notdelivery"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.256"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="0.512"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="1.024"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="2.048"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="4.096"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="8.192"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="16.384"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="32.768"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/notdelivery",le="+Inf"} 1
+aspnetcore_requests_duration_seconds_sum{code="200",method="GET",route="info"} 105.80167589999994
+aspnetcore_requests_duration_seconds_count{code="200",method="GET",route="info"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.004"} 2286
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.008"} 2458
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.016"} 2469
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.032"} 2486
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.064"} 2889
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.128"} 3209
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.256"} 3468
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="0.512"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="1.024"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="2.048"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="4.096"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="8.192"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="16.384"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="32.768"} 3482
+aspnetcore_requests_duration_seconds_bucket{code="200",method="GET",route="info",le="+Inf"} 3482
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint"} 19.3984697
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint"} 23
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.128"} 1
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.256"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="0.512"} 17
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="1.024"} 19
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="2.048"} 20
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="4.096"} 22
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="8.192"} 23
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="16.384"} 23
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="32.768"} 23
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/changeToAccessPoint",le="+Inf"} 23
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/addToCargolist"} 6.076859000000001
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/addToCargolist"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.032"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.064"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.128"} 7
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.256"} 8
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="0.512"} 9
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="1.024"} 10
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="2.048"} 11
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="4.096"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="8.192"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="16.384"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="32.768"} 12
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/addToCargolist",le="+Inf"} 12
+aspnetcore_requests_duration_seconds_sum{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone"} 0.28555460000000005
+aspnetcore_requests_duration_seconds_count{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.001"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.002"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.004"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.008"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.016"} 0
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.032"} 2
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.064"} 5
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.128"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.256"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="0.512"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="1.024"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="2.048"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="4.096"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="8.192"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="16.384"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="32.768"} 6
+aspnetcore_requests_duration_seconds_bucket{code="200",method="POST",route="event/{shipmentId}/SetRecipientPhone",le="+Inf"} 6
+# HELP runtime_lock_contention_total Monitor Lock Contention Count
+# TYPE runtime_lock_contention_total gauge
+runtime_lock_contention_total 0
+# HELP net_security_tls_sessions_total All TLS Sessions Active
+# TYPE net_security_tls_sessions_total gauge
+net_security_tls_sessions_total 1
+# HELP kestrel_connections_per_second Number of connections between update intervals
+# TYPE kestrel_connections_per_second gauge
+kestrel_connections_per_second 0
+# HELP aspnetcore_requests_failed_total Failed Requests
+# TYPE aspnetcore_requests_failed_total gauge
+aspnetcore_requests_failed_total 1
+# HELP runtime_cpu_usage_ratio CPU usage in percents
+# TYPE runtime_cpu_usage_ratio gauge
+runtime_cpu_usage_ratio 1
+# HELP kestrel_connections_current_total Number of current connections
+# TYPE kestrel_connections_current_total gauge
+kestrel_connections_current_total 0
