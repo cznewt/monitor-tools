@@ -97,10 +97,8 @@ mixins:
       mimirNamespace: opencost
       grafanaDashboardFolder: Monitoring
     source:
-      git:
-        url: https://github.com/adinhodovic/opencost-mixin.git
-        ref: main
-        depth: 1
+      directory:
+        path: /mixins/opencost-mixin
   loki:
     config:
       mimirNamespace: loki

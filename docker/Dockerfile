@@ -205,6 +205,9 @@ COPY ./files/requirements.txt /requirements-base.txt
 RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-base.txt
 
 COPY ./files/mixins /mixins
+# Vendor jsonnet deps for any bundled jsonnet mixins (e.g. opencost-mixin needs
+# adinhodovic/mixin-utils) so the render can build them with -J <mixin>/vendor.
+RUN for m in /mixins/*/; do if [ -f "${m}jsonnetfile.json" ]; then ( cd "$m" && jb install ) >/dev/null 2>&1 || true; fi; done
 COPY ./files/config /config
 COPY ./files/scripts /scripts
 COPY ./files/docs /docs
