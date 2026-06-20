@@ -25,14 +25,12 @@ local g = import 'g.libsonnet';
         rows.alertListBasic
       ),
 
-    // canvas panel dropped: cznewt/monitoring-utils canvas ext is incompatible
-    // with grafonnet v11.4.0 (the render harness). Re-enable once that's fixed.
-    //'reference-panel-canvas.json':
-    //  dashboards.base('Panel / Canvas', tags=['reference', 'reference-panel'])
-    //  + self.referenceLinks('canvas', 'canvas')
-    //  + g.dashboard.withPanels(
-    //    rows.canvasHomeSolarDay
-    //  ),
+    'reference-panel-canvas.json':
+      dashboards.base('Panel / Canvas', tags=['reference', 'reference-panel'])
+      + self.referenceLinks('canvas', 'canvas')
+      + g.dashboard.withPanels(
+        rows.canvasHomeSolarDay
+      ),
 
     'reference-panel-pie-chart.json':
       dashboards.base('Panel / Pie chart', tags=['reference', 'reference-panel'])
@@ -42,40 +40,40 @@ local g = import 'g.libsonnet';
       ),
 
     'reference-panel-state-history.json':
-      dashboards.base('Panel / Table', tags=['reference', 'reference-panel'])
+      dashboards.base('Panel / State history', tags=['reference', 'reference-panel'])
       + self.referenceLinks('stateHistory', 'state-history')
       + g.dashboard.withPanels(
         []
       ),
 
-    //'reference-panel-table.json':
-    //  dashboards.base('Panel / Table', tags=['reference', 'reference-panel'])
-    //  + self.referenceLinks('table')
-    //  + g.dashboard.withVariables([
-    //    variables.datasource,
-    //  ])
-    //  + g.dashboard.withPanels(
-    //    rows.tableCellOptions
-    //    + rows.tableCellGaugeBars
-    //    + rows.tableCellSparklines
-    //    + rows.tableCellColors
-    //    + rows.tableImageCells
-    //  ),
+    'reference-panel-table.json':
+      dashboards.base('Panel / Table', tags=['reference', 'reference-panel'])
+      + self.referenceLinks('table')
+      + g.dashboard.withVariables([
+        variables.datasource,
+      ])
+      + g.dashboard.withPanels(
+        rows.tableCellOptions
+        + rows.tableCellGaugeBars
+        + rows.tableCellSparklines
+        + rows.tableCellColors
+        + rows.tableImageCells
+      ),
 
-    //'reference-panel-time-series.json':
-    //  dashboards.base('Panel / Time series', tags=['reference', 'reference-panel'])
-    //  + self.referenceLinks('timeSeries', 'time-series')
-    //  + g.dashboard.withPanels(
-    //    rows.timeSeriesStyle
-    //    + rows.timeSeriesLineInterpolation
-    //    + rows.timeSeriesFillOpacity
-    //    + rows.timeSeriesLineStyle
-    //    + rows.timeSeriesLineWidth
-    //    + rows.timeSeriesGradientMode
-    //    + rows.timeSeriesThreshold
-    //    + rows.timeSeriesMinMax
-    //    + rows.timeSeriesYAxis
-    //  ),
+    'reference-panel-time-series.json':
+      dashboards.base('Panel / Time series', tags=['reference', 'reference-panel'])
+      + self.referenceLinks('timeSeries', 'time-series')
+      + g.dashboard.withPanels(
+        rows.timeSeriesStyle
+        + rows.timeSeriesLineInterpolation
+        + rows.timeSeriesFillOpacity
+        + rows.timeSeriesLineStyle
+        + rows.timeSeriesLineWidth
+        + rows.timeSeriesGradientMode
+        + rows.timeSeriesThreshold
+        + rows.timeSeriesMinMax
+        + rows.timeSeriesYAxis
+      ),
 
   },
 }

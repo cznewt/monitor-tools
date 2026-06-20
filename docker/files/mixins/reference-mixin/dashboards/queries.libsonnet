@@ -6,19 +6,19 @@ local testdataQuery = g.query.testData;
 function(config, variables) {
 
   testdataSetGauge:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withAlias('Temperature')
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('1,20,30,35,20,50,10,30,40,90,60,70,100'),
 
   testdataSetLargeGauge:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withAlias('Pressure')
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('320,230,120,180,400,340,50,270'),
 
   testdataSetLargeRandomGauge:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withAlias('Energy')
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('400,340,50,270,320,230,120,180'),
@@ -204,35 +204,35 @@ function(config, variables) {
    */
 
   testdataSetLines: [
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('10,10'),
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('8,8'),
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('6,6'),
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('4,4'),
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('2,2'),
   ],
 
   testdataSetMaxNormal:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('10,11,12,11,10,11,12,12,11,10,9,10,11,12,10,10,11,12,13,11,10,9,10,11,12,13,14,10,10'),
 
   testdataSetMaxSpike:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_metric_values')
     + testdataQuery.withStringInput('10,11,12,11,10,11,12,12,11,10,9,10,11,12,200,10,11,12,13,11,10,9,10,11,12,13,14,10,10'),
 
   testdataSetTable:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_content')
     + testdataQuery.withCsvContent(|||
       "id","Catch phrase","Image","Something","Sensor"
@@ -269,7 +269,7 @@ function(config, variables) {
     |||),
 
   testdataHomeSolarDay:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_content')
     + testdataQuery.withStringInput(|||
       house_draw, battery_charge, solar_output
@@ -299,7 +299,7 @@ function(config, variables) {
 
 
   testdataSetSmallTable:
-    testdataQuery.withDatasource(variables.testDatasource.name)
+    { datasource: { type: 'datasource', uid: '${' + variables.testDatasource.name + '}' } }
     + testdataQuery.withScenarioId('csv_content')
     + testdataQuery.withCsvContent(|||
       "id","Catch phrase","Something","Sensor"
