@@ -1,0 +1,15 @@
+{
+  '#': { help: 'grafonnet-ext.query.alertmanager', name: 'alertmanager' },
+  '#withDatasource': { 'function': { args: [{ default: null, enums: null, name: 'value', type: ['string'] }], help: "For mixed data sources the selected datasource is on the query level.\nFor non mixed scenarios this is undefined.\nTODO find a better way to do this ^ that's friendly to schema\nTODO this shouldn't be unknown but DataSourceRef | null" } },
+  withDatasource(value): { datasource: value },
+  '#withActive': { 'function': { args: [{ default: true, enums: null, name: 'value', type: ['boolean'] }], help: 'Whether the alerts gathered should be active.' } },
+  withActive(value=true): { active: value },
+  '#withSilenced': { 'function': { args: [{ default: false, enums: null, name: 'value', type: ['boolean'] }], help: 'Whether the alerts gathered should be silenced.' } },
+  withSilenced(value=true): { silenced: value },
+  '#withFilters': { 'function': { args: [{ default: null, enums: null, name: 'value', type: ['string'] }], help: 'Into the query expression field, you can set filters.\nFor example `alertname="HostDown"` will only display alerts which has the label `alertname` equals to `HostDown`.' } },
+  withFilters(value): { filters: value },
+  '#withReceiver': { 'function': { args: [{ default: null, enums: null, name: 'value', type: ['string'] }], help: 'Only retrieve alerts that match the defined receiver. If left empty, all receivers will be matched.' } },
+  withReceiver(value): { receiver: value },
+  '#withRefId': { 'function': { args: [{ default: null, enums: null, name: 'value', type: ['string'] }], help: 'A unique identifier for the query within the list of targets.\nIn server side expressions, the refId is used as a variable name to identify results.\nBy default, the UI will assign A->Z; however setting meaningful names may be useful.' } },
+  withRefId(value): { refId: value },
+}
