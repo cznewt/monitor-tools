@@ -1,0 +1,27 @@
+name: Build observ-lib
+
+on:
+  workflow_dispatch:
+  schedule:
+    # weekly refresh — observ-viz lives in another repo, so there is no
+    # path-based trigger for its changes
+    - cron: '20 5 * * 1'
+  push:
+    branches: ["main"]
+    paths:
+      - observ-lib/**
+      - .github/workflows/build-observ-lib.yml
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: cznewt/observ-lib
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  build-observ-lib:
+    name: "Build observ-lib"
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/docker-publish.yml
+    with:
+      APP_NAME: observ-lib
+      APP_DIR: observ-lib
