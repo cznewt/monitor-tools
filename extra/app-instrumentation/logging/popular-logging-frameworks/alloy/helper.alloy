@@ -1,0 +1,499 @@
+declare "app_logs_parser" {
+  // argument.write_to is a required argument that specifies where parsed
+  // log lines are sent.
+  //
+  // The value of the argument is retrieved in this file with
+  // argument.write_to.value.
+  argument "write_to" {
+    optional = false
+  }
+
+  // loki.process.app_logs_parser is our component which executes the parsing,
+  // passing parsed logs to argument.write_to.value.
+  loki.process "app_logs_parser" {
+
+    // ## Python Processing ##
+    // Let only python logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "python"
+      selector = "{service_name=\"python\"}"
+      
+      // Extract the timestamp, file, line number, level, and message from the log line.
+      // Python logs format: "2025-06-17 09:54:15,283 - main.py:25 - INFO - Starting application"
+      stage.regex {
+        expression = "^(?P<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2},\\d{3}) - (?P<file>[^:]+):(?P<line_num>\\d+) - (?P<level>[^ ]+) - (?P<msg>.*)"
+      }
+      
+      // Set the file and level as labels for efficient filtering and querying in Loki.
+      // Labels are indexed and should be used for high-cardinality filtering.
+      stage.labels {
+        values = {
+          file = "",
+          level = "",
+        }
+      }
+
+      // Set the timestamp to the timestamp extracted from the log line.
+      // This ensures proper chronological ordering in Loki.
+      stage.timestamp {
+        source = "timestamp"
+        format = "2006-01-02 15:04:05,000"
+      }
+
+      // Set the line number as structured metadata in Loki (non-indexed).
+      // Structured metadata is searchable but not indexed, reducing storage costs.
+      stage.structured_metadata {
+        values = {
+          line_num = "",
+        }
+      }
+
+      // We want to maintain a similar format to the original log line so we use template to create a new
+      // temporary variable called output. This creates a clean, consistent format across all Python logs.
+      stage.template {
+        source = "output"
+        template = "{{.file}} - {{.line_num}} - {{.level}} - {{.msg}}"
+      }
+
+      // We use the new output variable to create a new log body. This is the log line that will be sent to loki.
+      // The output stage replaces the original log message with our formatted version.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // ## Node.js Processing ##
+    // Let only node.js logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "javascript"
+      selector = "{service_name=\"javascript\"}"
+      
+      // Extract fields from JSON-formatted Pino logs.
+      // Pino outputs structured JSON logs with fields like level (numeric), time (timestamp), msg, etc.
+      stage.json {
+        expressions = {
+          level_num        = "level",
+          time             = "time",
+          pid              = "pid",
+          hostname         = "hostname",
+          msg              = "msg",
+          obj              = "obj",
+          counter          = "counter",
+          component        = "component",
+          query            = "query",
+          duration         = "duration",
+          version          = "version",
+          method           = "method",
+          path             = "path",
+          status           = "status",
+          nested_obj       = "nested.obj",
+          nested_timestamp = "nested.timestamp",
+          err_type         = "err.type",
+          err_message      = "err.message",
+          err_stack        = "err.stack",
+        }
+      }
+
+      // Convert Pino's numeric log levels to human-readable strings.
+      // Pino uses numbers: 10=trace, 20=debug, 30=info, 40=warn, 50=error, 60=fatal
+      stage.template {
+        source   = "level"
+        template = "{{- if eq .level_num \"10\" -}}trace{{- else if eq .level_num \"20\" -}}debug{{- else if eq .level_num \"30\" -}}info{{- else if eq .level_num \"40\" -}}warn{{- else if eq .level_num \"50\" -}}error{{- else if eq .level_num \"60\" -}}fatal{{- else -}}unknown{{- end -}}"
+      }
+
+      // Set important fields as labels for efficient querying.
+      // hostname and component help identify log sources, level enables filtering by severity.
+      stage.labels {
+        values = {
+          file      = "",
+          hostname  = "",
+          component = "",
+          level     = "",
+        }
+      }
+
+      // Set the timestamp from Pino's Unix millisecond timestamp.
+      // Pino logs include precise timestamps for accurate log ordering.
+      stage.timestamp {
+        source = "time"
+        format = "UnixMs"
+      }
+
+      // Store all extracted fields as structured metadata for searchability without indexing costs.
+      // This includes process info, request details, and error information.
+      stage.structured_metadata {
+        values = {
+          level_num        = "",
+          pid              = "",
+          query            = "",
+          duration         = "",
+          version          = "",
+          method           = "",
+          path             = "",
+          status           = "",
+          nested_obj       = "",
+          nested_timestamp = "",
+          err_type         = "",
+          err_message      = "",
+          err_stack        = "",
+        }
+      }
+
+      // Create a consistent output format prioritizing error messages over regular messages.
+      // This provides better visibility of errors while maintaining standard log structure.
+      stage.template {
+        source   = "output"
+        template = "{{.hostname}} - {{.level}} - {{ if .err_message }}{{ .err_message }}{{ else }}{{ .msg }}{{ end }}"
+      }
+
+      // Apply the formatted output as the final log message sent to Loki.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // ## Go Processing ##
+    // Let only go logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "go"
+      selector = "{service_name=\"go\"}"
+      
+      // Extract fields from Zap's JSON-structured logs.
+      // Zap outputs detailed JSON logs with structured fields for better observability.
+      stage.json {
+        expressions = {
+          level            = "level",
+          ts               = "ts",
+          logger           = "logger",
+          caller           = "caller",
+          msg              = "msg",
+          answer           = "answer",
+          obj              = "obj",
+          counter          = "counter",
+          feature          = "feature",
+          query            = "query",
+          duration         = "duration",
+          method           = "method",
+          path             = "path",
+          status           = "status",
+          requestId        = "requestId",
+          context1         = "context1",
+          context2         = "context2",
+          error            = "error",
+          stacktrace       = "stacktrace",
+          nested_obj       = "nested.obj",
+          nested_timestamp = "nested.timestamp",
+        }
+      }
+
+      // Set logger name and level as indexed labels for efficient filtering.
+      // This enables quick filtering by specific loggers (e.g., database, api) and log levels.
+      stage.labels {
+        values = {
+          logger = "",
+          level  = "",
+        }
+      }
+
+      // Parse Zap's Unix timestamp with fractional seconds.
+      // Zap provides high-precision timestamps for accurate log correlation.
+      stage.timestamp {
+        source = "ts"
+        format = "1750342991.0445938"
+      }
+
+      // Store all contextual information as structured metadata.
+      // This includes caller info, request details, errors, and application-specific data.
+      stage.structured_metadata {
+        values = {
+          caller           = "caller",
+          answer           = "answer",
+          obj              = "obj",
+          counter          = "counter",
+          feature          = "feature",
+          query            = "query",
+          duration         = "duration",
+          method           = "method",
+          path             = "path",
+          status           = "status",
+          requestId        = "requestId",
+          context1         = "context1",
+          context2         = "context2",
+          error            = "error",
+          stacktrace       = "stacktrace",
+          nested_obj       = "nested.obj",
+          nested_timestamp = "nested.timestamp",
+        }
+      }
+
+      // Create a clean, consistent output format showing logger, level, and message.
+      // This maintains readability while preserving structured data in metadata.
+      stage.template {
+        source   = "output"
+        template = "{{.logger}} - {{.level}} - {{.msg}}"
+      }
+
+      // Apply the formatted output as the final log message.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // ## Java Processing ##
+    // Let only java logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "java"
+      selector = "{service_name=\"java\"}"
+      
+      // Handle multi-line Java stack traces by identifying the start of new log entries.
+      // Java exceptions often span multiple lines, so we need to group them properly.
+      stage.multiline {
+        firstline = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\+\\d{4}\\[[^\\]]+\\]\\s+[A-Z]+\\s+\\w+\\s+-\\s+"
+      }
+
+      // Parse Logback's structured log format including timestamps, threads, levels, and stack traces.
+      // Format: "2024-01-15T14:41:02.423+0000[main] INFO App - Starting application"
+      stage.regex {
+        expression = "^(?P<timestamp>\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}\\+\\d{4})\\[(?P<thread>[^\\]]+)\\] (?P<level>[A-Z]+)\\s+(?P<logger>[^ ]+) - (?P<msg>[^\n]*)(?:\\n(?P<stacktrace>.*))?"
+      }
+
+      // Set logger and level as indexed labels for efficient log filtering.
+      // This enables filtering by specific Java classes/packages and log severity.
+      stage.labels {
+        values = {
+          logger = "",
+          level  = "",
+        }
+      }
+
+      // Parse ISO 8601 timestamp with timezone for accurate time correlation.
+      // Java's Logback uses precise timestamps with timezone information.
+      stage.timestamp {
+        source = "timestamp"
+        format = "2006-01-02T15:04:05.000-0700"
+      }
+
+      // Store thread information and stack traces as structured metadata.
+      // Thread info helps with concurrent debugging, stack traces provide error context.
+      stage.structured_metadata {
+        values = {
+          thread     = "",
+          stacktrace = "",
+        }
+      }
+
+      // Format output to show essential information: logger, level, and message.
+      // Stack traces are preserved in metadata for when they're needed.
+      stage.template {
+        source   = "output"
+        template = "{{.logger}} - {{.level}} - {{.msg}}"
+      }
+
+      // Apply the clean formatted output while preserving detailed metadata.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // ## C# Processing ##
+    // Let only c# logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "csharp"
+      selector = "{service_name=\"csharp\"}"
+
+      // Handle multi-line .NET logs and exception stack traces.
+      // .NET logging can span multiple lines, especially with structured logging and exceptions.
+      stage.multiline {
+        firstline = "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} [a-z]+: [^\\[]+\\[\\d+\\]"
+      }
+
+      // Parse .NET's structured logging format with event IDs.
+      // Format: "2024-01-15 14:41:02.423 info: Microsoft.Extensions.Hosting[1] Starting application"
+      stage.regex {
+        expression = "^(?P<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) (?P<level>[a-z]+): (?P<logger>[^\\[]+)\\[(?P<event_id>\\d+)\\]\\n\\s+(?P<msg>.*)"
+      }
+
+      // Set logger namespace and level as indexed labels for filtering.
+      // .NET uses hierarchical logger names (e.g., Microsoft.Extensions.Hosting) for categorization.
+      stage.labels {
+        values = {
+          logger = "",
+          level  = "",
+        }
+      }
+
+      // Parse .NET's standard timestamp format (no timezone).
+      // .NET logging typically uses local time format.
+      stage.timestamp {
+        source = "timestamp"
+        format = "2006-01-02 15:04:05.000"
+      }
+
+      // Store .NET-specific event IDs as structured metadata.
+      // Event IDs help categorize and filter specific types of .NET framework events.
+      stage.structured_metadata {
+        values = {
+          event_id = "",
+        }
+      }
+
+      // Create consistent output format showing logger namespace, level, and message.
+      stage.template {
+        source = "output"
+        template = "{{.logger}} - {{.level}} - {{.msg}}"
+      }
+
+      // Apply the formatted output to maintain consistency with other language logs.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // ## PHP Processing ##
+    // Let only php logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "php"
+      selector = "{service_name=\"php\"}"
+
+      // Parse Monolog's default line format with timestamp, logger, level, message, context, and extra data.
+      // Format: "[2024-01-15T14:41:02.123456+00:00] app.INFO: hello world {"counter":42} {"environment":"production"}"
+      stage.regex {
+        expression = "^\\[(?P<timestamp>[^\\]]+)\\] (?P<logger>[^.]+)\\.(?P<level>[A-Z]+): (?P<msg>.*?) (?P<context_json>\\[\\]|\\{.*?\\}) (?P<extra_json>\\{.*?\\})$"
+      }
+
+      // Set logger name and level as indexed labels for efficient querying.
+      // PHP applications often use multiple named loggers (app, database, api, etc.).
+      stage.labels {
+        values = {
+          logger = "",
+          level  = "",
+        }
+      }
+
+      // Parse Monolog's ISO 8601 timestamp with microseconds and timezone.
+      // Monolog provides high-precision timestamps for accurate log correlation.
+      stage.timestamp {
+        source = "timestamp"
+        format = "2006-01-02T15:04:05.000000-07:00"
+      }
+
+      // Extract application-specific data from the context JSON.
+      // Context contains request-specific data like counters, query info, API details, etc.
+      stage.json {
+        source = "context_json"
+        expressions = {
+          counter          = "counter",
+          obj              = "obj",
+          query            = "query",
+          duration         = "duration",
+          method           = "method",
+          path             = "path",
+          status           = "status",
+          exception        = "exception",
+          error_code       = "error_code",
+          affected_service = "affected_service",
+        }
+      }
+      
+      // Extract environment and system-level data from the extra JSON.
+      // Extra data typically contains environment info, process details, etc.
+      stage.json {
+        source = "extra_json"
+        expressions = {
+          environment = "environment",
+        }
+      }
+
+      // Store all extracted PHP context and environment data as structured metadata.
+      // This provides rich searchability for PHP application debugging and monitoring.
+      stage.structured_metadata {
+        values = {
+          counter          = "",
+          obj              = "",
+          query            = "",
+          duration         = "",
+          method           = "",
+          path             = "",
+          status           = "",
+          exception        = "",
+          error_code       = "",
+          affected_service = "",
+          environment      = "",
+        }
+      }
+
+      // Create clean output format showing logger, level, and message.
+      // Detailed context remains accessible in structured metadata.
+      stage.template {
+        source = "output"
+        template = "{{.logger}} - {{.level}} - {{.msg}}"
+      }
+
+      // Apply the standardized output format while preserving rich PHP context data.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // ## C++ Processing ##
+    // Let only cpp logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "cpp"
+      selector = "{service_name=\"cpp\"}"
+
+      // Parse C++ structured logging format with detailed source location information.
+      // Format: "2024-01-15 14:41:02.423 [info] [logger] [thread 1] [main.cpp:25 main] - Starting application"
+      stage.regex {
+        expression = "^(?P<timestamp>\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3}) \\[(?P<level>[^\\]]+)\\] \\[(?P<logger>[^\\]]+)\\] \\[(?P<thread>[^\\]]+)\\] \\[(?P<file>[^:]+):(?P<line_num>\\d+) (?P<function>[^\\]]+)\\] - (?P<msg>.*)"
+      }
+
+      // Set logger, level, and source file as indexed labels for debugging.
+      // C++ logs benefit from file-based filtering for debugging specific modules.
+      stage.labels {
+        values = {
+          logger = "",
+          level  = "",
+          file   = "",
+        }
+      }
+
+      // Parse standard timestamp format used by C++ logging libraries.
+      stage.timestamp {
+        source = "timestamp"
+        format = "2006-01-02 15:04:05.000"
+      }
+
+      // Store detailed C++ debugging information as structured metadata.
+      // Thread info, line numbers, and function names are crucial for C++ debugging.
+      stage.structured_metadata {
+        values = {
+          thread   = "",
+          line_num = "",
+          function = "",
+        }
+      }
+
+      // Create detailed output showing file location, function, level, and message.
+      // C++ debugging often requires precise source location information.
+      stage.template {
+        source = "output"
+        template = "{{.file}}:{{.line_num}} {{.function}} - {{.level}} - {{.msg}}"
+      }
+
+      // Apply the detailed C++ format optimized for debugging and troubleshooting.
+      stage.output {
+        source = "output"
+      }
+    }
+
+    // Send processed logs to our argument.
+    forward_to = argument.write_to.value
+  }
+
+  // export.parser_input exports a value to the module consumer.
+  export "parser_input" {
+    // Expose the receiver of loki.process so the module importer can send
+    // logs to our loki.process component.
+    value = loki.process.app_logs_parser.receiver
+  }
+}

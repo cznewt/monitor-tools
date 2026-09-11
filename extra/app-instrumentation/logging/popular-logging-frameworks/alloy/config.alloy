@@ -1,0 +1,77 @@
+// ###############################
+// #### Main Logging Configuration ####
+// ###############################
+
+// Import the custom log parsing helper module.
+// This gives us access to the "app_logs_parser" component that handles
+// language-specific log parsing for Python, JavaScript, Go, Java, C#, PHP, and C++.
+import.file "helper" {
+  filename = "/etc/alloy/helper.alloy"
+}
+
+// Discover Docker containers running on the local Docker daemon.
+// This component continuously monitors the Docker socket for container changes,
+// providing real-time discovery of log sources without manual configuration.
+discovery.docker "linux" {
+  host = "unix:///var/run/docker.sock"  // Connect to local Docker daemon via Unix socket
+}
+
+// Transform Docker container metadata into useful labels for log routing.
+// This creates a "service_name" label from the container name, which is used
+// by our parsing stages to determine which language parser to apply.
+discovery.relabel "logs_integrations_docker" {
+  targets = []  // Start with empty targets (will be populated by discovery.docker)
+  
+  // Extract container name and use it as service identifier
+  // Example: container "/python-app" becomes service_name="python-app"
+  rule {
+    source_labels = ["__meta_docker_container_name"]  // Docker provides this metadata
+    regex = "/(.*)"                                   // Remove leading slash from container name
+    target_label = "service_name"                     // Create clean service identifier
+  }
+}
+
+// Instantiate our custom log parser with output destination.
+// This creates the processing pipeline that will parse logs from all supported languages
+// and forward them to Loki for storage and querying.
+helper.app_logs_parser "default" {
+  write_to = [loki.write.local.receiver]  // Send parsed logs to our Loki instance
+}
+
+// Collect logs from all discovered Docker containers.
+// This is the main log collection engine that streams container logs in real-time
+// and feeds them into our language-specific parsing pipeline.
+loki.source.docker "default" {
+  host       = "unix:///var/run/docker.sock"                           // Connect to Docker daemon
+  targets    = discovery.docker.linux.targets                          // Use discovered containers
+  labels     = {"platform" = "docker"}                                 // Add platform label to all logs
+  relabel_rules = discovery.relabel.logs_integrations_docker.rules     // Apply container name transformation
+  forward_to = [helper.app_logs_parser.default.parser_input]           // Send raw logs to our parser
+}
+
+// Configure Loki write endpoint for log storage.
+// This is where all parsed and enriched logs are finally stored for querying,
+// alerting, and analysis in Grafana or other tools.
+// By default logs are written to the bundled local Loki. To forward to a
+// remote Loki / Grafana Cloud instead, set LOGS_PRIMARY_URL (plus
+// LOGS_PRIMARY_USER / LOGS_PRIMARY_PASSWORD for basic auth) in the shared
+// extra/app-instrumentation/.env file — see .env.example.
+loki.write "local" {
+  endpoint {
+    url = coalesce(sys.env("LOGS_PRIMARY_URL"), "http://loki:3100/loki/api/v1/push")
+
+    // Basic auth only matters for remote endpoints; the bundled local Loki
+    // ignores the (empty) credentials.
+    basic_auth {
+      username = sys.env("LOGS_PRIMARY_USER")
+      password = sys.env("LOGS_PRIMARY_PASSWORD")
+    }
+  }
+
+  // Optional labels stamped on every stream when several environments share one
+  // backend. Empty values are dropped.
+  external_labels = {
+    "cluster" = coalesce(sys.env("CLUSTER_NAME"), ""),
+    "env"     = coalesce(sys.env("ENV"), ""),
+  }
+}

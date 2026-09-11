@@ -1,0 +1,123 @@
+version: '3.8'
+
+services:
+  javascript-logging:
+    build:
+      context: ./javascript
+      dockerfile: Dockerfile
+    container_name: javascript
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+  python-logging:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    container_name: python
+    environment:
+      - PYTHON_ENV=production
+    restart: unless-stopped
+
+  java-logging:
+    build:
+      context: ./java
+      dockerfile: Dockerfile
+    container_name: java
+    environment:
+      - JAVA_ENV=production
+    restart: unless-stopped
+
+  csharp-logging:
+    build:
+      context: ./csharp
+      dockerfile: Dockerfile
+    container_name: csharp
+    environment:
+      - DOTNET_ENVIRONMENT=Production
+    restart: unless-stopped
+
+  cpp-logging:
+    build:
+      context: ./cpp
+      dockerfile: Dockerfile
+    container_name: cpp
+    environment:
+      - CPP_ENV=production
+    restart: unless-stopped
+
+  go-logging:
+    build:
+      context: ./go
+      dockerfile: Dockerfile
+    container_name: go
+    environment:
+      - GO_ENV=production
+    restart: unless-stopped
+
+  php-logging:
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    container_name: php
+    environment:
+      - PHP_ENV=production
+    restart: unless-stopped
+
+
+  loki:
+    image: grafana/loki:${GRAFANA_LOKI_VERSION:-3.6.10}
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+     - ./loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+  grafana:
+   image: grafana/grafana:${GRAFANA_VERSION:-13.0.2}
+   container_name: grafana
+   environment:
+     - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+     - GF_AUTH_ANONYMOUS_ENABLED=true
+     - GF_AUTH_BASIC_ENABLED=false
+   ports:
+     - 3000:3000/tcp
+   entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: false
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+
+  alloy:
+   image: grafana/alloy:${GRAFANA_ALLOY_VERSION:-v1.17.0}
+   container_name: alloy
+   env_file:                  # shared app-instrumentation/.env (remote forwarding)
+     - path: ../../.env
+       required: false
+   ports:
+     - 12345:12345
+     - 4317:4317
+     - 4318:4318
+   volumes:
+     - ./alloy/:/etc/alloy/
+     - /var/run/docker.sock:/var/run/docker.sock
+   command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+
+
+networks:
+  default:
+    name: logging-examples-network 

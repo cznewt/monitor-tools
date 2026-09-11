@@ -1,0 +1,48 @@
+// ###################################################
+// #### Prometheus client metrics (pull / scrape model) ####
+// ###################################################
+//
+// Each online-store service uses its language's native Prometheus client
+// library to expose a /metrics endpoint on port 9100. Alloy scrapes all five
+// endpoints and remote-writes the samples to Prometheus.
+//
+//   apps (/metrics) ◀──(scrape)── Alloy ──(remote_write)──▶ Prometheus ──▶ Grafana
+//
+// Targets are listed statically (one per service) so the container-name to
+// target mapping is explicit. The service_name and language labels are attached
+// at scrape time so you can group by service in Metrics Drilldown.
+
+prometheus.scrape "store_apps" {
+  targets = [
+    { "__address__" = "python:9100", "service_name" = "checkout",  "language" = "python" },
+    { "__address__" = "node:9100",   "service_name" = "catalog",   "language" = "javascript" },
+    { "__address__" = "go:9100",     "service_name" = "inventory", "language" = "go" },
+    { "__address__" = "java:9100",   "service_name" = "orders",    "language" = "java" },
+    { "__address__" = "csharp:9100", "service_name" = "shipping",  "language" = "csharp" },
+  ]
+
+  scrape_interval = "5s"
+  scrape_timeout  = "5s" // must be <= scrape_interval
+  forward_to      = [prometheus.remote_write.local.receiver]
+}
+
+// By default samples are remote-written to the bundled local Prometheus. To
+// forward to a remote Prometheus / Mimir / Grafana Cloud instead, set
+// METRICS_PRIMARY_URL (plus METRICS_PRIMARY_USER / METRICS_PRIMARY_PASSWORD for
+// basic auth) in the shared extra/app-instrumentation/.env file.
+prometheus.remote_write "local" {
+  endpoint {
+    url = coalesce(sys.env("METRICS_PRIMARY_URL"), "http://prometheus:9090/api/v1/write")
+
+    // Basic auth only matters for remote endpoints; the bundled local
+    // Prometheus ignores the (empty) credentials.
+    basic_auth {
+      username = sys.env("METRICS_PRIMARY_USER")
+      password = sys.env("METRICS_PRIMARY_PASSWORD")
+    }
+  }
+  external_labels = {
+    "cluster" = coalesce(sys.env("CLUSTER_NAME"), ""),
+    "env"     = coalesce(sys.env("ENV"), ""),
+  }
+}

@@ -13,6 +13,37 @@ run-container:
     @echo "Running container..."
     docker run --rm -it ghcr.io/cznewt/monitor-tools:latest
 
+# --- App instrumentation demo stacks (extra/app-instrumentation) ---
+# Multi-language sample apps emitting one signal each through Alloy. They default
+# to a bundled local backend; copy extra/app-instrumentation/.env.example to .env
+# to forward to a remote Mimir/Loki/Tempo or Grafana Cloud. Run one at a time.
+
+_instrumentation DIR:
+    docker compose -f extra/app-instrumentation/{{DIR}}/docker-compose.yml up --build
+
+# Logs from 7 languages -> Alloy -> Loki + Grafana
+instrumentation-logging:
+    @just _instrumentation logging/popular-logging-frameworks
+
+# Prometheus-client /metrics from 5 languages -> Alloy -> Prometheus + Grafana
+instrumentation-metrics-prom:
+    @just _instrumentation metrics/prometheus-client
+
+# OTLP metrics from 5 languages -> Alloy -> Prometheus + Grafana
+instrumentation-metrics-otel:
+    @just _instrumentation metrics/opentelemetry-sdk
+
+# OTLP traces from 5 languages -> Alloy -> Tempo + Grafana
+instrumentation-traces:
+    @just _instrumentation traces/opentelemetry-sdk
+
+# Tear down every instrumentation stack (volumes included)
+instrumentation-clean:
+    -docker compose -f extra/app-instrumentation/logging/popular-logging-frameworks/docker-compose.yml down -v
+    -docker compose -f extra/app-instrumentation/metrics/prometheus-client/docker-compose.yml down -v
+    -docker compose -f extra/app-instrumentation/metrics/opentelemetry-sdk/docker-compose.yml down -v
+    -docker compose -f extra/app-instrumentation/traces/opentelemetry-sdk/docker-compose.yml down -v
+
 # --- Alertmanager action handler demo (extra/alert-handler) ---
 # Prometheus fires a demo alert, Alertmanager posts it to alert-handler, and the
 # handler runs the rule's actions (a runbook command and an HTTP call; the

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Console appender with standard format -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ}[%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Root logger configuration -->
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+    </root>
+    
+    <!-- Specific logger configurations -->
+    <logger name="app" level="DEBUG" />
+    <logger name="database" level="DEBUG" />
+    <logger name="api" level="DEBUG" />
+</configuration> 
