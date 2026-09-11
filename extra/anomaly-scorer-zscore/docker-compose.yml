@@ -1,0 +1,19 @@
+services:
+  anomaly-scorer-zscore:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    # image: ghcr.io/cznewt/anomaly-scorer-zscore:latest
+    environment:
+      PROMETHEUS_URL: "http://prometheus:9090"
+      METRIC_QUERY: 'container_memory_working_set_bytes{namespace="production"}'
+      ANOMALY_LABELS: "namespace,pod"
+      LOOKBACK_DAYS: "7"
+      STEP: "5m"
+      EVAL_POINTS: "12"
+      Z_MAX: "4"
+      LOOP_INTERVAL: "300"
+      EXPORTER_PORT: "8000"
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
