@@ -1,0 +1,19 @@
+# Everything goes to the handler. Short timers so the demo is quick; a real
+# route would group for minutes, not seconds.
+route:
+  receiver: alert-handler
+  group_by: ['alertname']
+  group_wait: 5s
+  group_interval: 30s
+  repeat_interval: 2m
+
+receivers:
+  - name: alert-handler
+    webhook_configs:
+      - url: http://alert-handler:8080/alert
+        send_resolved: true
+        # With `settings.auth_token` set on the handler:
+        # http_config:
+        #   authorization:
+        #     type: Bearer
+        #     credentials: <token>

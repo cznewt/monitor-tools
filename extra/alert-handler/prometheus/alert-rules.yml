@@ -1,0 +1,36 @@
+groups:
+  - name: alert-handler-demo
+    rules:
+      # Fires on its own about 30 s after the stack starts: `vector(1)` is
+      # always true, `for: 15s` just makes it pass through pending first. The
+      # labels are the ones a Kubernetes alert would carry, so the handler's
+      # rules read the way they would in a real cluster.
+      - alert: DemoWorkloadUnhealthy
+        expr: vector(1) > 0
+        for: 15s
+        labels:
+          severity: warning
+          namespace: demo
+          deployment: demo-app
+        annotations:
+          summary: demo-app in namespace demo is unhealthy
+          runbook_url: https://example.com/runbooks/demo-app
+
+      # Monitoring the monitor: any action that fails (a bad URL, a command
+      # that exits non-zero, a Kubernetes call the RBAC refuses) shows up here.
+      - alert: AlertHandlerActionsFailing
+        expr: increase(alert_handler_actions_total{result="failure"}[5m]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: '{{ $labels.rule }} keeps failing its {{ $labels.action }} action'
+
+      # The config file is only re-read on SIGHUP, and a broken one is refused
+      # in favour of the previous rules - which is easy to miss without this.
+      - alert: AlertHandlerConfigInvalid
+        expr: alert_handler_config_valid == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: alert-handler is running on a stale config, the last reload failed

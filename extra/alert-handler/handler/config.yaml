@@ -1,0 +1,43 @@
+# Demo rules. Actions that need a cluster are commented out - compose has no
+# Kubernetes API, and the handler would (correctly) report them as failures.
+settings:
+  dry_run: false
+  cooldown: 60          # a firing alert re-notifies every repeat_interval
+  action_timeout: 10
+  workers: 4
+  allowed_namespaces: [] # empty = any namespace; set an allow-list in a cluster
+
+rules:
+  # 1. Everything that arrives gets a line, firing and resolved alike.
+  - name: log-everything
+    status: any
+    cooldown: 0
+    actions:
+      - type: log
+        message: "{{ status }} {{ labels.alertname }} ({{ labels.severity }}) ns={{ labels.namespace }} summary={{ annotations.summary }}"
+
+  # 2. The remediation the demo is really about: a workload alert triggers a
+  #    command, an outbound HTTP call, and - in a cluster - a rollout restart.
+  - name: demo-remediation
+    match:
+      alertname: DemoWorkloadUnhealthy
+    match_re:
+      severity: 'warning|critical'
+    cooldown: 60
+    actions:
+      - type: exec
+        # Alert labels reach the command as ALERT_LABEL_<NAME>, so a runbook
+        # script needs no JSON parsing.
+        command: ["/bin/sh", "-c", "echo runbook: would recycle $ALERT_LABEL_DEPLOYMENT in $ALERT_LABEL_NAMESPACE, status=$ALERT_STATUS"]
+      - type: http
+        method: GET
+        url: http://alertmanager:9093/api/v2/status
+      # - type: k8s_rollout_restart
+      #   kind: deployment
+      #   namespace: "{{ labels.namespace }}"
+      #   name: "{{ labels.deployment }}"
+      # - type: k8s_scale
+      #   kind: deployment
+      #   namespace: "{{ labels.namespace }}"
+      #   name: "{{ labels.deployment }}"
+      #   replicas: 4

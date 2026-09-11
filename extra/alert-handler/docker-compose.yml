@@ -1,0 +1,46 @@
+# Alertmanager -> alert-handler -> actions, end to end on one machine.
+#
+# Prometheus evaluates a rule that fires on its own ~30 s after start, routes it
+# through Alertmanager, and Alertmanager posts the group to the handler, which
+# matches it against its rules and runs the actions. Prometheus also scrapes the
+# handler, so the actions it took show up as metrics in the same stack.
+services:
+  # ── The handler under test ──
+  alert-handler:
+    # Built from service-catalog/monitor-services/alert-handler:
+    #   cd <service-catalog>/monitor-services/alert-handler && just container-build
+    image: ghcr.io/cznewt/alert-handler:${ALERT_HANDLER_VERSION:-latest}
+    environment:
+      LOG_LEVEL: INFO
+    volumes:
+      - ./handler/config.yaml:/etc/alert-handler/config.yaml:ro
+    ports:
+      # Host ports are overridable: a monitoring workstation usually has
+      # something on 9090 already. `PROMETHEUS_PORT=19090 just alert-handler-demo`
+      - ${ALERT_HANDLER_PORT:-8080}:8080   # /alert, /metrics, /rules
+    restart: unless-stopped
+
+  # ── Alerting pipeline ──
+  alertmanager:
+    image: prom/alertmanager:${ALERTMANAGER_VERSION:-v0.28.1}
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --log.level=info
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - ${ALERTMANAGER_PORT:-9093}:9093
+    depends_on:
+      - alert-handler
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:-v3.11.3}
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml
+    ports:
+      - ${PROMETHEUS_PORT:-9090}:9090
+    depends_on:
+      - alertmanager

@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/alert-rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+scrape_configs:
+  # The handler exports what it did with every alert it was handed.
+  - job_name: alert-handler
+    static_configs:
+      - targets: ['alert-handler:8080']
+
+  - job_name: alertmanager
+    static_configs:
+      - targets: ['alertmanager:9093']
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
