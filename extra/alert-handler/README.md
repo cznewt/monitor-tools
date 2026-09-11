@@ -49,9 +49,12 @@ running:
 
 ```
 INFO [action:log] firing DemoWorkloadUnhealthy (warning) ns=demo summary=demo-app in namespace demo is unhealthy
-INFO rule demo-remediation ran exec for DemoWorkloadUnhealthy{deployment=demo-app,...}: exit 0: runbook: would recycle demo-app in demo, status=firing
+INFO rule demo-remediation ran runbook for DemoWorkloadUnhealthy{deployment=demo-app,...}: runbook recycle.sh: exit 0: would recycle demo-app in demo after DemoWorkloadUnhealthy (token=***)
 INFO rule demo-remediation ran http for DemoWorkloadUnhealthy{deployment=demo-app,...}: GET http://alertmanager:9093/api/v2/status -> 200
 ```
+
+Note the `token=***`: the runbook was handed a credential by name and printed
+it, and the handler redacted the value on its way to the log.
 
 and the same story is in the metrics:
 
@@ -77,6 +80,23 @@ the rules it already has (`alert_handler_config_valid` goes to 0, which the
 | `prometheus/alert-rules.yml` | The demo alert plus two rules that watch the handler |
 | `alertmanager/alertmanager.yml` | One route, one webhook receiver, short timers |
 | `handler/config.yaml` | The handler's own rules: what matches and what runs |
+| `runbooks/recycle.sh` | A script a `runbook` action runs (a ConfigMap in a cluster) |
+| `secrets/demo-token` | One file per credential (a Secret in a cluster) |
+
+## Runbooks and credentials
+
+The remediation rule runs `runbooks/recycle.sh` rather than an inline command,
+and the script is handed `secrets/demo-token` as `$DEMO_TOKEN` because the
+action names it in `secret_env`. Both directories are ordinary mounts — a
+ConfigMap and a Secret in a cluster — so a new procedure or a rotated credential
+is a config change, not a rebuilt image.
+
+```bash
+curl -s localhost:8080/runbooks     # what the handler can see
+```
+
+Add a script to `runbooks/`, name it from a rule, and
+`docker compose kill -s HUP alert-handler` to pick it up without a restart.
 
 ## Taking it further
 

@@ -25,10 +25,13 @@ rules:
       severity: 'warning|critical'
     cooldown: 60
     actions:
-      - type: exec
-        # Alert labels reach the command as ALERT_LABEL_<NAME>, so a runbook
-        # script needs no JSON parsing.
-        command: ["/bin/sh", "-c", "echo runbook: would recycle $ALERT_LABEL_DEPLOYMENT in $ALERT_LABEL_NAMESPACE, status=$ALERT_STATUS"]
+      # A script from ./runbooks, handed one credential from ./secrets by name.
+      # Alert labels reach it as ALERT_LABEL_<NAME>, so it needs no JSON parsing.
+      - type: runbook
+        name: recycle.sh
+        args: ["{{ labels.namespace }}", "{{ labels.deployment }}"]
+        secret_env:
+          DEMO_TOKEN: demo-token
       - type: http
         method: GET
         url: http://alertmanager:9093/api/v2/status
