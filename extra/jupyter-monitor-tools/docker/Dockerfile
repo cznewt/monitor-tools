@@ -22,6 +22,12 @@ COPY ./files/jupyter /home/ubuntu/.jupyter
 
 RUN chown ubuntu:ubuntu /home/ubuntu/.jupyter -R
 
+# JupyterLab serves /source, and a persistent volume is mounted at /source/work.
+# HOME is /home/ubuntu, so ~/work would otherwise miss it - the symlink lets
+# both paths work and dangles harmlessly when nothing is mounted.
+RUN ln -sfn /source/work /home/ubuntu/work && \
+    chown -h ubuntu:ubuntu /home/ubuntu/work
+
 # Notebooks baseline (mirrored from repo-root /notebooks at build time by
 # the workflow). On first container start the seed script copies these
 # into the user-writable /source/notebooks; later edits are preserved.
