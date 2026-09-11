@@ -22,6 +22,13 @@ alertmanager:
         # info -> swallow
         - matchers: ['severity="info"']
           receiver: 'null'
+        # Machine-actionable alerts -> the action handler, in parallel with the
+        # human receivers above. Uncomment once gedu-prg-infra-alert-handler is
+        # actually deployed and reachable from this Alertmanager - until then it
+        # would only produce notification failures.
+        # - matchers: ['severity=~"warning|critical"']
+        #   receiver: alert-handler
+        #   continue: true
     receivers:
       - name: 'null'
       - name: page
@@ -33,4 +40,11 @@ alertmanager:
           - api_url: https://hooks.slack.com/services/CHANGEME
             channel: '#alerts'
             send_resolved: true
+      # The handler answers 202 as soon as it has queued the actions, so it
+      # never holds this Alertmanager up. With settings.auth_token set, add
+      # http_config.authorization: {type: Bearer, credentials: <token>}.
+      # - name: alert-handler
+      #   webhook_configs:
+      #     - url: http://<alert-handler host>:8080/alert
+      #       send_resolved: true
   templates: {}
