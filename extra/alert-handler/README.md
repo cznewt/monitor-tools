@@ -20,11 +20,13 @@ alert on the handler itself — a failing action or a rejected config reload.
 
 ## Run it
 
-The image comes from the service catalog
-(`monitor-services/alert-handler`); build it once if you do not have it:
+The handler lives in its own repository,
+[cznewt/alert-handler](https://github.com/cznewt/alert-handler), which
+publishes `ghcr.io/cznewt/alert-handler` and carries this same demo under
+`demo/` (`just demo`). Build the image locally only if you want to change it:
 
 ```bash
-cd <service-catalog>/monitor-services/alert-handler && just container-build
+git clone https://github.com/cznewt/alert-handler.git && cd alert-handler && just image
 ```
 
 Then, from the repository root:

@@ -49,7 +49,7 @@ instrumentation-clean:
 # handler runs the rule's actions (a runbook command and an HTTP call; the
 # Kubernetes actions are commented out because compose has no API server).
 # Needs the image: build it once from the service catalog with
-#   cd <service-catalog>/monitor-services/alert-handler && just container-build
+#   git clone https://github.com/cznewt/alert-handler.git && cd alert-handler && just image
 # Host ports are overridable, e.g. `PROMETHEUS_PORT=19090 just alert-handler-demo`.
 
 # Alertmanager -> alert-handler -> actions, on Prometheus + Alertmanager
