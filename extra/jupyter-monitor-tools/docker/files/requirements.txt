@@ -11,3 +11,4 @@ requests
 notebook
 jupyterthemes
 jupyterlab-lsp
+jupyter-server-proxy
