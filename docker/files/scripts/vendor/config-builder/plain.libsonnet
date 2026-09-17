@@ -7,12 +7,14 @@
   promRuleGroups(mixin, config)::
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
+    // one Prometheus rule file per group - a file starts with `groups:`, which is
+    // what promtool and pint parse; a bare group is not a rule file
     {
-      [group.name + '.yaml']: std.manifestYamlDoc(group, indent_array_in_object=true, quote_keys=false)
+      [group.name + '.yaml']: std.manifestYamlDoc({ groups: [group] }, indent_array_in_object=true, quote_keys=false)
       for group in rules.groups
     } +
     {
-      [group.name + '.yaml']: std.manifestYamlDoc(group, indent_array_in_object=true, quote_keys=false)
+      [group.name + '.yaml']: std.manifestYamlDoc({ groups: [group] }, indent_array_in_object=true, quote_keys=false)
       for group in alerts.groups
     },
 }
