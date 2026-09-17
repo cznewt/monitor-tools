@@ -33,6 +33,6 @@ fi
 # alertmanager resources
 printf  "\nApplying Alertmanager resources with $alertmanager processor...\n"
 
-if [ "$alertnamanger" = "mimirtool" ]; then 
+if [ "$alertmanager" = "mimirtool" ]; then 
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config apply-mimirtool-alertmanager-config
 fi

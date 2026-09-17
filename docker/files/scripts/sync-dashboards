@@ -5,7 +5,7 @@ BUILD_DIR="${BUILD_DIR:=/source/default}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 
-dashboards=$(yq eval '.dashboards | keys | .[]' "$CONFIG_FILE" 2>/dev/null)
+dashboards=$(yq eval -o=json -I=0 '.dashboards | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
 
 if [ -z "$dashboards" ]; then
   echo "No dashboards found in $CONFIG_FILE."

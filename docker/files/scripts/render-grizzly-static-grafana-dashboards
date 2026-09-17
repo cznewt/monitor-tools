@@ -7,7 +7,7 @@ BUILD_DIR="${BUILD_DIR:=/build/default/grizzly/grafana-dashboards}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 
-keys=$(yq eval '.dashboards | keys | .[]' "$CONFIG_FILE" 2>/dev/null)
+keys=$(yq eval -o=json -I=0 '.dashboards | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
 
 if [ -z "$keys" ]; then
   echo "No static dashboards defined in $CONFIG_FILE."
