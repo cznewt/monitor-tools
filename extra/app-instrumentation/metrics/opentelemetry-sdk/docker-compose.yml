@@ -39,6 +39,18 @@ services:
     depends_on:
       - alloy
 
+  rust:
+    build: ./rust
+    environment:
+      - OTEL_SERVICE_NAME=payments
+      - OTEL_RESOURCE_ATTRIBUTES=service.namespace=onlinestore,service.version=1.0.0,deployment.environment=demo,language=rust
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://alloy:4317
+      - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+      - OTEL_METRIC_EXPORT_INTERVAL=5000
+    restart: unless-stopped
+    depends_on:
+      - alloy
+
   java:
     build: ./java
     environment:

@@ -1,0 +1,15 @@
+[package]
+name = "demo-metrics-otel-rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "app"
+path = "src/main.rs"
+
+[dependencies]
+opentelemetry = "0.30"
+opentelemetry_sdk = "0.30"
+opentelemetry-otlp = { version = "0.30", features = ["grpc-tonic"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time", "signal"] }
+rand = "0.8"

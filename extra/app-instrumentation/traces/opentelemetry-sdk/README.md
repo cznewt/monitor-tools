@@ -34,7 +34,7 @@ Ensure you have the following:
                                           +------------+
 ```
 
-- **Store services**: Five containers named `python`, `node`, `go`, `java`, and `csharp`. Each instruments a store domain with its language's OpenTelemetry tracing SDK and pushes spans over OTLP.
+- **Store services**: Six containers named `python`, `node`, `go`, `rust`, `java`, and `csharp`. Each instruments a store domain with its language's OpenTelemetry tracing SDK and pushes spans over OTLP.
 - **Alloy**: Receives OTLP spans on port 4317 for gRPC and 4318 for HTTP, batches them, and forwards them to Tempo.
 - **Tempo**: Stores the traces and generates service-graph and span metrics that it remote-writes to Prometheus.
 - **Prometheus**: Stores the generated metrics that power the service graph and request, error, and duration metrics.
@@ -47,6 +47,7 @@ Each service sets its own `service.name` and carries its language as a resource 
 | Python | Checkout and payments | `checkout` | gRPC on port 4317 |
 | Node.js | Product catalog | `catalog` | HTTP on port 4318 |
 | Go | Inventory | `inventory` | gRPC on port 4317 |
+| Rust | Payments | `payments` | gRPC on port 4317 |
 | Java | Orders | `orders` | gRPC on port 4317 |
 | C# | Shipping | `shipping` | gRPC on port 4317 |
 

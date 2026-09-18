@@ -11,6 +11,10 @@ services:
     build: ./go
     restart: unless-stopped
 
+  rust:
+    build: ./rust
+    restart: unless-stopped
+
   java:
     build: ./java
     restart: unless-stopped

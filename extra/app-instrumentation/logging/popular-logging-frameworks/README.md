@@ -19,6 +19,7 @@ This directory contains a comprehensive **Alloy tutorial** demonstrating how to 
 | **C#** | `Microsoft.Extensions.Logging` | Structured text | .NET standard framework, event IDs, structured data | `mcr.microsoft.com/dotnet/*:9.0` |
 | **C++** | `spdlog` | Structured text | High performance, source location, thread-safe | `ubuntu:24.04` |
 | **Go** | `Zap` | JSON structured | High performance, named loggers, structured fields | `golang:1.23-alpine` |
+| **Rust** | `tracing` + `tracing-subscriber` | JSON structured | Structured fields, spans as context, targets as named loggers | `rust:1-alpine` |
 | **PHP** | `Monolog` | Structured text | Context arrays, processors, multiple handlers | `php:8.3-cli-alpine` |
 
 ## Directory Structure
@@ -50,6 +51,10 @@ app-instrumentation/logging/popular-logging-frameworks/
 │   ├── main.go               # Zap JSON logging
 │   ├── go.mod
 │   ├── go.sum
+│   └── Dockerfile
+├── rust/
+│   ├── src/main.rs           # tracing JSON logging
+│   ├── Cargo.toml
 │   └── Dockerfile
 ├── php/
 │   ├── app.php               # Monolog with context
@@ -89,6 +94,7 @@ Each language parser demonstrates different Alloy parsing capabilities:
 | **C#** | Event IDs and namespaces | Regex parsing with structured metadata |
 | **C++** | Source location details | Complex regex for file:line extraction |
 | **Go (Zap)** | Unix timestamps | Timestamp parsing with fractional seconds |
+| **Rust (tracing)** | Span context nested under `span` | JSON expressions reaching into the span object |
 | **PHP (Monolog)** | Nested JSON context | Multiple JSON parsing stages |
 
 ## 🚀 Quick Start Tutorial
@@ -173,5 +179,16 @@ stage.multiline {
 stage.timestamp {
   source = "ts"
   format = "1750342991.0445938"
+}
+```
+
+#### Rust (tracing)
+```alloy
+// Challenge: the enclosing span and its fields sit under "span"
+stage.json {
+  expressions = {
+    span_name       = "span.name",
+    span_request_id = "span.request_id",
+  }
 }
 ```

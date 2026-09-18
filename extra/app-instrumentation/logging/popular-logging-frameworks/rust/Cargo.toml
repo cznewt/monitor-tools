@@ -1,0 +1,13 @@
+[package]
+name = "demo-logging-rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "app"
+path = "src/main.rs"
+
+[dependencies]
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json"] }
+serde_json = "1"

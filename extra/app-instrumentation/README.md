@@ -19,10 +19,10 @@ pre-provisioned datasource.
 
 | Stack | Signal | Transport | Languages (one image each) | Local backend |
 | :--- | :--- | :--- | :--- | :--- |
-| `logging/popular-logging-frameworks` | Logs | Docker log scrape → Loki | JavaScript (Pino), Python, Java (SLF4J+Logback), C# (MS.Extensions.Logging), C++ (spdlog), Go (Zap), PHP (Monolog) | Loki |
-| `metrics/prometheus-client` | Metrics | scrape `/metrics` → remote_write | C#, Go, Java, Node, Python | Prometheus |
-| `metrics/opentelemetry-sdk` | Metrics | OTLP push → OTLP/HTTP | C#, Go, Java, Node, Python | Prometheus |
-| `traces/opentelemetry-sdk` | Traces | OTLP push → OTLP/gRPC | C#, Go, Java, Node, Python | Tempo |
+| `logging/popular-logging-frameworks` | Logs | Docker log scrape → Loki | JavaScript (Pino), Python, Java (SLF4J+Logback), C# (MS.Extensions.Logging), C++ (spdlog), Go (Zap), Rust (tracing), PHP (Monolog) | Loki |
+| `metrics/prometheus-client` | Metrics | scrape `/metrics` → remote_write | C#, Go, Java, Node, Python, Rust | Prometheus |
+| `metrics/opentelemetry-sdk` | Metrics | OTLP push → OTLP/HTTP | C#, Go, Java, Node, Python, Rust | Prometheus |
+| `traces/opentelemetry-sdk` | Traces | OTLP push → OTLP/gRPC | C#, Go, Java, Node, Python, Rust | Tempo |
 
 Once up: **Grafana → http://localhost:3000** (anonymous admin),
 **Alloy UI → http://localhost:12345**.
@@ -32,10 +32,10 @@ Once up: **Grafana → http://localhost:3000** (anonymous admin),
 From the **monitor-tools repo root**, via `just`:
 
 ```bash
-just instrumentation-logging        # logs, 7 languages
-just instrumentation-metrics-prom   # Prometheus-client metrics, 5 languages
-just instrumentation-metrics-otel   # OTLP metrics, 5 languages
-just instrumentation-traces         # OTLP traces, 5 languages
+just instrumentation-logging        # logs, 8 languages
+just instrumentation-metrics-prom   # Prometheus-client metrics, 6 languages
+just instrumentation-metrics-otel   # OTLP metrics, 6 languages
+just instrumentation-traces         # OTLP traces, 6 languages
 
 just instrumentation-clean          # tear all of them down (-v)
 ```

@@ -1,0 +1,13 @@
+[package]
+name = "demo-metrics-prom-rust"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "app"
+path = "src/main.rs"
+
+[dependencies]
+prometheus = "0.13"
+tiny_http = "0.12"
+rand = "0.8"

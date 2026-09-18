@@ -4,7 +4,7 @@
 
 // Import the custom log parsing helper module.
 // This gives us access to the "app_logs_parser" component that handles
-// language-specific log parsing for Python, JavaScript, Go, Java, C#, PHP, and C++.
+// language-specific log parsing for Python, JavaScript, Go, Rust, Java, C#, PHP, and C++.
 import.file "helper" {
   filename = "/etc/alloy/helper.alloy"
 }

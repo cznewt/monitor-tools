@@ -39,7 +39,7 @@ This scenario and its sibling collect the same store metrics with opposite colle
 +-------------------+       +-------+       +------------+       +---------+
 ```
 
-- **Store services**: Five containers named `python`, `node`, `go`, `java`, and `csharp`. Each instruments a store domain with its language's OpenTelemetry metrics SDK and pushes metrics over OTLP.
+- **Store services**: Six containers named `python`, `node`, `go`, `rust`, `java`, and `csharp`. Each instruments a store domain with its language's OpenTelemetry metrics SDK and pushes metrics over OTLP.
 - **Alloy**: Receives OTLP metrics on port 4317 for gRPC and 4318 for HTTP, batches them, and forwards them to Prometheus.
 - **Prometheus**: Stores the metrics through its native OTLP endpoint.
 - **Grafana**: Explores the metrics with **Metrics Drilldown**.
@@ -51,6 +51,7 @@ Each service sets its own `service.name` and carries its language as a resource 
 | Python | Checkout and payments | `checkout` | gRPC on port 4317 |
 | Node.js | Product catalog | `catalog` | HTTP on port 4318 |
 | Go | Inventory | `inventory` | gRPC on port 4317 |
+| Rust | Payments | `payments` | gRPC on port 4317 |
 | Java | Orders | `orders` | gRPC on port 4317 |
 | C# | Shipping | `shipping` | gRPC on port 4317 |
 

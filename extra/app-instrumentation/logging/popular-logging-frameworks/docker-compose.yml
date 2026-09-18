@@ -55,6 +55,15 @@ services:
       - GO_ENV=production
     restart: unless-stopped
 
+  rust-logging:
+    build:
+      context: ./rust
+      dockerfile: Dockerfile
+    container_name: rust
+    environment:
+      - RUST_ENV=production
+    restart: unless-stopped
+
   php-logging:
     build:
       context: ./php

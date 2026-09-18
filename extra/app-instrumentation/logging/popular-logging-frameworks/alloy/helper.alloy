@@ -239,6 +239,81 @@ declare "app_logs_parser" {
       }
     }
 
+    // Let only rust logs pass through this stage. This is done via the label match on the service_name label.
+    stage.match {
+      pipeline_name = "rust"
+      selector = "{service_name=\"rust\"}"
+
+      // Extract fields from tracing-subscriber's JSON output. Event fields are
+      // flattened to the top level; the enclosing span (if any) sits under "span".
+      stage.json {
+        expressions = {
+          level           = "level",
+          timestamp       = "timestamp",
+          target          = "target",
+          message         = "message",
+          answer          = "answer",
+          obj             = "obj",
+          counter         = "counter",
+          nested          = "nested",
+          query           = "query",
+          duration_ms     = "duration_ms",
+          method          = "method",
+          path            = "path",
+          status          = "status",
+          context1        = "context1",
+          context2        = "context2",
+          error           = "error",
+          span_name       = "span.name",
+          span_request_id = "span.request_id",
+        }
+      }
+
+      // The tracing target plays the role of a named logger (app, database, api).
+      stage.labels {
+        values = {
+          logger = "target",
+          level  = "",
+        }
+      }
+
+      // tracing-subscriber writes RFC 3339 timestamps with nanoseconds in UTC.
+      stage.timestamp {
+        source = "timestamp"
+        format = "RFC3339Nano"
+      }
+
+      // Everything contextual goes to structured metadata.
+      stage.structured_metadata {
+        values = {
+          answer          = "answer",
+          obj             = "obj",
+          counter         = "counter",
+          nested          = "nested",
+          query           = "query",
+          duration_ms     = "duration_ms",
+          method          = "method",
+          path            = "path",
+          status          = "status",
+          context1        = "context1",
+          context2        = "context2",
+          error           = "error",
+          span_name       = "span_name",
+          span_request_id = "span_request_id",
+        }
+      }
+
+      // Same "logger - level - message" line as the other languages.
+      stage.template {
+        source   = "output"
+        template = "{{.target}} - {{.level}} - {{.message}}"
+      }
+
+      stage.output {
+        source = "output"
+      }
+    }
+
     // ## Java Processing ##
     // Let only java logs pass through this stage. This is done via the label match on the service_name label.
     stage.match {

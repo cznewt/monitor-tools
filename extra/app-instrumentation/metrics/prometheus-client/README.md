@@ -39,7 +39,7 @@ This scenario and its sibling collect the same store metrics with opposite colle
 +-------------------+         +-------+       +------------+       +---------+
 ```
 
-- **Store services**: Five containers named `python`, `node`, `go`, `java`, and `csharp`. Each instruments a store domain with its language's Prometheus client library and serves `/metrics` on port 9100.
+- **Store services**: Six containers named `python`, `node`, `go`, `rust`, `java`, and `csharp`. Each instruments a store domain with its language's Prometheus client library and serves `/metrics` on port 9100.
 - **Alloy**: Scrapes all five endpoints every five seconds and remote-writes the samples to Prometheus.
 - **Prometheus**: Stores the samples through its remote-write endpoint.
 - **Grafana**: Explores the metrics with **Metrics Drilldown**.
@@ -51,6 +51,7 @@ Alloy lists the five targets statically and attaches a `service_name` and a `lan
 | Python | Checkout and payments | `checkout` | `python:9100` |
 | Node.js | Product catalog | `catalog` | `node:9100` |
 | Go | Inventory | `inventory` | `go:9100` |
+| Rust | Payments | `payments` | `rust:9100` |
 | Java | Orders | `orders` | `java:9100` |
 | C# | Shipping | `shipping` | `csharp:9100` |
 
