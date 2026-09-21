@@ -441,6 +441,7 @@ spec:
   lifecycle: experimental
   owner: platform-team
   system: lab-samples
+---
 # --- the demo workloads, one system per environment --------------------------
 apiVersion: backstage.io/v1alpha1
 kind: System
