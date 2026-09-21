@@ -34,6 +34,7 @@ metadata:
   name: monitoring
   description: monitor-lab observability stack (LGTM+ - logs, metrics, traces, profiles) with a tenant per environment
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-system/system-map?var-system=monitoring", title: System map (Grafana) }
     - { url: "https://grafana.monlab.newt.cz", title: Grafana, icon: dashboard }
     - { url: "https://alerta.monlab.newt.cz", title: Alerta console }
     - { url: "https://alert-handler.monlab.newt.cz", title: Alert handler }
@@ -49,6 +50,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: mimir
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=mimir", title: Service map (Grafana) }
   description: Grafana Mimir - metrics storage, multi-tenant (anonymous, dev, prod) with tenant federation for reads
   tags: [observability, metrics]
   annotations:
@@ -65,6 +68,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: loki
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=loki", title: Service map (Grafana) }
   description: Grafana Loki 3.4 - log storage, multi-tenant behind a gateway sidecar that defaults header-less clients to the anonymous tenant
   tags: [observability, logs]
   annotations:
@@ -81,6 +86,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: tempo
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=tempo", title: Service map (Grafana) }
   description: Grafana Tempo 2.6 - trace storage, multi-tenant behind a gateway sidecar; its metrics generator writes span metrics and service graphs per tenant into Mimir
   tags: [observability, traces]
   annotations:
@@ -97,6 +104,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: pyroscope
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=pyroscope", title: Service map (Grafana) }
   description: Grafana Pyroscope - continuous profiling (eBPF and pprof), single tenant
   tags: [observability, profiling]
   annotations:
@@ -115,6 +124,7 @@ metadata:
   description: Grafana Alloy collectors (k8s-monitoring chart) - metrics, pod logs, OTLP receiver, profiles; routes each environment namespace to its tenant
   tags: [observability, collector, alloy]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=k8s-monitoring", title: Service map (Grafana) }
     - { url: "https://alloy-metrics.monlab.newt.cz", title: Alloy metrics UI }
     - { url: "https://alloy-logs.monlab.newt.cz", title: Alloy logs UI }
     - { url: "https://alloy-receiver.monlab.newt.cz", title: Alloy receiver UI }
@@ -133,6 +143,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: alloy-remote-config
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=alloy-remote-config", title: Service map (Grafana) }
   description: Alloy fleet configuration server - the notebooks' Alloys pull their pipelines from here
   tags: [observability, collector, alloy]
   annotations:
@@ -148,6 +160,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: kspan
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=kspan", title: Service map (Grafana) }
   description: kspan - turns Kubernetes events into OpenTelemetry spans (into the anonymous tenant)
   tags: [observability, events, traces]
   annotations:
@@ -163,6 +177,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: anomaly-exporter
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=anomaly-exporter", title: Service map (Grafana) }
   description: Anomaly scorer - statistical modules (sigma, IQR, EDM, Prophet) over PromQL series, exposed as a probe exporter
   tags: [observability, analytics]
   annotations:
@@ -179,6 +195,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: alertmanager
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=alertmanager", title: Service map (Grafana) }
   description: Prometheus Alertmanager (3-node HA + karma); Mimir and Loki rulers deliver here, plus a per-tenant Alertmanager inside Mimir
   tags: [observability, alerting]
   annotations:
@@ -197,6 +215,7 @@ metadata:
   description: LLM-assisted alert handling - webhook receiver that runs log, http, runbook, k8s and salt actions before a human sees the alert
   tags: [observability, alerting, llm]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=alert-handler", title: Service map (Grafana) }
     - { url: "https://alert-handler.monlab.newt.cz", title: Alert handler }
     - { url: "https://github.com/cznewt/alert-handler", title: Source, icon: github }
   annotations:
@@ -216,6 +235,7 @@ metadata:
   description: Alerta - alert console fed by the Alertmanagers and the per-tenant Mimir Alertmanager configurations
   tags: [observability, alerting]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=alerta", title: Service map (Grafana) }
     - { url: "https://alerta.monlab.newt.cz", title: Alerta console }
   annotations:
     backstage.io/kubernetes-namespace: global-monitor-alerta
@@ -234,6 +254,7 @@ metadata:
   description: Grafana 13 - shared lab instance with a datasource per tenant (mimir/loki/tempo -dev/-prod read the tenant plus the shared data)
   tags: [observability, visualization]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=grafana", title: Service map (Grafana) }
     - { url: "https://grafana.monlab.newt.cz", title: Grafana }
     - { url: "https://grafana.monlab.newt.cz/explore", title: Explore }
   annotations:
@@ -254,6 +275,7 @@ metadata:
   description: OpenCost - Kubernetes cost allocation over the Mimir data
   tags: [observability, cost]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=opencost", title: Service map (Grafana) }
     - { url: "https://opencost.monlab.newt.cz", title: OpenCost }
   annotations:
     backstage.io/kubernetes-namespace: kube-monitor
@@ -271,6 +293,7 @@ metadata:
   description: Argo CD - every lab target's committed compiled manifests registered as an Application (manual sync); shows drift and health of the whole lab
   tags: [gitops, control]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=argo-cd", title: Service map (Grafana) }
     - { url: "https://argocd.monlab.newt.cz", title: Argo CD }
   annotations:
     backstage.io/kubernetes-namespace: global-control-argo-cd
@@ -287,6 +310,7 @@ metadata:
   description: This portal - the catalog you are reading, plus the GraphQL API Grafana's Infinity datasource queries
   tags: [catalog, control]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=backstage", title: Service map (Grafana) }
     - { url: "https://backstage.monlab.newt.cz", title: Backstage }
   annotations:
     backstage.io/kubernetes-namespace: global-control-backstage
@@ -370,6 +394,8 @@ apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: lab-samples
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-system/system-map?var-system=lab-samples", title: System map (Grafana) }
   description: Sample data sources and the test stack the course tooling runs against
 spec:
   owner: platform-team
@@ -382,6 +408,7 @@ metadata:
   description: NASA space weather (SWPC) exporter - real-world solar wind series (speed, density, temperature) used by the anomaly detection lessons
   tags: [sample, metrics, exporter]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=nasa-swpc-exporter", title: Service map (Grafana) }
     - { url: "https://www.swpc.noaa.gov/products/real-time-solar-wind", title: Data source }
   annotations:
     backstage.io/kubernetes-namespace: default
@@ -399,6 +426,7 @@ metadata:
   description: The test student's JupyterLab - the notebook validation (test-in-lab.sh) runs every lesson here before students get it
   tags: [test, jupyter]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=jupyter-test", title: Service map (Grafana) }
     - { url: "https://jupyter-test.monlab.newt.cz", title: JupyterLab }
   annotations:
     backstage.io/kubernetes-namespace: global-monitor-jupyter
@@ -417,6 +445,7 @@ metadata:
   description: The test student's own Grafana (grr apply lands here during validation runs)
   tags: [test, grafana]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=grafana-test", title: Service map (Grafana) }
     - { url: "https://grafana-test.monlab.newt.cz", title: Grafana }
   annotations:
     backstage.io/kubernetes-namespace: global-monitor-grafana-test
@@ -431,6 +460,8 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: redis-test
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=redis-test", title: Service map (Grafana) }
   description: The test student's Redis with redis_exporter - the running example of the metrics lessons
   tags: [test, redis]
   annotations:
@@ -449,6 +480,7 @@ metadata:
   name: onlinestore-dev
   description: Demo shop, dev environment (namespace demo-dev) - telemetry in tenant dev
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-system/system-map?var-system=onlinestore-dev", title: System map (Grafana) }
     - { url: "https://grafana.monlab.newt.cz/explore", title: Explore (pick the *-dev datasources) }
 spec:
   owner: platform-team
@@ -460,6 +492,7 @@ metadata:
   name: onlinestore-prod
   description: Demo shop, prod environment (namespace demo-prod) - telemetry in tenant prod
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-system/system-map?var-system=onlinestore-prod", title: System map (Grafana) }
     - { url: "https://grafana.monlab.newt.cz/explore", title: Explore (pick the *-prod datasources) }
 spec:
   owner: platform-team
@@ -469,6 +502,8 @@ apiVersion: backstage.io/v1alpha1
 kind: System
 metadata:
   name: onlinestore-workshop
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-system/system-map?var-system=onlinestore-workshop", title: System map (Grafana) }
   description: Demo shop as the course lessons query it (namespace global-monitor-demo) - telemetry in the shared anonymous tenant
 spec:
   owner: platform-team
@@ -482,6 +517,7 @@ metadata:
   description: "Python samples - logging module, prometheus_client on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=checkout, deployment.environment=dev"
   tags: [demo, python, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-python-dev", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: demo-dev
@@ -500,6 +536,7 @@ metadata:
   description: "Go samples - Zap JSON logging, client_golang on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=warehouse, deployment.environment=dev"
   tags: [demo, go, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-go-dev", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: demo-dev
@@ -518,6 +555,7 @@ metadata:
   description: "Rust samples - tracing JSON logging, prometheus crate on :9100, OpenTelemetry traces over OTLP/gRPC (opentelemetry 0.30); service.name=payments, deployment.environment=dev"
   tags: [demo, rust, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-rust-dev", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: demo-dev
@@ -536,6 +574,7 @@ metadata:
   description: "Python samples - logging module, prometheus_client on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=checkout, deployment.environment=prod"
   tags: [demo, python, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-python-prod", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: demo-prod
@@ -554,6 +593,7 @@ metadata:
   description: "Go samples - Zap JSON logging, client_golang on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=warehouse, deployment.environment=prod"
   tags: [demo, go, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-go-prod", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: demo-prod
@@ -572,6 +612,7 @@ metadata:
   description: "Rust samples - tracing JSON logging, prometheus crate on :9100, OpenTelemetry traces over OTLP/gRPC (opentelemetry 0.30); service.name=payments, deployment.environment=prod"
   tags: [demo, rust, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-rust-prod", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: demo-prod
@@ -590,6 +631,7 @@ metadata:
   description: "Python samples - logging module, prometheus_client on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=checkout, deployment.environment=workshop"
   tags: [demo, python, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-python-workshop", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: global-monitor-demo
@@ -608,6 +650,7 @@ metadata:
   description: "Go samples - Zap JSON logging, client_golang on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=warehouse, deployment.environment=workshop"
   tags: [demo, go, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-go-workshop", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: global-monitor-demo
@@ -626,6 +669,7 @@ metadata:
   description: "Rust samples - tracing JSON logging, prometheus crate on :9100, OpenTelemetry traces over OTLP/gRPC (opentelemetry 0.30); service.name=payments, deployment.environment=workshop"
   tags: [demo, rust, logs, metrics, traces]
   links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-service/service-map?var-service=demo-rust-workshop", title: Service map (Grafana) }
     - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
   annotations:
     backstage.io/kubernetes-namespace: global-monitor-demo
