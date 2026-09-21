@@ -142,23 +142,7 @@ spec:
   lifecycle: production
   owner: platform-team
   system: monitoring
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: promtail
-  description: Promtail - legacy pod log shipper (external label cluster=cluster1); duplicates what Alloy collects, into the anonymous tenant only
-  tags: [observability, logs, legacy]
-  links:
-    - { url: "https://promtail.monlab.newt.cz", title: Promtail }
-  annotations:
-    backstage.io/kubernetes-namespace: kube-monitor-promtail
-spec:
-  type: service
-  lifecycle: deprecated
-  owner: platform-team
-  system: monitoring
-  dependsOn: [component:loki]
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
