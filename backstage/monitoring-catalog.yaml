@@ -23,6 +23,27 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
+  name: platform
+  description: The control plane the lab runs on - GitOps and the developer portal
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: cicd
+  description: Continuous delivery and the developer portal - Argo CD deploys every lab target from monitor-lab-model, Backstage catalogs it all
+  links:
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-system/system-map?var-system=cicd", title: System map (Grafana) }
+    - { url: "https://argocd.monlab.newt.cz", title: Argo CD }
+    - { url: "https://backstage.monlab.newt.cz", title: Backstage }
+spec:
+  owner: platform-team
+  domain: platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
   name: onlinestore
   description: The demo shop whose services emit the telemetry - one copy per environment
 spec:
@@ -38,8 +59,6 @@ metadata:
     - { url: "https://grafana.monlab.newt.cz", title: Grafana, icon: dashboard }
     - { url: "https://alerta.monlab.newt.cz", title: Alerta console }
     - { url: "https://alert-handler.monlab.newt.cz", title: Alert handler }
-    - { url: "https://argocd.monlab.newt.cz", title: Argo CD (lab targets) }
-    - { url: "https://backstage.monlab.newt.cz", title: Backstage }
     - { url: "https://opencost.monlab.newt.cz", title: OpenCost }
 spec:
   owner: platform-team
@@ -301,7 +320,7 @@ spec:
   type: service
   lifecycle: production
   owner: platform-team
-  system: monitoring
+  system: cicd
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -318,7 +337,7 @@ spec:
   type: website
   lifecycle: production
   owner: platform-team
-  system: monitoring
+  system: cicd
   providesApis: [backstage-graphql]
 ---
 apiVersion: backstage.io/v1alpha1
@@ -331,7 +350,7 @@ spec:
   type: graphql
   lifecycle: production
   owner: platform-team
-  system: monitoring
+  system: cicd
   definition: |
     type Query { catalog: Catalog }
     type Catalog { entities: [Entity] }
