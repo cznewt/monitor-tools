@@ -1,3 +1,7 @@
+# Backstage catalog of the monitor-lab observability stack: the platform
+# (System monitoring), the telemetry tenants, and the demo workloads per
+# environment that feed them. Loaded by backstage.monlab.newt.cz
+# (gedu-sites-model target monitor-lab-global-control-backstage).
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Group
@@ -9,95 +13,304 @@ spec:
   children: []
 ---
 apiVersion: backstage.io/v1alpha1
-kind: System
+kind: Domain
 metadata:
-  name: monitoring
-  description: monitor-lab observability stack (LGTM+ — logs, metrics, traces, profiles)
-  links:
-    - url: https://grafana.monlab.newt.cz
-      title: Grafana
-      icon: dashboard
+  name: observability
+  description: Everything that collects, stores, routes and shows telemetry in the lab
 spec:
   owner: platform-team
 ---
 apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: onlinestore
+  description: The demo shop whose services emit the telemetry - one copy per environment
+spec:
+  owner: platform-team
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: monitoring
+  description: monitor-lab observability stack (LGTM+ - logs, metrics, traces, profiles) with a tenant per environment
+  links:
+    - { url: "https://grafana.monlab.newt.cz", title: Grafana, icon: dashboard }
+    - { url: "https://alerta.monlab.newt.cz", title: Alerta console }
+    - { url: "https://alert-handler.monlab.newt.cz", title: Alert handler }
+    - { url: "https://argocd.monlab.newt.cz", title: Argo CD (lab targets) }
+    - { url: "https://backstage.monlab.newt.cz", title: Backstage }
+    - { url: "https://opencost.monlab.newt.cz", title: OpenCost }
+spec:
+  owner: platform-team
+  domain: observability
+---
+# --- storage backends -------------------------------------------------------
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: mimir
+  description: Grafana Mimir - metrics storage, multi-tenant (anonymous, dev, prod) with tenant federation for reads
+  tags: [observability, metrics]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-mimir
+    grafana/dashboard-selector: "tags @> 'mimir'"
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [resource:tenant-anonymous, resource:tenant-dev, resource:tenant-prod]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: loki
+  description: Grafana Loki 3.4 - log storage, multi-tenant behind a gateway sidecar that defaults header-less clients to the anonymous tenant
+  tags: [observability, logs]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-loki
+    grafana/dashboard-selector: "tags @> 'loki'"
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:mimir, component:alertmanager, resource:tenant-anonymous, resource:tenant-dev, resource:tenant-prod]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: tempo
+  description: Grafana Tempo 2.6 - trace storage, multi-tenant behind a gateway sidecar; its metrics generator writes span metrics and service graphs per tenant into Mimir
+  tags: [observability, traces]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-tempo
+    grafana/dashboard-selector: "tags @> 'tempo'"
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:mimir, resource:tenant-anonymous, resource:tenant-dev, resource:tenant-prod]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: pyroscope
+  description: Grafana Pyroscope - continuous profiling (eBPF and pprof), single tenant
+  tags: [observability, profiling]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-pyroscope
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+---
+# --- collection --------------------------------------------------------------
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: k8s-monitoring
+  description: Grafana Alloy collectors (k8s-monitoring chart) - metrics, pod logs, OTLP receiver, profiles; routes each environment namespace to its tenant
+  tags: [observability, collector, alloy]
+  links:
+    - { url: "https://alloy-metrics.monlab.newt.cz", title: Alloy metrics UI }
+    - { url: "https://alloy-logs.monlab.newt.cz", title: Alloy logs UI }
+    - { url: "https://alloy-receiver.monlab.newt.cz", title: Alloy receiver UI }
+    - { url: "https://alloy-profiles.monlab.newt.cz", title: Alloy profiles UI }
+    - { url: "https://alloy-singleton.monlab.newt.cz", title: Alloy singleton UI }
+  annotations:
+    backstage.io/kubernetes-namespace: kube-monitor
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:mimir, component:loki, component:tempo, component:pyroscope]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: alloy-remote-config
+  description: Alloy fleet configuration server - the notebooks' Alloys pull their pipelines from here
+  tags: [observability, collector, alloy]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-alloy-remote-config
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: promtail
+  description: Promtail - legacy pod log shipper (external label cluster=cluster1); duplicates what Alloy collects, into the anonymous tenant only
+  tags: [observability, logs, legacy]
+  links:
+    - { url: "https://promtail.monlab.newt.cz", title: Promtail }
+  annotations:
+    backstage.io/kubernetes-namespace: kube-monitor-promtail
+spec:
+  type: service
+  lifecycle: deprecated
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:loki]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: kspan
+  description: kspan - turns Kubernetes events into OpenTelemetry spans (into the anonymous tenant)
+  tags: [observability, events, traces]
+  annotations:
+    backstage.io/kubernetes-namespace: kube-monitor
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:k8s-monitoring]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: anomaly-exporter
+  description: Anomaly scorer - statistical modules (sigma, IQR, EDM, Prophet) over PromQL series, exposed as a probe exporter
+  tags: [observability, analytics]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-anomaly-scorer
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:mimir]
+---
+# --- alerting ---------------------------------------------------------------
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: alertmanager
+  description: Prometheus Alertmanager (3-node HA + karma); Mimir and Loki rulers deliver here, plus a per-tenant Alertmanager inside Mimir
+  tags: [observability, alerting]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-alertmanager
+    grafana/alert-label-selector: "severity=critical"
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: alert-handler
+  description: LLM-assisted alert handling - webhook receiver that runs log, http, runbook, k8s and salt actions before a human sees the alert
+  tags: [observability, alerting, llm]
+  links:
+    - { url: "https://alert-handler.monlab.newt.cz", title: Alert handler }
+    - { url: "https://github.com/cznewt/alert-handler", title: Source, icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-alert-handler
+    backstage.io/source-location: url:https://github.com/cznewt/alert-handler
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:alertmanager, component:mimir, component:loki]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: alerta
+  description: Alerta - alert console fed by the Alertmanagers and the per-tenant Mimir Alertmanager configurations
+  tags: [observability, alerting]
+  links:
+    - { url: "https://alerta.monlab.newt.cz", title: Alerta console }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-alerta
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:alertmanager]
+---
+# --- visualisation and control ----------------------------------------------
+apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: grafana
-  description: Grafana — dashboards, exploration and alerting UI
+  description: Grafana 13 - shared lab instance with a datasource per tenant (mimir/loki/tempo -dev/-prod read the tenant plus the shared data)
   tags: [observability, visualization]
   links:
     - { url: "https://grafana.monlab.newt.cz", title: Grafana }
+    - { url: "https://grafana.monlab.newt.cz/explore", title: Explore }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-grafana
 spec:
   type: service
   lifecycle: production
   owner: platform-team
   system: monitoring
   providesApis: [backstage-graphql]
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: mimir
-  description: Grafana Mimir — long-term metrics storage (Prometheus-compatible)
-  tags: [observability, metrics]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: loki
-  description: Grafana Loki 3.4 (tsdb/v13) — log aggregation
-  tags: [observability, logs]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: tempo
-  description: Grafana Tempo 2.6 — distributed tracing + service-graph metrics-generator
-  tags: [observability, traces]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: pyroscope
-  description: Grafana Pyroscope — continuous profiling (eBPF)
-  tags: [observability, profiling]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
----
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: alertmanager
-  description: Prometheus Alertmanager (3-node HA + karma)
-  tags: [observability, alerting]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+  dependsOn: [component:mimir, component:loki, component:tempo, component:pyroscope, component:alertmanager]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: opencost
-  description: OpenCost — Kubernetes cost allocation
+  description: OpenCost - Kubernetes cost allocation over the Mimir data
   tags: [observability, cost]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+  links:
+    - { url: "https://opencost.monlab.newt.cz", title: OpenCost }
+  annotations:
+    backstage.io/kubernetes-namespace: kube-monitor
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:mimir]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: kspan
-  description: kspan — turns Kubernetes events into OpenTelemetry spans
-  tags: [observability, events, traces]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+  name: argo-cd
+  description: Argo CD - every lab target's committed compiled manifests registered as an Application (manual sync); shows drift and health of the whole lab
+  tags: [gitops, control]
+  links:
+    - { url: "https://argocd.monlab.newt.cz", title: Argo CD }
+  annotations:
+    backstage.io/kubernetes-namespace: global-control-argo-cd
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: k8s-monitoring
-  description: Grafana Alloy (k8s-monitoring) — metrics/logs/traces/profiles collector
-  tags: [observability, collector, alloy]
-spec: { type: service, lifecycle: production, owner: platform-team, system: monitoring }
+  name: backstage
+  description: This portal - the catalog you are reading, plus the GraphQL API Grafana's Infinity datasource queries
+  tags: [catalog, control]
+  links:
+    - { url: "https://backstage.monlab.newt.cz", title: Backstage }
+  annotations:
+    backstage.io/kubernetes-namespace: global-control-backstage
+spec:
+  type: website
+  lifecycle: production
+  owner: platform-team
+  system: monitoring
+  providesApis: [backstage-graphql]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: API
@@ -114,3 +327,233 @@ spec:
     type Query { catalog: Catalog }
     type Catalog { entities: [Entity] }
     type Entity { name: String }
+---
+# --- tenants: where telemetry lands ----------------------------------------
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tenant-anonymous
+  description: Shared tenant - nodes, control plane, the monitoring stack itself, the workshop demo (global-monitor-demo) and everything without an environment; every environment reads it next to its own data
+  tags: [tenant]
+spec:
+  type: telemetry-tenant
+  owner: platform-team
+  system: monitoring
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tenant-dev
+  description: Tenant of the dev environment - everything from namespace demo-dev (app metrics, kube-state-metrics and cAdvisor series, pod logs, traces)
+  tags: [tenant, dev]
+spec:
+  type: telemetry-tenant
+  owner: platform-team
+  system: monitoring
+  dependsOn: [system:onlinestore-dev]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: tenant-prod
+  description: Tenant of the prod environment - everything from namespace demo-prod
+  tags: [tenant, prod]
+spec:
+  type: telemetry-tenant
+  owner: platform-team
+  system: monitoring
+  dependsOn: [system:onlinestore-prod]
+---
+# --- the demo workloads, one system per environment --------------------------
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: onlinestore-dev
+  description: Demo shop, dev environment (namespace demo-dev) - telemetry in tenant dev
+  links:
+    - { url: "https://grafana.monlab.newt.cz/explore", title: Explore (pick the *-dev datasources) }
+spec:
+  owner: platform-team
+  domain: onlinestore
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: onlinestore-prod
+  description: Demo shop, prod environment (namespace demo-prod) - telemetry in tenant prod
+  links:
+    - { url: "https://grafana.monlab.newt.cz/explore", title: Explore (pick the *-prod datasources) }
+spec:
+  owner: platform-team
+  domain: onlinestore
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: onlinestore-workshop
+  description: Demo shop as the course lessons query it (namespace global-monitor-demo) - telemetry in the shared anonymous tenant
+spec:
+  owner: platform-team
+  domain: onlinestore
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-python-dev
+  title: checkout (python, dev)
+  description: "Python samples - logging module, prometheus_client on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=checkout, deployment.environment=dev"
+  tags: [demo, python, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: demo-dev
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-dev
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-go-dev
+  title: warehouse (go, dev)
+  description: "Go samples - Zap JSON logging, client_golang on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=warehouse, deployment.environment=dev"
+  tags: [demo, go, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: demo-dev
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-dev
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-rust-dev
+  title: payments (rust, dev)
+  description: "Rust samples - tracing JSON logging, prometheus crate on :9100, OpenTelemetry traces over OTLP/gRPC (opentelemetry 0.30); service.name=payments, deployment.environment=dev"
+  tags: [demo, rust, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: demo-dev
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-dev
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-python-prod
+  title: checkout (python, prod)
+  description: "Python samples - logging module, prometheus_client on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=checkout, deployment.environment=prod"
+  tags: [demo, python, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: demo-prod
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-prod
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-go-prod
+  title: warehouse (go, prod)
+  description: "Go samples - Zap JSON logging, client_golang on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=warehouse, deployment.environment=prod"
+  tags: [demo, go, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: demo-prod
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-prod
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-rust-prod
+  title: payments (rust, prod)
+  description: "Rust samples - tracing JSON logging, prometheus crate on :9100, OpenTelemetry traces over OTLP/gRPC (opentelemetry 0.30); service.name=payments, deployment.environment=prod"
+  tags: [demo, rust, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: demo-prod
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-prod
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-python-workshop
+  title: checkout (python, workshop)
+  description: "Python samples - logging module, prometheus_client on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=checkout, deployment.environment=workshop"
+  tags: [demo, python, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-demo
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-workshop
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-go-workshop
+  title: warehouse (go, workshop)
+  description: "Go samples - Zap JSON logging, client_golang on :9100, OpenTelemetry traces over OTLP/gRPC; service.name=warehouse, deployment.environment=workshop"
+  tags: [demo, go, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-demo
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-workshop
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: demo-rust-workshop
+  title: payments (rust, workshop)
+  description: "Rust samples - tracing JSON logging, prometheus crate on :9100, OpenTelemetry traces over OTLP/gRPC (opentelemetry 0.30); service.name=payments, deployment.environment=workshop"
+  tags: [demo, rust, logs, metrics, traces]
+  links:
+    - { url: "https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation", title: Source (app-instrumentation), icon: github }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-demo
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/part-of=demo-apps"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: onlinestore-workshop
