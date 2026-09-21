@@ -244,7 +244,8 @@ spec:
   owner: platform-team
   system: monitoring
   providesApis: [backstage-graphql]
-  dependsOn: [component:mimir, component:loki, component:tempo, component:pyroscope, component:alertmanager]
+  consumesApis: [backstage-graphql]
+  dependsOn: [component:mimir, component:loki, component:tempo, component:pyroscope, component:alertmanager, resource:grafana-infinity]
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Component
@@ -348,6 +349,98 @@ spec:
   system: monitoring
   dependsOn: [system:onlinestore-prod]
 ---
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: grafana-infinity
+  description: Grafana Infinity datasource (yesoreyeram-infinity-datasource) pointed at this Backstage - the "Backstage catalog" dashboard reads systems, components and tenants from the catalog API and joins them with pod health from Mimir
+  tags: [grafana, datasource]
+  links:
+    - { url: "https://grafana.monlab.newt.cz/connections/datasources/edit/backstage-graphql-infinity", title: Datasource in Grafana }
+    - { url: "https://grafana.monlab.newt.cz/d/backstage-catalog", title: Backstage catalog dashboard }
+spec:
+  type: grafana-datasource
+  owner: platform-team
+  system: monitoring
+  dependsOn: [component:backstage]
+---
+# --- sample and test workloads --------------------------------------------
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: lab-samples
+  description: Sample data sources and the test stack the course tooling runs against
+spec:
+  owner: platform-team
+  domain: observability
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: nasa-swpc-exporter
+  description: NASA space weather (SWPC) exporter - real-world solar wind series (speed, density, temperature) used by the anomaly detection lessons
+  tags: [sample, metrics, exporter]
+  links:
+    - { url: "https://www.swpc.noaa.gov/products/real-time-solar-wind", title: Data source }
+  annotations:
+    backstage.io/kubernetes-namespace: default
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: lab-samples
+  dependsOn: [component:k8s-monitoring]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: jupyter-test
+  description: The test student's JupyterLab - the notebook validation (test-in-lab.sh) runs every lesson here before students get it
+  tags: [test, jupyter]
+  links:
+    - { url: "https://jupyter-test.monlab.newt.cz", title: JupyterLab }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-jupyter
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/name=jupyter-test-notebook"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: lab-samples
+  dependsOn: [component:grafana-test, component:redis-test, component:mimir, component:loki, component:tempo]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: grafana-test
+  description: The test student's own Grafana (grr apply lands here during validation runs)
+  tags: [test, grafana]
+  links:
+    - { url: "https://grafana-test.monlab.newt.cz", title: Grafana }
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-grafana-test
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: lab-samples
+  dependsOn: [component:mimir, component:loki, component:tempo]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: redis-test
+  description: The test student's Redis with redis_exporter - the running example of the metrics lessons
+  tags: [test, redis]
+  annotations:
+    backstage.io/kubernetes-namespace: global-monitor-redis
+    backstage.io/kubernetes-label-selector: "app.kubernetes.io/name=redis-test-server"
+spec:
+  type: service
+  lifecycle: experimental
+  owner: platform-team
+  system: lab-samples
 # --- the demo workloads, one system per environment --------------------------
 apiVersion: backstage.io/v1alpha1
 kind: System
