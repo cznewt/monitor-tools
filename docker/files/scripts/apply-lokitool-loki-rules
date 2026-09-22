@@ -1,4 +1,9 @@
 #!/bin/bash
+# Load rendered Loki rule groups ({namespace, groups} files) into the Loki
+# ruler. Uses lokitool when present; Loki ships no lokitool release binary,
+# so otherwise each group is POSTed to the ruler API directly
+# (/loki/api/v1/rules/<namespace>, X-Scope-OrgID). Optional basic auth:
+# LOKI_USER + LOKI_PASSWORD.
 
 BUILD_DIR="${BUILD_DIR:=/build/default/lokitool/loki-rules}"
 
@@ -9,7 +14,28 @@ if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exi
 if [ -z "$LOKI_ADDRESS" ]; then echo "LOKI_ADDRESS not set, cannot connect to Loki server."; exit 1; fi
 if [ -z "$LOKI_TENANT_ID" ]; then echo "LOKI_TENANT_ID not set, cannot connect to Loki server."; exit 1; fi
 
+AUTH=()
+if [ -n "$LOKI_USER" ] && [ -n "$LOKI_PASSWORD" ]; then AUTH=(-u "$LOKI_USER:$LOKI_PASSWORD"); fi
+
+fail=0
 for yaml_file in $yaml_files; do
   echo "Applying $yaml_file lokitool LokiRules to $LOKI_ADDRESS/$LOKI_TENANT_ID"
-  lokitool rules load "$yaml_file"
+  if command -v lokitool >/dev/null 2>&1; then
+    lokitool rules load "$yaml_file" || fail=1
+    continue
+  fi
+  namespace=$(yq eval '.namespace' "$yaml_file")
+  count=$(yq eval '.groups | length' "$yaml_file")
+  for i in $(seq 0 $((count - 1))); do
+    group=$(yq eval ".groups[$i].name" "$yaml_file")
+    code=$(yq eval ".groups[$i]" "$yaml_file" | curl -s -o /tmp/loki-resp.txt -w "%{http_code}" "${AUTH[@]}" \
+      -H "X-Scope-OrgID: $LOKI_TENANT_ID" -H "Content-Type: application/yaml" \
+      -X POST "$LOKI_ADDRESS/loki/api/v1/rules/$namespace" --data-binary @-)
+    if [ "$code" = "202" ] || [ "$code" = "200" ]; then
+      echo "OK   $namespace/$group"
+    else
+      echo "FAIL $namespace/$group HTTP $code: $(head -c 300 /tmp/loki-resp.txt)"; fail=1
+    fi
+  done
 done
+exit $fail
