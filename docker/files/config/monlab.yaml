@@ -146,20 +146,17 @@ mixins:
         url: https://github.com/adinhodovic/ingress-nginx-mixin.git
         ref: main
         depth: 1
-  kubernetes-events:
+  kubernetes-events-alloy:
     config:
-      # the lab's events stream: Alloy's eventhandler, not the mixin's default
-      # job="loki.source.kubernetes_events"
-      kubernetesEventsSelector: job="integrations/kubernetes/eventhandler"
       mimirNamespace: kubernetes-events
       grafanaDashboardFolder: Platform (upstream)
+      # LogQL rules: they are loaded into Loki's ruler, not Mimir's
       lokiRuleGroups:
-      - kubernetes-events.rules
+        - kubernetes-events-alloy.rules
+        - kubernetes-events-alloy
     source:
-      git:
-        url: https://github.com/adinhodovic/kubernetes-events-mixin.git
-        ref: main
-        depth: 1
+      directory:
+        path: /mixins/kubernetes-events-alloy-mixin
   opencost:
     config:
       mimirNamespace: opencost
