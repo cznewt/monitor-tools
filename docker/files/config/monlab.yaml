@@ -6,7 +6,8 @@
 # app-platform API (grafana.render: grafanactl) because grizzly cannot push v2
 # boards; rules through mimirtool. The lab ruler (tenant anonymous) already holds
 # the kubernetes-mixin and node-mixin groups under those namespace names, so the
-# config reuses them: a push replaces those groups instead of duplicating them. Datasource uid global-monitor-mimir-server
+# config reuses them (recording rules and alerts in separate namespaces, via
+# mimirAlertNamespace): a push replaces those groups instead of duplicating them. Datasource uid global-monitor-mimir-server
 # is monlab's mimir-monolith.
 name: monlab
 prometheus:
@@ -22,6 +23,7 @@ mixins:
     config:
       showMultiCluster: true
       mimirNamespace: kubernetes-mixin
+      mimirAlertNamespace: kubernetes-mixin-alerts
       grafanaDashboardFolder: Kubernetes (upstream)
       cadvisorSelector: job="integrations/kubernetes/cadvisor"
       kubeletSelector: job="integrations/kubernetes/kubelet"
@@ -49,6 +51,7 @@ mixins:
   node-exporter:
     config:
       mimirNamespace: node-mixin
+      mimirAlertNamespace: node-mixin-alerts
       grafanaDashboardFolder: Nodes (upstream)
       nodeExporterSelector: job="integrations/node_exporter"
     source:

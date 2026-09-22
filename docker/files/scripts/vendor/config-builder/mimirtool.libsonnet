@@ -10,10 +10,14 @@
   promAlertRuleGroups(mixin, config)::
     local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
     local namespace = (if std.objectHasAll(config, 'mimirNamespace') then config.mimirNamespace else config.mixinName);
+    // optional separate namespace for alert groups (mimirAlertNamespace), e.g.
+    // kubernetes-mixin + kubernetes-mixin-alerts, the layout mimirtool users
+    // commonly load upstream mixins in.
+    local alertNamespace = (if std.objectHasAll(config, 'mimirAlertNamespace') then config.mimirAlertNamespace else namespace);
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
     {
-      [namespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
-        namespace: namespace,
+      [alertNamespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
+        namespace: alertNamespace,
         groups: [
           group,
         ],
@@ -38,11 +42,12 @@
   promRuleGroups(mixin, config)::
     local lokiRuleGroups = (if std.objectHasAll(config, 'lokiRuleGroups') then config.lokiRuleGroups else []);
     local namespace = (if std.objectHasAll(config, 'mimirNamespace') then config.mimirNamespace else config.mixinName);
+    local alertNamespace = (if std.objectHasAll(config, 'mimirAlertNamespace') then config.mimirAlertNamespace else namespace);
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
     {
-      [namespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
-        namespace: namespace,
+      [alertNamespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
+        namespace: alertNamespace,
         groups: [
           group,
         ],

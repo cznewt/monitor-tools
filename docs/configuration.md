@@ -220,6 +220,8 @@ mixins:
       grafanaDashboardFolder: Platform (observ-viz)
 ```
 
+`config.mimirAlertNamespace` (optional) puts a mixin's alert groups in their own Mimir namespace, next to the recording rules in `mimirNamespace`.
+
 Rendered rule files are named `<namespace>-<group>.yaml`, so mixins that share a group name no longer overwrite each other's files.
 
 ## SLO Configuration

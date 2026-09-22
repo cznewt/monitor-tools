@@ -22,6 +22,13 @@ jobs:
     name: "Build observ-lib"
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/docker-publish.yml
+    # a called workflow only gets the permissions the caller grants: without
+    # packages: write every push was denied (permission_denied: write_package)
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    secrets: inherit
     with:
       APP_NAME: observ-lib
       APP_DIR: observ-lib
