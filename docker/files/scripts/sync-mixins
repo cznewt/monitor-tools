@@ -26,7 +26,18 @@ yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml" -not -name "*.
 
 if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
 
+# GitHub intermittently answers shallow fetches with 'could not read
+# Username' / 'expected flush after ref listing' - retry each mixin with
+# backoff and fail only when one still fails.
+SYNC_ATTEMPTS="${SYNC_ATTEMPTS:=4}"
+failed=""
 for yaml_file in $yaml_files; do
-  echo "Syncing vendir $yaml_file target..."
-  vendir sync --chdir $BUILD_DIR --file $yaml_file --lock-file "${yaml_file%.*}.lock.yaml"
+  for attempt in $(seq 1 $SYNC_ATTEMPTS); do
+    echo "Syncing vendir $yaml_file target (attempt $attempt)..."
+    if vendir sync --chdir $BUILD_DIR --file $yaml_file --lock-file "${yaml_file%.*}.lock.yaml"; then
+      break
+    fi
+    if [ "$attempt" = "$SYNC_ATTEMPTS" ]; then failed="$failed $yaml_file"; else sleep $((attempt * 20)); fi
+  done
 done
+if [ -n "$failed" ]; then echo "Error: failed to sync:$failed"; exit 1; fi

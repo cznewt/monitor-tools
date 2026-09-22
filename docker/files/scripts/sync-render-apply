@@ -14,8 +14,8 @@ ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
 export CONFIG_FILE
 
 echo "== sync ($ENV_NAME)"
-# the first clone of many repos sometimes fails transiently - retry once
-BUILD_DIR=/source/$ENV_NAME sync-mixins || { sleep 10; BUILD_DIR=/source/$ENV_NAME sync-mixins; } || exit 1
+# sync-mixins retries each mixin itself (SYNC_ATTEMPTS)
+BUILD_DIR=/source/$ENV_NAME sync-mixins || exit 1
 BUILD_DIR=/source/$ENV_NAME sync-dashboards || exit 1
 
 echo "== init ($ENV_NAME)"
