@@ -47,10 +47,14 @@ else
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/prom-rules render-configmap-prom-rules
   fi
 
-  # loki resources (apply-resources already applies them)
+  # loki resources
   if [ "$loki" = "lokitool" ]; then
     printf  "\nProcessing Loki resources with $loki processor...\n"
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/lokitool/loki-rules render-lokitool-loki-rules
+  fi
+  if [ "$loki" = "configmap" ]; then
+    printf  "\nProcessing Loki resources with $loki processor...\n"
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/loki-rules render-configmap-loki-rules
   fi
 fi
 

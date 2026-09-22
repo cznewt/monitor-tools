@@ -9,7 +9,7 @@ The configuration file generally contains the following top-level keys:
 - `name`: The environment name (e.g., `default`).
 - `prometheus`: Settings for Prometheus resource rendering (e.g., `render: mimirtool`).
 - `grafana`: Settings for Grafana resource rendering: `render: grizzly` (classic dashboards via grr), `render: plain` (JSON files) or `render: grafanactl` (app-platform resources, needed for schema v2 dashboards).
-- `loki` (Optional): `render: lokitool` renders the Loki rule groups a mixin lists in `lokiRuleGroups`.
+- `loki` (Optional): renders the Loki rule groups a mixin lists in `lokiRuleGroups`. `render: lokitool` loads them through the ruler API (needs a writable ruler store); `render: configmap` wraps them in a ConfigMap (`namespace`, `labels`) that a Loki config sidecar syncs into the ruler's rule directory, which is how a Loki on the read-only local rule store gets them.
 - `mixins`: A map of mixin definitions.
 - `libs` (Optional): A map of observ-lib (or any reusable Jsonnet library) definitions vendored alongside mixins.
 - `dashboards` (Optional): A map of static Grafana dashboard releases (from grafana.com or any HTTP URL).

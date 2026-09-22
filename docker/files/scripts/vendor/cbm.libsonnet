@@ -18,6 +18,19 @@ local builder = (import 'cb.libsonnet');
           then config.prometheus.labels else {},
       },
     ),
+  configmapLokiRules(name, mixin, config)::
+    builder.configmap.lokiRuleGroups(
+      mixin + {_config+:: config.mixins[name].config},
+      config.mixins[name].config + {
+        mixinName: name,
+        lokiNamespace:
+          if std.objectHasAll(config, 'loki') && std.objectHasAll(config.loki, 'namespace')
+          then config.loki.namespace else 'default',
+        lokiLabels:
+          if std.objectHasAll(config, 'loki') && std.objectHasAll(config.loki, 'labels')
+          then config.loki.labels else {},
+      },
+    ),
   grizzlyGrafanaFolders(name, mixin, config)::
     builder.grizzly.grafanaFolders(config.mixins[name].config + {mixinName: name}),
   grizzlyGrafanaDashboards(name, mixin, config)::

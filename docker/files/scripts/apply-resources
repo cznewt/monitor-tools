@@ -33,6 +33,9 @@ printf  "\nApplying Loki resources with $loki processor...\n"
 if [ "$loki" = "lokitool" ]; then
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/lokitool/loki-rules apply-lokitool-loki-rules
 fi
+if [ "$loki" = "configmap" ]; then
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/configmap/loki-rules apply-configmap-loki-rules
+fi
 
 # alertmanager resources
 printf  "\nApplying Alertmanager resources with $alertmanager processor...\n"

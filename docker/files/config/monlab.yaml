@@ -12,10 +12,13 @@
 name: monlab
 prometheus:
   render: mimirtool
-# The lab Loki runs a writable ruler store (loki_ruler_storage: filesystem),
-# so rule groups can be loaded through its ruler API.
+# Loki's ruler API is read-only on its local rule store, so rule groups go in
+# as a ConfigMap that the Loki config sidecar syncs into the ruler's directory.
 loki:
-  render: lokitool
+  render: configmap
+  namespace: global-monitor-loki
+  labels:
+    loki/rules: loki-monolith
 grafana:
   render: grafanactl
 mixins:

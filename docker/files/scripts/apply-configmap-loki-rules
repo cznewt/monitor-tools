@@ -1,0 +1,23 @@
+#!/bin/bash
+# Apply the rendered Loki rule ConfigMaps with kubectl. Loki's ruler API is
+# read-only on the local rule store, so rule groups reach the ruler through
+# its config sidecar, which syncs labelled ConfigMaps into the rule directory.
+# In-cluster the job's ServiceAccount needs configmap write access in the Loki
+# namespace; outside, KUBECONFIG applies.
+
+BUILD_DIR="${BUILD_DIR:=/build/default/configmap/loki-rules}"
+
+yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 0; fi
+
+fail=0
+for yaml_file in $yaml_files; do
+  name=$(yq eval '.metadata.name' "$yaml_file"); namespace=$(yq eval '.metadata.namespace' "$yaml_file")
+  echo "Applying $yaml_file Loki rules ConfigMap $namespace/$name"
+  if kubectl apply -f "$yaml_file"; then
+    echo "OK   $namespace/$name"
+  else
+    echo "FAIL $namespace/$name"; fail=1
+  fi
+done
+exit $fail
