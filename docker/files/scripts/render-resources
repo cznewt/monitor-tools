@@ -8,6 +8,7 @@ dashboards=$(yq eval ".dashboards" "$CONFIG_FILE")
 ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
 grafana=$(yq eval ".grafana.render" "$CONFIG_FILE")
 prometheus=$(yq eval ".prometheus.render" "$CONFIG_FILE")
+loki=$(yq eval ".loki.render" "$CONFIG_FILE")
 alertmanager=$(yq eval ".alertmanager.render" "$CONFIG_FILE")
 pyrra=$(yq eval ".pyrra.render" "$CONFIG_FILE")
 sloth=$(yq eval ".sloth.render" "$CONFIG_FILE")
@@ -28,6 +29,10 @@ else
   if [ "$grafana" = "plain" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
   fi
+  if [ "$grafana" = "grafanactl" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-folders render-grafanactl-grafana-folders
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards render-grafanactl-grafana-dashboards
+  fi
 
   # prometheus resources
   printf  "\nProcessing Prometheus resources with $prometheus processor...\n"
@@ -41,6 +46,12 @@ else
   if [ "$prometheus" = "configmap" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/prom-rules render-configmap-prom-rules
   fi
+
+  # loki resources (apply-resources already applies them)
+  if [ "$loki" = "lokitool" ]; then
+    printf  "\nProcessing Loki resources with $loki processor...\n"
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/lokitool/loki-rules render-lokitool-loki-rules
+  fi
 fi
 
 if [ "$dashboards" = "null" ] || [ -z "$dashboards" ]; then
@@ -53,6 +64,9 @@ else
   fi
   if [ "$grafana" = "plain" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards
+  fi
+  if [ "$grafana" = "grafanactl" ]; then
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards render-grafanactl-static-grafana-dashboards
   fi
 fi
 

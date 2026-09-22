@@ -1,15 +1,23 @@
 #!/bin/bash
+# Ensure the folders app-platform dashboards are annotated with (legacy
+# /api/folders: create, or update the title when it exists). Same auth env as
+# apply-grafanactl-grafana-dashboards.
 
 BUILD_DIR="${BUILD_DIR:=/build/default/grafanactl/grafana-folders}"
 
 yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
-
-if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
-
+if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 0; fi
 if [ -z "$GRAFANA_URL" ]; then echo "GRAFANA_URL not set, cannot connect to Grafana server."; exit 1; fi
-if [ -z "$GRAFANA_TOKEN" ]; then echo "GRAFANA_TOKEN not set, cannot connect to Grafana server."; exit 1; fi
+if [ -n "$GRAFANA_TOKEN" ]; then AUTH=(-H "Authorization: Bearer $GRAFANA_TOKEN");
+elif [ -n "$GRAFANA_USER" ] && [ -n "$GRAFANA_PASSWORD" ]; then AUTH=(-u "$GRAFANA_USER:$GRAFANA_PASSWORD");
+else echo "Set GRAFANA_TOKEN or GRAFANA_USER + GRAFANA_PASSWORD."; exit 1; fi
 
 for yaml_file in $yaml_files; do
-  echo "Applying $yaml_file grafanactl GrafanaFolders to $GRAFANA_URL..."
-  grafanactl resources push folders $yaml_file
+  uid=$(yq eval '.metadata.name' "$yaml_file"); title=$(yq eval '.spec.title' "$yaml_file")
+  code=$(curl -s -o /tmp/resp.json -w "%{http_code}" "${AUTH[@]}" -H "Content-Type: application/json" -X POST "$GRAFANA_URL/api/folders" -d "{\"uid\":\"$uid\",\"title\":\"$title\"}")
+  case "$code" in
+    200|201) echo "OK   folder $uid ($title) created" ;;
+    409|412) curl -s -o /dev/null "${AUTH[@]}" -H "Content-Type: application/json" -X PUT "$GRAFANA_URL/api/folders/$uid" -d "{\"title\":\"$title\",\"overwrite\":true}"; echo "OK   folder $uid ($title) exists" ;;
+    *) echo "FAIL folder $uid HTTP $code: $(head -c 200 /tmp/resp.json)" ;;
+  esac
 done

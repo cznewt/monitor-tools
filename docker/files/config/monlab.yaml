@@ -1,0 +1,249 @@
+# monitoring-lab (grafana.monlab.newt.cz): the upstream Kubernetes monitoring
+# set from k8s-monitoring.yaml (kubernetes-mixin multi-cluster, node-exporter,
+# kube-state-metrics, LGTM + alertmanager mixins, cert-manager, ingress-nginx,
+# kubernetes-events, OpenCost, base) plus the Argo CD mixin and the observ-viz
+# `platform` and `monlab` scenarios (schema v2). Dashboards go through the
+# app-platform API (grafana.render: grafanactl) because grizzly cannot push v2
+# boards; rules through mimirtool. The lab ruler (tenant anonymous) already holds
+# the kubernetes-mixin and node-mixin groups under those namespace names, so the
+# config reuses them: a push replaces those groups instead of duplicating them. Datasource uid global-monitor-mimir-server
+# is monlab's mimir-monolith.
+name: monlab
+prometheus:
+  render: mimirtool
+loki:
+  render: lokitool
+grafana:
+  render: grafanactl
+mixins:
+  kubernetes:
+    mixinDir: /source/mixins/kubernetes-mixin
+    vendorDir: /source/mixins/kubernetes-mixin/vendor
+    config:
+      showMultiCluster: true
+      mimirNamespace: kubernetes-mixin
+      grafanaDashboardFolder: Kubernetes (upstream)
+      cadvisorSelector: job="integrations/kubernetes/cadvisor"
+      kubeletSelector: job="integrations/kubernetes/kubelet"
+      kubeApiserverSelector: job="integrations/kubernetes/kube-apiserver"
+      kubeProxySelector: job="integrations/kubernetes/kube-proxy"
+      kubeStateMetricsSelector: job="integrations/kubernetes/kube-state-metrics"
+      nodeExporterSelector: job="integrations/node_exporter"
+    source:
+      git:
+        url: https://github.com/kubernetes-monitoring/kubernetes-mixin.git
+        ref: master
+        depth: 1
+  kube-state-metrics:
+    config:
+      mimirNamespace: kube-state-metrics
+      grafanaDashboardFolder: Kubernetes (upstream)
+    source:
+      git:
+        url: https://github.com/kubernetes/kube-state-metrics.git
+        ref: main
+        depth: 1
+      includePaths:
+      - jsonnet/kube-state-metrics-mixin//**/*
+      newRootPath: jsonnet/kube-state-metrics-mixin
+  node-exporter:
+    config:
+      mimirNamespace: node-mixin
+      grafanaDashboardFolder: Nodes (upstream)
+      nodeExporterSelector: job="integrations/node_exporter"
+    source:
+      git:
+        url: https://github.com/prometheus/node_exporter.git
+        ref: master
+        depth: 1
+      includePaths:
+      - docs/node-mixin/**/*
+      newRootPath: docs/node-mixin
+  alloy:
+    config:
+      mimirNamespace: alloy
+      grafanaDashboardFolder: Monitoring (upstream)
+    source:
+      git:
+        url: https://github.com/grafana/alloy.git
+        ref: main
+        depth: 1
+      includePaths:
+      - operations/alloy-mixin/**/*
+      newRootPath: operations/alloy-mixin
+  mimir:
+    config:
+      mimirNamespace: mimir
+      grafanaDashboardFolder: Monitoring (upstream)
+    source:
+      git:
+        url: https://github.com/grafana/mimir.git
+        ref: main
+        depth: 1
+      includePaths:
+      - operations/mimir-mixin/**/*
+      newRootPath: operations/mimir-mixin
+  loki:
+    config:
+      mimirNamespace: loki
+      grafanaDashboardFolder: Monitoring (upstream)
+    source:
+      git:
+        url: https://github.com/grafana/loki.git
+        ref: main
+        depth: 1
+      includePaths:
+      - production/loki-mixin/**/*
+      newRootPath: production/loki-mixin
+  tempo:
+    config:
+      mimirNamespace: tempo
+      grafanaDashboardFolder: Monitoring (upstream)
+    source:
+      git:
+        url: https://github.com/grafana/tempo.git
+        ref: main
+        depth: 1
+      includePaths:
+      - operations/tempo-mixin/**/*
+      newRootPath: operations/tempo-mixin
+  alertmanager:
+    config:
+      mimirNamespace: alertmanager
+      grafanaDashboardFolder: Monitoring (upstream)
+    source:
+      git:
+        url: https://github.com/prometheus/alertmanager.git
+        ref: main
+        depth: 1
+      includePaths:
+      - doc/alertmanager-mixin/**/*
+      newRootPath: doc/alertmanager-mixin
+  cert-manager:
+    config:
+      mimirNamespace: cert-manager
+      enableMultiCluster: true
+      grafanaDashboardFolder: Platform (upstream)
+    source:
+      git:
+        url: https://github.com/imusmanmalik/cert-manager-mixin.git
+        ref: main
+        depth: 1
+  ingress-nginx:
+    config:
+      mimirNamespace: ingress-nginx
+      grafanaDashboardFolder: Platform (upstream)
+    source:
+      git:
+        url: https://github.com/adinhodovic/ingress-nginx-mixin.git
+        ref: main
+        depth: 1
+  kubernetes-events:
+    config:
+      mimirNamespace: kubernetes-events
+      grafanaDashboardFolder: Platform (upstream)
+      lokiRuleGroups:
+      - kubernetes-events.rules
+    source:
+      git:
+        url: https://github.com/adinhodovic/kubernetes-events-mixin.git
+        ref: main
+        depth: 1
+  opencost:
+    config:
+      mimirNamespace: opencost
+      grafanaDashboardFolder: Platform (upstream)
+    source:
+      directory:
+        path: /mixins/opencost-mixin
+  base:
+    config:
+      mimirNamespace: base
+      grafanaDashboardFolder: Base
+      serverLinuxLink: /d/dashboardlink
+      baseClusterLink: /d/dashboardlink
+    source:
+      directory:
+        path: /mixins/base-mixin
+  argo-cd:
+    mixinDir: /source/mixins/argo-cd-mixin
+    vendorDir: /source/mixins/argo-cd-mixin/vendor
+    config:
+      mimirNamespace: argo-cd
+      grafanaDashboardFolder: CI/CD (upstream)
+    source:
+      git:
+        url: https://github.com/adinhodovic/argo-cd-mixin.git
+        ref: main
+        depth: 1
+  observ-viz-platform:
+    config:
+      scenario: platform
+      mimirNamespace: observ-viz-platform
+      grafanaDashboardFolder: Platform (observ-viz)
+    jpaths:
+    - vendor/github.com/cznewt/observ-viz
+    source:
+      directory:
+        path: /mixins/observ-viz-mixin
+  observ-viz-services:
+    config:
+      scenario: monlab
+      mimirNamespace: observ-viz-services
+      grafanaDashboardFolder: Services (observ-viz)
+    jpaths:
+    - vendor/github.com/cznewt/observ-viz
+    source:
+      directory:
+        path: /mixins/observ-viz-mixin
+dashboards:
+  kubernetes-views-global:
+    source:
+      grafana:
+        id: 15757
+        revision: 43
+    config:
+      grafanaDashboardFolder: Kubernetes (upstream)
+      uid: kubernetes-views-global
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  k8s-node-metrics-multi-clusters:
+    source:
+      grafana:
+        id: 22413
+        revision: 6
+    config:
+      grafanaDashboardFolder: Kubernetes (upstream)
+      uid: k8s-node-metrics-multi-clusters
+  pyroscope-overview:
+    source:
+      http:
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/pyroscope-mixin/pyroscope-overview.json
+        sha256: 72c6d410677101f3317f74473930b17dd76e77a8c578c4d81e7e189f820c5a0b
+    config:
+      grafanaDashboardFolder: Monitoring (upstream)
+      uid: pyroscope-overview
+  kspan-overview:
+    source:
+      http:
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-overview.json
+        sha256: 1f2924784316f5ef96cf3ec6698c9168990bc9e19a2f3582ecccc70436e17b6e
+    config:
+      grafanaDashboardFolder: Platform (upstream)
+      uid: kspan-overview
+  kspan-deployments:
+    source:
+      http:
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-deployments.json
+        sha256: b99b8fd0b6679477721927008094e4a6477d333c7b4ce31f8ee31880d45a0079
+    config:
+      grafanaDashboardFolder: Platform (upstream)
+      uid: kspan-deployments
+  backstage-app-graph:
+    source:
+      http:
+        url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/backstage-mixin/backstage-app-graph.json
+        sha256: 8f679ddf3617a87861234f956572ee7edfd62cc7b9d64e0de8061fc9cdd08cd9
+    config:
+      grafanaDashboardFolder: CI/CD (upstream)
+      uid: backstage-app-graph

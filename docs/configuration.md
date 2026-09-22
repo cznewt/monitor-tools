@@ -8,7 +8,8 @@ The configuration file generally contains the following top-level keys:
 
 - `name`: The environment name (e.g., `default`).
 - `prometheus`: Settings for Prometheus resource rendering (e.g., `render: mimirtool`).
-- `grafana`: Settings for Grafana resource rendering (e.g., `render: grizzly`).
+- `grafana`: Settings for Grafana resource rendering: `render: grizzly` (classic dashboards via grr), `render: plain` (JSON files) or `render: grafanactl` (app-platform resources, needed for schema v2 dashboards).
+- `loki` (Optional): `render: lokitool` renders the Loki rule groups a mixin lists in `lokiRuleGroups`.
 - `mixins`: A map of mixin definitions.
 - `libs` (Optional): A map of observ-lib (or any reusable Jsonnet library) definitions vendored alongside mixins.
 - `dashboards` (Optional): A map of static Grafana dashboard releases (from grafana.com or any HTTP URL).
@@ -185,6 +186,41 @@ dashboards:
 1. **Sync**: `sync-dashboards` (also called by `sync-all-mixins`) downloads each pinned JSON to `/source/<env>/dashboards/<name>.json`.
 2. **Render**: `render-grizzly-static-grafana-dashboards` (and the plain variant) wrap them as Grizzly `Dashboard` resources, applying the datasource substitutions.
 3. **Apply**: handled by the same `apply-grizzly-grafana-dashboards` script as mixin-derived dashboards.
+
+## Grafana Rendering: `render: grafanactl`
+
+Renders dashboards and folders as Grafana app-platform resources and pushes them through Grafana's Kubernetes-style API (`/apis/dashboard.grafana.app/...`). Use it for schema v2 dashboards (for example the observ-viz mixin), which grizzly cannot push.
+
+```yaml
+grafana:
+  render: grafanactl
+```
+
+- A dashboard whose spec has `elements` and `layout` is rendered as `dashboard.grafana.app/v2beta1`; anything else as `dashboard.grafana.app/v0alpha1`. Static `dashboards:` go the same way.
+- The folder comes from `config.grafanaDashboardFolder` and rides in the `grafana.app/folder` annotation. Its uid is the slugified folder name (`CI/CD (upstream)` becomes `ci-cd-upstream`).
+- The dashboard uid is the uid the mixin set when it is a valid Grafana uid (kubernetes-mixin cross-links its boards by those), otherwise the file name. A v2 spec carries no uid, so the file name is used.
+- `apply-grafanactl-grafana-folders` and `apply-grafanactl-grafana-dashboards` create or update each resource with `curl`. Set `GRAFANA_URL` plus either `GRAFANA_TOKEN` or `GRAFANA_USER` and `GRAFANA_PASSWORD`. `GRAFANA_NAMESPACE` defaults to `default` (org 1).
+- The target Grafana needs the feature toggles `kubernetesDashboards`, `dashboardNewLayouts` and `kubernetesClientDashboardsFolders` for v2 boards.
+
+## Extra Jsonnet paths: `jpaths`
+
+A mixin may list extra `-J` paths, relative to its mixin directory. Every renderer adds them after the mixin's `vendor/`. This is how a vendored repository that imports its own files by repo-relative path resolves:
+
+```yaml
+mixins:
+  observ-viz-platform:
+    source:
+      directory:
+        path: /mixins/observ-viz-mixin
+    jpaths:
+      - vendor/github.com/cznewt/observ-viz
+    config:
+      scenario: platform
+      mimirNamespace: observ-viz-platform
+      grafanaDashboardFolder: Platform (observ-viz)
+```
+
+Rendered rule files are named `<namespace>-<group>.yaml`, so mixins that share a group name no longer overwrite each other's files.
 
 ## SLO Configuration
 

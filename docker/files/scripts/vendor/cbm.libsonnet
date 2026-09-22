@@ -34,6 +34,14 @@ local builder = (import 'cb.libsonnet');
     builder.pyrra.pyrraRules(config),
   slothRules(config)::
     builder.sloth.slothRules(config),
+  grafanactlGrafanaFolders(name, mixin, config)::
+    builder.grafanactl.grafanaFolders(config.mixins[name].config + {mixinName: name}),
+  grafanactlGrafanaDashboards(name, mixin, config)::
+    builder.grafanactl.grafanaDashboards(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
+  grafanactlStaticDashboard(name, rawJson, config)::
+    builder.grafanactl.staticGrafanaDashboard(name, rawJson, config.dashboards[name].config + {dashboardName: name}),
+  grafanactlDashboardFolders(name, config)::
+    builder.grafanactl.grafanaFolders(config.dashboards[name].config + {dashboardName: name}),
   grizzlyStaticDashboard(name, rawJson, config)::
     builder.grizzly.staticGrafanaDashboard(name, rawJson, config.dashboards[name].config + {dashboardName: name}),
   plainStaticDashboard(name, rawJson, config)::

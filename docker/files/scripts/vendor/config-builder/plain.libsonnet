@@ -10,11 +10,11 @@
     // one Prometheus rule file per group - a file starts with `groups:`, which is
     // what promtool and pint parse; a bare group is not a rule file
     {
-      [group.name + '.yaml']: std.manifestYamlDoc({ groups: [group] }, indent_array_in_object=true, quote_keys=false)
+      [config.mixinName + '-' + group.name + '.yaml']: std.manifestYamlDoc({ groups: [group] }, indent_array_in_object=true, quote_keys=false)
       for group in rules.groups
     } +
     {
-      [group.name + '.yaml']: std.manifestYamlDoc({ groups: [group] }, indent_array_in_object=true, quote_keys=false)
+      [config.mixinName + '-' + group.name + '.yaml']: std.manifestYamlDoc({ groups: [group] }, indent_array_in_object=true, quote_keys=false)
       for group in alerts.groups
     },
 }

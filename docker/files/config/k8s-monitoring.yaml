@@ -212,7 +212,7 @@ dashboards:
     source:
       http:
         url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-deployments.json
-        sha256: 0d8c34ae62252a3eaace636e9ec543e67b65df8ff46ab550e53ff7fa7850ed38
+        sha256: b99b8fd0b6679477721927008094e4a6477d333c7b4ce31f8ee31880d45a0079
     config:
       grafanaDashboardFolder: Monitoring
       uid: kspan-deployments

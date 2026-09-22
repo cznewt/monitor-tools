@@ -4,7 +4,7 @@
     local namespace = (if std.objectHasAll(config, 'lokiNamespace') then config.lokiNamespace else config.mixinName);
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
     {
-      [group.name + '.yaml']: std.manifestYamlDoc({
+      [namespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
         namespace: namespace,
         groups: [
           group,
@@ -18,7 +18,7 @@
     local namespace = (if std.objectHasAll(config, 'lokiNamespace') then config.lokiNamespace else config.mixinName);
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     {
-      [group.name + '.yaml']: std.manifestYamlDoc({
+      [namespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
         namespace: namespace,
         groups: [
           group,
@@ -33,7 +33,7 @@
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
     local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
     {
-      [group.name + '.yaml']: std.manifestYamlDoc({
+      [namespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
         namespace: namespace,
         groups: [
           group,
@@ -43,7 +43,7 @@
       if std.member(lokiRuleGroups, group.name)
     } +
     {
-      [group.name + '.yaml']: std.manifestYamlDoc({
+      [namespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
         namespace: namespace,
         groups: [
           group,

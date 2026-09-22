@@ -84,6 +84,10 @@ Most of the curated `*-observ-lib` modules live in [grafana/jsonnet-libs](https:
 
 Other useful shared libraries from the same repo: `common-lib`, `logs-lib`, `mixin-utils`, `status-panels-lib`.
 
+## observ-viz mixin
+
+`docker/files/mixins/observ-viz-mixin` wraps one [observ-viz](https://github.com/cznewt/observ-viz) scenario as a mixin. `jb install` vendors the repo, and `config.scenario` picks the scenario: `platform`, `monlab`, `kubernetes`, `lgtm`, `linux-server` and others. The mixin yields the scenario's schema v2 dashboards, its merged alert groups and its recording rules. Use it with `grafana.render: grafanactl` and `jpaths: [vendor/github.com/cznewt/observ-viz]`, as in `docker/files/config/monlab.yaml`.
+
 ## Usage
 
 To use a mixin (or library):

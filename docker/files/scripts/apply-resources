@@ -17,6 +17,10 @@ if [ "$grafana" = "grizzly" ]; then
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-library-panels apply-grizzly-grafana-library-panels
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards apply-grizzly-grafana-dashboards
 fi
+if [ "$grafana" = "grafanactl" ]; then
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-folders apply-grafanactl-grafana-folders
+  CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards apply-grafanactl-grafana-dashboards
+fi
 
 # prometheus resources
 printf  "\nApplying Prometheus resources with $prometheus processor...\n"

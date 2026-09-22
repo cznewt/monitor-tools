@@ -3,7 +3,7 @@
 CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
 VENDOR_DIR="/scripts/vendor"
 SOURCE_DIR="${SOURCE_DIR:=/source/default}"
-BUILD_DIR="${BUILD_DIR:=/build/default/plain/grafana-dashboards}"
+BUILD_DIR="${BUILD_DIR:=/build/default/grafanactl/grafana-dashboards}"
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 
@@ -15,18 +15,20 @@ extra_jpaths() {
     [ -n "$p" ] && printf ' -J %s' "$mixinDir/$p"
   done
 }
+
 keys=$(yq eval -o=json -I=0 '.mixins | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
+mkdir -p "$BUILD_DIR"
 
 for key in $keys; do
   if [ "$key" = "-" ]; then continue; fi
   mixinDir="$SOURCE_DIR/mixins/$key-mixin"
   if [ -d "$mixinDir/vendor" ]; then
-      echo "Rendering $mixinDir plain GrafanaDashboards with vendor to $BUILD_DIR..."
+      echo "Rendering $mixinDir app-platform grafana-dashboards with vendor to $BUILD_DIR..."
       jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR -J "$mixinDir/vendor" $(extra_jpaths "$key") \
-      -e "(import 'cbm.libsonnet').plainGrafanaDashboards('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+      -e "(import 'cbm.libsonnet').grafanactlGrafanaDashboards('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
   else
-      echo "Rendering $mixinDir plain GrafanaDashboards to $BUILD_DIR..."
+      echo "Rendering $mixinDir app-platform grafana-dashboards to $BUILD_DIR..."
       jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR $(extra_jpaths "$key") \
-      -e "(import 'cbm.libsonnet').plainGrafanaDashboards('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+      -e "(import 'cbm.libsonnet').grafanactlGrafanaDashboards('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
   fi
 done

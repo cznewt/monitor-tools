@@ -14,6 +14,9 @@ if [ "$grafana" = "null" ] || [ -z "$grafana" ]; then
     echo "No grafana defined in $CONFIG_FILE config."
 else
   printf "\nLinting Grafana resources with $grafana processor...\n"
+  if [ "$grafana" = "grafanactl" ]; then
+    echo "app-platform dashboards (v2 schema) are validated on push; no dashboard-linter pass."
+  fi
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards lint-plain-grafana-dashboards
   CONFIG_FILE=$CONFIG_FILE BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-library-panels lint-grizzly-grafana-library-panels
 fi
