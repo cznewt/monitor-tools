@@ -108,3 +108,7 @@ Pushes the rendered and linted resources to the respective services.
 - `clean-build`: Cleans up the `/build` directory.
 - `analyze-mimirtool-mimir-rules`: Analyzes Mimir rules for efficiency. (Env: `BUILD_DIR`)
 - `analyze-plain-grafana-dashboards`: Analyzes Grafana dashboards. (Env: `BUILD_DIR`)
+
+## sync-render-apply
+
+Runs one config end to end: `sync-mixins`, `sync-dashboards`, `init-mixins`, `render-resources` and, unless `APPLY=false`, `apply-resources`. It stops before applying when any render fails. Set `CONFIG_FILE`, plus the apply credentials (`GRAFANA_URL` with `GRAFANA_TOKEN` or `GRAFANA_USER` and `GRAFANA_PASSWORD`, `MIMIR_ADDRESS`, `MIMIR_TENANT_ID`, `LOKI_ADDRESS`, `LOKI_TENANT_ID`). The in-cluster monitor-tools CronJob runs this script.

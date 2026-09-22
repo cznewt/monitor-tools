@@ -1,0 +1,31 @@
+#!/bin/bash
+# One config end to end: sync mixins + static dashboards, install jsonnet
+# deps, render, apply. What the in-cluster monitor-tools CronJob runs.
+#   CONFIG_FILE=/config/monlab.yaml sync-render-apply
+# Apply credentials come from the environment (GRAFANA_URL + GRAFANA_TOKEN or
+# GRAFANA_USER/GRAFANA_PASSWORD, MIMIR_ADDRESS + MIMIR_TENANT_ID, LOKI_*).
+# Set APPLY=false to stop after rendering.
+set -o pipefail
+
+CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
+APPLY="${APPLY:=true}"
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
+export CONFIG_FILE
+
+echo "== sync ($ENV_NAME)"
+# the first clone of many repos sometimes fails transiently - retry once
+BUILD_DIR=/source/$ENV_NAME sync-mixins || { sleep 10; BUILD_DIR=/source/$ENV_NAME sync-mixins; } || exit 1
+BUILD_DIR=/source/$ENV_NAME sync-dashboards || exit 1
+
+echo "== init ($ENV_NAME)"
+SOURCE_DIR=/source/$ENV_NAME init-mixins
+
+echo "== render ($ENV_NAME)"
+render-resources 2>&1 | tee /tmp/render.log
+if grep -q "RUNTIME ERROR" /tmp/render.log; then echo "Error: render failed, not applying."; exit 1; fi
+
+if [ "$APPLY" = "true" ]; then
+  echo "== apply ($ENV_NAME)"
+  apply-resources
+fi
