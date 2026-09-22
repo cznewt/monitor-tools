@@ -4,6 +4,15 @@ CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
 VENDOR_DIR="/scripts/vendor"
 BUILD_DIR="${BUILD_DIR:=/source/default}"
 
+# Optional GITHUB_TOKEN (read-only is enough): authenticates git fetches from
+# github.com. Anonymous fetches from shared cloud IPs get throttled - GitHub
+# then answers 401 ('could not read Username').
+if [ -n "$GITHUB_TOKEN" ] && [ -z "$GIT_CONFIG_COUNT" ]; then
+  export GIT_CONFIG_COUNT=1
+  export GIT_CONFIG_KEY_0="url.https://x-access-token:${GITHUB_TOKEN}@github.com/.insteadOf"
+  export GIT_CONFIG_VALUE_0="https://github.com/"
+fi
+
 echo "Syncing mixins for $CONFIG_FILE to $BUILD_DIR..."
 
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
