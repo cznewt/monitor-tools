@@ -7,6 +7,24 @@ service:
   type: ClusterIP
   port: 8888
 
+# Disabled by default - JupyterLab has no built-in auth, so exposing it via
+# Ingress means putting your own auth in front (annotations for e.g.
+# oauth2-proxy, basic-auth, or a cluster SSO gateway) rather than relying on
+# network-only access via kubectl port-forward.
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: jupyter-monitor-tools.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+    # - secretName: jupyter-monitor-tools-tls
+    #   hosts:
+    #     - jupyter-monitor-tools.example.com
+
 # Map of config filename -> raw YAML content. Mounted into /config.
 configs: {}
 
