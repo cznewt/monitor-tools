@@ -22,19 +22,25 @@ if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not 
 ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
 export CONFIG_FILE
 
+# Degrade instead of stopping: dashboards and rule groups are only ever
+# upserted (never deleted), so a mixin that failed to sync or render simply
+# keeps its previously applied version. The exit status still reports it.
+status=0
+
 echo "== sync ($ENV_NAME)"
 # sync-mixins retries each mixin itself (SYNC_ATTEMPTS)
-BUILD_DIR=/source/$ENV_NAME sync-mixins || exit 1
-BUILD_DIR=/source/$ENV_NAME sync-dashboards || exit 1
+BUILD_DIR=/source/$ENV_NAME sync-mixins || { echo "Warning: some mixins did not sync - rendering the rest."; status=1; }
+BUILD_DIR=/source/$ENV_NAME sync-dashboards || { echo "Warning: some static dashboards did not sync."; status=1; }
 
 echo "== init ($ENV_NAME)"
 SOURCE_DIR=/source/$ENV_NAME init-mixins
 
 echo "== render ($ENV_NAME)"
 render-resources 2>&1 | tee /tmp/render.log
-if grep -q "RUNTIME ERROR" /tmp/render.log; then echo "Error: render failed, not applying."; exit 1; fi
+if grep -q "RUNTIME ERROR" /tmp/render.log; then echo "Warning: some mixins did not render - applying the rest."; status=1; fi
 
 if [ "$APPLY" = "true" ]; then
   echo "== apply ($ENV_NAME)"
   apply-resources
 fi
+exit $status
