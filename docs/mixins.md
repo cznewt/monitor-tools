@@ -84,6 +84,17 @@ Most of the curated `*-observ-lib` modules live in [grafana/jsonnet-libs](https:
 
 Other useful shared libraries from the same repo: `common-lib`, `logs-lib`, `mixin-utils`, `status-panels-lib`.
 
+## Base mixin setups
+
+The local `base-mixin` builds a home board and a detail board per label hierarchy. `config.baseSetup` takes one setup name or a list:
+
+| Setup | Variables | Boards |
+| :--- | :--- | :--- |
+| `env-cluster-system` (default) | `$env` → `$cluster` → `$system` | Base / Home, Base / Cluster |
+| `system-env` | `$system` → `$env`; cluster stays a column | Base / Systems, Base / System |
+
+Each variable lists the values under the ones chosen before it, and All matches series that lack the label. Labels come from `envLabel` (`env`), `clusterLabel` (`cluster`) and `systemLabel` (`app_part_of`); new setups go into `baseSetups`. Home rows link to the detail board with the row's values.
+
 ## observ-viz mixin
 
 `docker/files/mixins/observ-viz-mixin` wraps one [observ-viz](https://github.com/cznewt/observ-viz) scenario as a mixin. `jb install` vendors the repo, and `config.scenario` picks the scenario: `platform`, `monlab`, `kubernetes`, `lgtm`, `linux-server` and others. The mixin yields the scenario's schema v2 dashboards, its merged alert groups and its recording rules. Use it with `grafana.render: grafanactl` and `jpaths: [vendor/github.com/cznewt/observ-viz]`, as in `docker/files/config/monlab.yaml`.

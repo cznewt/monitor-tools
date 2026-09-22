@@ -164,6 +164,11 @@ mixins:
       mimirNamespace: base
       grafanaDashboardFolder: Base
       serverLinuxLink: /d/dashboardlink
+      # both label hierarchies: env > cluster > system (Base / Home, Base / Cluster)
+      # and system > env (Base / Systems, Base / System)
+      baseSetup:
+        - env-cluster-system
+        - system-env
       baseClusterLink: /d/dashboardlink
     source:
       directory:
