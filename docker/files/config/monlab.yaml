@@ -12,10 +12,10 @@
 name: monlab
 prometheus:
   render: mimirtool
-# Loki rules are off: the lab Loki ruler uses read-only local storage (the
-# ruler API answers 'SetRuleGroup unsupported in rule local store').
-# loki:
-#   render: lokitool
+# The lab Loki runs a writable ruler store (loki_ruler_storage: filesystem),
+# so rule groups can be loaded through its ruler API.
+loki:
+  render: lokitool
 grafana:
   render: grafanactl
 mixins:
