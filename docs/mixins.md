@@ -84,6 +84,33 @@ Most of the curated `*-observ-lib` modules live in [grafana/jsonnet-libs](https:
 
 Other useful shared libraries from the same repo: `common-lib`, `logs-lib`, `mixin-utils`, `status-panels-lib`.
 
+## Mixins in the image
+
+The image carries these mixins at `/mixins`, so a config uses them without fetching anything:
+
+```yaml
+mixins:
+  base:
+    config:
+      mimirNamespace: base
+      grafanaDashboardFolder: Base
+    source:
+      directory:
+        path: /mixins/base-mixin
+```
+
+| Mixin | Provides | Notes |
+| :--- | :--- | :--- |
+| **base** | The home and cluster boards plus the Watchdog alert and its runbook. | Two label hierarchies, see below. |
+| **reference** | Reference boards, including a datasource demo. | Dashboards only. |
+| **windows** | Windows host boards and alerts. | Built on `grafana/jsonnet-libs//windows-observ-lib`. |
+| **unpoller** | UniFi Poller boards, alerts and runbooks. | For [unpoller](https://github.com/unpoller/unpoller) metrics. |
+| **opencost** | Kubernetes cost boards, alerts and rules. | A vendored copy of the upstream mixin in the table above. |
+| **kubernetes-events-alloy** | Recording rules and alerts over the Kubernetes events Alloy's eventhandler ships. | LogQL: list both groups under `lokiRuleGroups` and apply them with `loki.render`. |
+| **observ-viz** | One [observ-viz](https://github.com/cznewt/observ-viz) scenario: its schema v2 boards, alerts and recording rules. | Needs `grafana.render: grafanactl` and a `jpaths` entry, see below. |
+
+Their sources live in `docker/files/mixins/`, so a change to one ships with the next image build.
+
 ## Base mixin setups
 
 The local `base-mixin` builds a home board and a detail board per label hierarchy. `config.baseSetup` takes one setup name or a list:
