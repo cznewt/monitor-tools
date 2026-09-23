@@ -140,6 +140,14 @@ RUN git clone --depth 1 --branch v0.1.1 https://github.com/grafana/dashboard-lin
 
 RUN /usr/local/go/bin/go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
 
+# Loki publishes no lokitool binary and its go.mod carries `replace`
+# directives, so `go install pkg@version` refuses it too: build it from a
+# shallow clone of the same Loki version the image's logcli comes from.
+RUN git clone --depth 1 --branch "v${LOKI_VERSION}" https://github.com/grafana/loki.git /tmp/loki && \
+    cd /tmp/loki && \
+    CGO_ENABLED=0 /usr/local/go/bin/go build -o /root/go/bin/lokitool ./cmd/lokitool && \
+    rm -rf /tmp/loki /root/go/pkg
+
 ARG ALLOY_VERSION=1.17.0
 ENV ALLOY_VERSION=${ALLOY_VERSION}
 RUN curl -fSL -o "alloy.zip" "https://github.com/grafana/alloy/releases/download/v${ALLOY_VERSION}/alloy-linux-amd64.zip" && \
@@ -158,6 +166,7 @@ COPY --from=static-downloader /root/grr /usr/local/bin/grr
 COPY --from=static-downloader /root/jrsonnet /usr/local/bin/jrsonnet
 COPY --from=static-downloader /root/jsonnet /usr/local/bin/jsonnet
 COPY --from=static-downloader /root/jsonnetfmt /usr/local/bin/jsonnetfmt
+COPY --from=static-downloader /root/jsonnet-lint /usr/local/bin/jsonnet-lint
 COPY --from=static-downloader /root/mimirtool /usr/local/bin/mimirtool
 COPY --from=static-downloader /root/jb /usr/local/bin/jb
 COPY --from=static-downloader /root/vendir /usr/local/bin/vendir
@@ -173,6 +182,7 @@ COPY --from=static-downloader /root/pyrra /usr/local/bin/pyrra
 COPY --from=static-downloader /root/just /usr/local/bin/just
 COPY --from=static-downloader /root/go/bin/dashboard-linter /usr/local/bin/dashboard-linter
 COPY --from=static-downloader /root/go/bin/mixtool /usr/local/bin/mixtool
+COPY --from=static-downloader /root/go/bin/lokitool /usr/local/bin/lokitool
 COPY --from=static-downloader /root/uv /usr/local/bin/uv
 COPY --from=static-downloader /root/k9s /usr/local/bin/k9s
 COPY --from=static-downloader /root/ktop /usr/local/bin/ktop
