@@ -88,7 +88,7 @@ if [ "$pyrra" != "null" ] && [ -n "$pyrra" ]; then
   CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/pyrra/pyrra-slos render-pyrra-rules
   if [ "$pyrra" = "mimirtool" ]; then
     CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-pyrra-prom-rules
-    #CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-pyrra-prom-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-pyrra-mimir-rules
   fi
 fi
 

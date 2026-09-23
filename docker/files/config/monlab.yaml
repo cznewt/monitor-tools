@@ -21,6 +21,106 @@ loki:
     loki/rules: loki-monolith
 grafana:
   render: grafanactl
+# Service level objectives for the lab's own platform, as Pyrra manifests.
+# `pyrra generate` turns them into burn-rate recordings and multi-window alerts
+# which land in the Mimir ruler under the 'pyrra' namespace, so an SLO is a rule
+# group like any other. Every indicator is a metric Alloy already writes to
+# Mimir - the lab Prometheus does not remote-write, so its own series cannot
+# carry an SLO here.
+pyrra:
+  render: mimirtool
+  namespace: pyrra
+  slos:
+    apiserver-read-latency:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: apiserver-read-latency
+        namespace: kube-monitor
+        labels:
+          role: alert-rules
+      spec:
+        description: Latency of read requests to the Kubernetes API server.
+        target: "99"
+        window: 2w
+        indicator:
+          latency:
+            success:
+              metric: apiserver_request_sli_duration_seconds_bucket{verb=~"LIST|GET",le="0.1"}
+            total:
+              metric: apiserver_request_sli_duration_seconds_bucket{verb=~"LIST|GET"}
+    kubelet-runtime-errors:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: kubelet-runtime-errors
+        namespace: kube-monitor
+        labels:
+          role: alert-rules
+      spec:
+        description: Container runtime operations the kubelet fails.
+        target: "99"
+        window: 2w
+        indicator:
+          ratio:
+            errors:
+              metric: kubelet_runtime_operations_errors_total{job="integrations/kubernetes/kubelet"}
+            total:
+              metric: kubelet_runtime_operations_total{job="integrations/kubernetes/kubelet"}
+    coredns-response-errors:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: coredns-response-errors
+        namespace: kube-monitor
+        labels:
+          role: alert-rules
+      spec:
+        description: DNS answers the cluster resolver fails to serve.
+        target: "99.9"
+        window: 2w
+        indicator:
+          ratio:
+            errors:
+              metric: coredns_dns_responses_total{job="integrations/kubernetes/kube-dns",rcode="SERVFAIL"}
+            total:
+              metric: coredns_dns_responses_total{job="integrations/kubernetes/kube-dns"}
+    ingress-nginx-latency:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: ingress-nginx-latency
+        namespace: infra-ingress-nginx
+        labels:
+          role: alert-rules
+      spec:
+        description: Latency of requests through the ingress controller.
+        target: "95"
+        window: 2w
+        indicator:
+          latency:
+            success:
+              metric: nginx_ingress_controller_request_duration_seconds_bucket{le="0.25"}
+            total:
+              metric: nginx_ingress_controller_request_duration_seconds_bucket{le="+Inf"}
+    mimir-request-errors:
+      apiVersion: pyrra.dev/v1alpha1
+      kind: ServiceLevelObjective
+      metadata:
+        name: mimir-request-errors
+        namespace: global-monitor-mimir
+        labels:
+          role: alert-rules
+      spec:
+        description: Requests Mimir answers with a server error.
+        target: "99.5"
+        window: 2w
+        indicator:
+          ratio:
+            errors:
+              metric: cortex_request_duration_seconds_count{status_code=~"5.."}
+            total:
+              metric: cortex_request_duration_seconds_count
 mixins:
   kubernetes:
     mixinDir: /source/mixins/kubernetes-mixin

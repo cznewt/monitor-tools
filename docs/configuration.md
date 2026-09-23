@@ -226,6 +226,8 @@ Rendered rule files are named `<namespace>-<group>.yaml`, so mixins that share a
 
 ## SLO Configuration
 
+`pyrra: {render: mimirtool}` renders the SLOs twice: as plain Prometheus rule files, and as one-group Mimir rule files under `pyrra.namespace` (default `pyrra`), which the mimirtool apply loads into the ruler. `pyrra.genericRules: false` leaves out Pyrra's own UI series (`pyrra_objective`, `pyrra_window`, `pyrra_availability`); Mimir loads them, but `mimirtool rules check` rejects their names for carrying no colon.
+
 Service Level Objectives can be defined using Pyrra or Sloth.
 
 ### Pyrra (`example-pyrra.yaml`)

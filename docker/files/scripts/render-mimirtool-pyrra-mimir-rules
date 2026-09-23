@@ -1,31 +1,40 @@
 #!/bin/bash
+# Pyrra service level objectives as Mimir rule groups: `pyrra generate` turns
+# the SLO manifests (render-pyrra-rules) into Prometheus rule files, and each
+# group is rewritten as a one-group mimirtool file under the Mimir namespace,
+# so an SLO is evaluated by the ruler like every other rule group.
+#
+# Pyrra's generic rules (pyrra_objective, pyrra_window, pyrra_availability) are
+# what its own UI reads. Mimir loads them, but `mimirtool rules check` calls
+# their names bad because they carry no colon - set `pyrra.genericRules: false`
+# in the config to leave them out.
 
 CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
 SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/mimirtool/mimir-rules}"
 
-if [ ! -f "$CONFIG_FILE" ]; then echo "[Error] Config file $CONFIG_FILE does not exist."; exit 1; fi
-ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
-pyrra=$(yq eval -o=json -I=0 '.pyrra.slos | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
+if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
+slos=$(yq eval -o=json -I=0 '.pyrra.slos | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
+if [ -z "$slos" ] || [ "$slos" = "null" ]; then echo "No pyrra in $CONFIG_FILE config."; exit 0; fi
 
-if [ "$pyrra" = "null" ] || [ -z "$pyrra" ]; then
-  echo "No pyrra in $CONFIG_FILE config."
-  exit 0
-else
-  mkdir -p "$BUILD_DIR/raw-sloth-rules"
-  echo "Rendering plain PrometheusRules from pyrra definitions in $SOURCE_DIR/pyrra/pyrra-slos to $BUILD_DIR/raw-sloth-rules..."
-  pyrra generate --config-files="$SOURCE_DIR/pyrra/pyrra-slos/*.yaml" --prometheus-folder="$BUILD_DIR/raw-sloth-rules" --generic-rules
+NAMESPACE=$(yq eval '.pyrra.namespace // "pyrra"' "$CONFIG_FILE")
+GENERIC=$(yq eval '.pyrra.genericRules // true' "$CONFIG_FILE")
+GENERIC_FLAG=""
+if [ "$GENERIC" = "true" ]; then GENERIC_FLAG="--generic-rules"; fi
 
-  yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
+tmp=$(mktemp -d); trap 'rm -rf "$tmp"' EXIT
+mkdir -p "$BUILD_DIR"
 
-  if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+echo "Rendering pyrra SLOs from $SOURCE_DIR/pyrra/pyrra-slos as mimirtool MimirRules to $BUILD_DIR..."
+pyrra generate --config-files="$SOURCE_DIR/pyrra/pyrra-slos/*.yaml" --prometheus-folder="$tmp" $GENERIC_FLAG || exit 1
 
-  for yaml_file in $yaml_files; do
-    dst_file = "${yaml_file/\/raw-sloth-rules/}"
-    mv $yaml_file $dst_file
-    printf "\nnamespace: $ENV_NAME\n" >> $dst_file
+for rule_file in "$tmp"/*.yaml; do
+  [ -f "$rule_file" ] || continue
+  count=$(yq eval '.groups | length' "$rule_file")
+  for i in $(seq 0 $((count - 1))); do
+    group=$(yq eval ".groups[$i].name" "$rule_file")
+    out="$BUILD_DIR/$NAMESPACE-$group.yaml"
+    yq eval -n ".namespace = \"$NAMESPACE\" | .groups = [load(\"$rule_file\") | .groups[$i]]" > "$out"
+    echo "$out"
   done
-
-  mkdir -p "$BUILD_DIR/raw-sloth-rules" -rf
-
-fi
+done
