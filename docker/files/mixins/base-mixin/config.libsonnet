@@ -33,6 +33,10 @@ local g = import 'g.libsonnet';
     // one setup name or a list of them
     baseSetup: ['env-cluster-system'],
 
+    // selector of the cluster-level tables; a setup without a $cluster variable
+    // overrides it with its own scope
+    clusterQuerySelector: '%(clusterVariableSelector)s, %(clusterLabel)s=~"$cluster"' % $._config,
+
     linuxQuerySelector: '%(clusterVariableSelector)s, %(clusterLabel)s=~"$cluster"' % $._config,
     windowsQuerySelector: '%(clusterVariableSelector)s, %(clusterLabel)s=~"$cluster"' % $._config,
 

@@ -49,14 +49,14 @@ function(config, variables) {
       prometheusQuery.new(
         '$' + variables.datasource.name,
         |||
-          count(up{%(clusterVariableSelector)s, %(clusterLabel)s=~"$cluster", %(appPartOfLabel)s=~".+"}) by (%(appPartOfLabel)s)
+          count(up{%(clusterQuerySelector)s, %(appPartOfLabel)s=~".+"}) by (%(appPartOfLabel)s)
         ||| % config
       )
       + self.base,
       prometheusQuery.new(
         '$' + variables.datasource.name,
         |||
-          count(ALERTS{alertstate="firing", %(clusterVariableSelector)s, %(clusterLabel)s=~"$cluster", %(appPartOfLabel)s=~".+"}) by ( %(appPartOfLabel)s)
+          count(ALERTS{alertstate="firing", %(clusterQuerySelector)s, %(appPartOfLabel)s=~".+"}) by ( %(appPartOfLabel)s)
         ||| % config
       )
       + self.base,

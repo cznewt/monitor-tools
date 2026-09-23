@@ -22,6 +22,8 @@ function(config, setup) {
   local nodeLevels = [l for l in levels if std.objectHas(l, 'onNodes') && l.onNodes],
 
   scope: join([base, sel(levels)]),
+  // the home board carries the first level only
+  homeScope: join([base, sel(levels[0:1])]),
   // node_exporter / windows_exporter series only carry the node-level labels
   nodeScope: join([base, sel(nodeLevels)]),
   detailUid: setup.detail.uid,
