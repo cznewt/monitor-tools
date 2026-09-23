@@ -326,18 +326,17 @@ mixins:
     source:
       directory:
         path: /mixins/observ-viz-mixin
-  # the observ-viz reference library (Panels / Runtimes / Common / Deployments).
-  # Its boards carry their own nested folder, so no grafanaDashboardFolder here.
-  # Needs monitor-tools >= 2026.9-r15 (board-carried folders); until that image
-  # is published the reference boards are loaded from the observ-viz repo.
-  # observ-viz-reference:
-  #   config:
-  #     scenario: reference
-  #   jpaths:
-  #   - vendor/github.com/cznewt/observ-viz
-  #   source:
-  #     directory:
-  #       path: /mixins/observ-viz-mixin
+  # the observ-viz reference library (Panels / Runtimes / Deployments). Its
+  # boards carry their own nested folder, so no grafanaDashboardFolder here -
+  # that needs monitor-tools >= 2026.9-r15.
+  observ-viz-reference:
+    config:
+      scenario: reference
+    jpaths:
+    - vendor/github.com/cznewt/observ-viz
+    source:
+      directory:
+        path: /mixins/observ-viz-mixin
 dashboards:
   kubernetes-views-global:
     source:

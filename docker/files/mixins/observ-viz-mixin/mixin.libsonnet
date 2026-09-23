@@ -20,6 +20,6 @@
   local reference = (import 'libs/reference-lib/mixin.libsonnet'),
   local s = if isReference then {} else (import 'scenarios/main.libsonnet')[$._config.scenario].asMonitoringMixin(),
   grafanaDashboards+:: if isReference then { [name]: reference.grafanaDashboards[name].toResource() for name in std.objectFields(reference.grafanaDashboards) } else s.grafanaDashboards,
-  prometheusAlerts+:: if isReference then {} else s.prometheusAlerts,
-  prometheusRules+:: if isReference then {} else s.prometheusRules,
+  prometheusAlerts+:: if isReference then { groups: [] } else s.prometheusAlerts,
+  prometheusRules+:: if isReference then { groups: [] } else s.prometheusRules,
 }
