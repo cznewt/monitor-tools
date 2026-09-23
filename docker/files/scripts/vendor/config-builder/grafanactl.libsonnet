@@ -53,6 +53,21 @@ local boardFolder(board) =
     parentUid: ann(board, 'observ-viz.dev/folder-parent-uid'),
     parentTitle: local t = ann(board, 'observ-viz.dev/folder-parent-title'); if t != null then t else ann(board, 'observ-viz.dev/folder-parent-uid'),
   };
+// a board may instead carry the whole ancestor chain (observ-viz folderPath),
+// for a tree deeper than parent/child: [{uid, title}, ...] ending in the folder
+local boardFolderChain(board) =
+  local raw = ann(board, 'observ-viz.dev/folder-path');
+  if raw == null then [] else
+    local path = std.parseJson(raw);
+    [
+      {
+        uid: path[i].uid,
+        title: if std.objectHas(path[i], 'title') then path[i].title else path[i].uid,
+        parentUid: if i > 0 then path[i - 1].uid else null,
+        parentTitle: if i > 0 then (if std.objectHas(path[i - 1], 'title') then path[i - 1].title else path[i - 1].uid) else null,
+      }
+      for i in std.range(0, std.length(path) - 1)
+    ];
 // private hints never reach Grafana
 local publicAnns(board) = { [k]: anns(board)[k] for k in std.objectFields(anns(board)) if !std.startsWith(k, 'observ-viz.dev/') };
 
@@ -79,9 +94,14 @@ local dashboard(name, board, config) =
   // any folder the mixin's own boards name in their metadata.
   grafanaFolders(config, mixin={})::
     local boards = if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {};
-    local carried = std.prune([boardFolder(boards[name]) for name in std.objectFields(boards)]);
-    local carriedFolders = std.foldl(function(acc, f) acc
-      + (if f.parentUid != null then { [f.parentUid + '.yaml']: folderResource(f.parentUid, f.parentTitle, config) } else {})
+    local carried =
+      std.prune([boardFolder(boards[name]) for name in std.objectFields(boards) if std.length(boardFolderChain(boards[name])) == 0])
+      + std.flattenArrays([boardFolderChain(boards[name]) for name in std.objectFields(boards)]);
+    // parents first, then the folders themselves: a folder that is both (the
+    // middle of a chain) must keep its own parent, so its real entry wins.
+    local carriedParents = std.foldl(function(acc, f) acc
+      + (if f.parentUid != null then { [f.parentUid + '.yaml']: folderResource(f.parentUid, f.parentTitle, config) } else {}), carried, {});
+    local carriedFolders = carriedParents + std.foldl(function(acc, f) acc
       + { [f.uid + '.yaml']: folderResource(f.uid, f.title, config, f.parentUid) }, carried, {});
     carriedFolders +
     (if !hasFolder(config) then {} else

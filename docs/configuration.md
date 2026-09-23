@@ -118,6 +118,11 @@ mixins:
 
 Nesting needs `grafana.render: grafanactl`; the grizzly path creates flat folders only.
 
+A mixin that emits whole Dashboard resources (observ-viz does) can instead file
+each board itself: the renderer reads the board's `grafana.app/folder`
+annotation, and `observ-viz.dev/folder-path` when the board sits deeper than one
+level, and emits every folder in that chain.
+
 ## Library (observ-lib) Configuration
 
 The `libs` section vendors reusable Jsonnet libraries (the `*-observ-lib` modules from [grafana/jsonnet-libs](https://github.com/grafana/jsonnet-libs), shared helpers, etc.) alongside mixins. Libraries don't render to anything on their own — they're build-time dependencies that mixins `import`.
