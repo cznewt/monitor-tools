@@ -7,9 +7,55 @@ local utils = (import './utils.libsonnet');
 // annotation, the way the app-platform API expects it.
 local isV2(spec) = std.isObject(spec) && std.objectHas(spec, 'elements') && std.objectHas(spec, 'layout');
 local ns(config) = if std.objectHas(config, 'grafanaNamespace') then config.grafanaNamespace else 'default';
+// A board's folder. `grafanaDashboardFolder` is the title; the uid defaults to
+// its slug and `grafanaDashboardFolderUid` overrides it. A folder may name a
+// parent (`grafanaDashboardFolderParent` [+ ...ParentUid]), which is how a
+// nested tree - Upstream / kubernetes-mixin - comes out of the config.
+local opt(config, key) = if std.objectHas(config, key) then config[key] else null;
+local hasFolder(config) =
+  std.objectHas(config, 'grafanaDashboardFolder') && config.grafanaDashboardFolder != 'General';
+local folderUid(config) =
+  local explicit = opt(config, 'grafanaDashboardFolderUid');
+  if explicit != null then explicit else utils.slugify(config.grafanaDashboardFolder);
+local parentTitle(config) = opt(config, 'grafanaDashboardFolderParent');
+local parentUid(config) =
+  local explicit = opt(config, 'grafanaDashboardFolderParentUid');
+  if explicit != null then explicit
+  else if parentTitle(config) != null then utils.slugify(parentTitle(config))
+  else null;
 local folderMeta(config) =
-  if std.objectHas(config, 'grafanaDashboardFolder') && config.grafanaDashboardFolder != 'General'
-  then { annotations: { 'grafana.app/folder': utils.slugify(config.grafanaDashboardFolder) } } else {};
+  if hasFolder(config) then { annotations: { 'grafana.app/folder': folderUid(config) } } else {};
+// one Folder resource; `parent` nests it the way a dashboard names its folder.
+local folderResource(uid, title, config, parent=null) = std.manifestYamlDoc({
+  apiVersion: 'folder.grafana.app/v1beta1',
+  kind: 'Folder',
+  metadata: { name: uid, namespace: ns(config) }
+            + (if parent != null then { annotations: { 'grafana.app/folder': parent } } else {}),
+  spec: { title: title },
+}, indent_array_in_object=true, quote_keys=false);
+// A mixin may emit whole resources (apiVersion/kind/metadata/spec) instead of
+// bare specs - observ-viz's reference boards do, because each one names its own
+// Grafana folder. Then the board's metadata wins over the config's folder.
+local isResource(board) =
+  std.isObject(board) && std.objectHas(board, 'spec') && std.objectHas(board, 'metadata')
+  && std.objectHas(board, 'apiVersion');
+local boardSpec(board) = if isResource(board) then board.spec else board;
+local anns(board) =
+  if isResource(board) && std.objectHas(board.metadata, 'annotations') then board.metadata.annotations else {};
+local ann(board, key) = local a = anns(board); if std.objectHas(a, key) then a[key] else null;
+// the folder a board carries: uid + title, and its parent (observ-viz writes
+// the readable title and the parent in private annotations next to the uid).
+local boardFolder(board) =
+  local uid = ann(board, 'grafana.app/folder');
+  if uid == null then null else {
+    uid: uid,
+    title: local t = ann(board, 'observ-viz.dev/folder-title'); if t != null then t else uid,
+    parentUid: ann(board, 'observ-viz.dev/folder-parent-uid'),
+    parentTitle: local t = ann(board, 'observ-viz.dev/folder-parent-title'); if t != null then t else ann(board, 'observ-viz.dev/folder-parent-uid'),
+  };
+// private hints never reach Grafana
+local publicAnns(board) = { [k]: anns(board)[k] for k in std.objectFields(anns(board)) if !std.startsWith(k, 'observ-viz.dev/') };
+
 // the board's uid: a v0 board keeps the uid its mixin set when that is a valid
 // Grafana uid (kubernetes-mixin links its boards by those uids), else the
 // file name; a v2 spec carries no uid, so the file name is the uid.
@@ -17,33 +63,37 @@ local uidFor(stem, spec) =
   if !isV2(spec) && std.objectHas(spec, 'uid') && utils.validUid(spec.uid) then spec.uid
   else if utils.validUid(stem) then stem
   else std.substr(utils.slugify(stem), 0, 40);
-local dashboard(name, spec, config) = std.manifestYamlDoc({
-  apiVersion: if isV2(spec) then 'dashboard.grafana.app/v2beta1' else 'dashboard.grafana.app/v0alpha1',
-  kind: 'Dashboard',
-  metadata: { name: name, namespace: ns(config) } + folderMeta(config),
-  spec: if isV2(spec) then spec else spec { uid: name },
-});
+local dashboard(name, board, config) =
+  local spec = boardSpec(board);
+  local own = publicAnns(board);
+  std.manifestYamlDoc({
+    apiVersion: if isV2(spec) then 'dashboard.grafana.app/v2beta1' else 'dashboard.grafana.app/v0alpha1',
+    kind: 'Dashboard',
+    metadata: { name: if isResource(board) then board.metadata.name else name, namespace: ns(config) }
+              + (if std.length(own) > 0 then { annotations: own } else folderMeta(config)),
+    spec: if isV2(spec) then spec else spec { uid: name },
+  });
 
 {
-  grafanaFolders(config)::
-    {
-      [if std.objectHas(config, 'grafanaDashboardFolder') && config.grafanaDashboardFolder != 'General' then utils.slugify(config.grafanaDashboardFolder) + '.yaml']: std.manifestYamlDoc({
-        apiVersion: 'folder.grafana.app/v1beta1',
-        kind: 'Folder',
-        metadata: {
-          name: utils.slugify(config.grafanaDashboardFolder),
-          namespace: ns(config),
-        },
-        spec: {
-          title: config.grafanaDashboardFolder,
-        },
-      }, indent_array_in_object=true, quote_keys=false),
-    },
+  // grafanaFolders(config, mixin): the config's folder (plus its parent), and
+  // any folder the mixin's own boards name in their metadata.
+  grafanaFolders(config, mixin={})::
+    local boards = if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {};
+    local carried = std.prune([boardFolder(boards[name]) for name in std.objectFields(boards)]);
+    local carriedFolders = std.foldl(function(acc, f) acc
+      + (if f.parentUid != null then { [f.parentUid + '.yaml']: folderResource(f.parentUid, f.parentTitle, config) } else {})
+      + { [f.uid + '.yaml']: folderResource(f.uid, f.title, config, f.parentUid) }, carried, {});
+    carriedFolders +
+    (if !hasFolder(config) then {} else
+      (if parentUid(config) != null
+       then { [parentUid(config) + '.yaml']: folderResource(parentUid(config), parentTitle(config), config) }
+       else {})
+      + { [folderUid(config) + '.yaml']: folderResource(folderUid(config), config.grafanaDashboardFolder, config, parentUid(config)) }),
   grafanaDashboards(mixin, config)::
     local boards = if std.objectHasAll(mixin, 'grafanaDashboards') then mixin.grafanaDashboards else {};
     {
       [std.strReplace(name, '.json', '') + '.yaml']:
-        dashboard(uidFor(std.strReplace(name, '.json', ''), boards[name]), boards[name], config)
+        dashboard(uidFor(std.strReplace(name, '.json', ''), boardSpec(boards[name])), boards[name], config)
       for name in std.objectFields(boards)
     },
   // a released dashboard JSON (config.dashboards.<name>) with the datasource

@@ -48,7 +48,8 @@ local builder = (import 'cb.libsonnet');
   slothRules(config)::
     builder.sloth.slothRules(config),
   grafanactlGrafanaFolders(name, mixin, config)::
-    builder.grafanactl.grafanaFolders(config.mixins[name].config + {mixinName: name}),
+    builder.grafanactl.grafanaFolders(config.mixins[name].config + {mixinName: name},
+                                      mixin + {_config+:: config.mixins[name].config}),
   grafanactlGrafanaDashboards(name, mixin, config)::
     builder.grafanactl.grafanaDashboards(mixin + {_config+:: config.mixins[name].config}, config.mixins[name].config + {mixinName: name}),
   grafanactlStaticDashboard(name, rawJson, config)::

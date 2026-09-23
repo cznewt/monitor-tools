@@ -104,7 +104,19 @@ mixins:
     - **directory**: Uses a local path.
 - **config**: Parameters passed to the mixin's Jsonnet code. Common parameters include:
     - `mimirNamespace`: The namespace for Mimir rules.
-    - `grafanaDashboardFolder`: The folder name in Grafana.
+    - `grafanaDashboardFolder`: The folder title in Grafana.
+    - `grafanaDashboardFolderUid`: The folder's uid. Defaults to the slug of the title (`Upstream / CI/CD` -> `ci-cd`); set it when two folders share a title.
+    - `grafanaDashboardFolderParent`: Title of a parent folder. The renderer emits the parent too and nests the folder under it, so a tree like `Upstream / kubernetes-mixin` comes out of the config. `grafanaDashboardFolderParentUid` overrides the parent's uid the same way.
+
+```yaml
+mixins:
+  kubernetes:
+    config:
+      grafanaDashboardFolder: kubernetes-mixin
+      grafanaDashboardFolderParent: Upstream
+```
+
+Nesting needs `grafana.render: grafanactl`; the grizzly path creates flat folders only.
 
 ## Library (observ-lib) Configuration
 

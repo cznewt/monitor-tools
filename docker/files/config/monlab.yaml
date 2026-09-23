@@ -129,7 +129,8 @@ mixins:
       showMultiCluster: true
       mimirNamespace: kubernetes-mixin
       mimirAlertNamespace: kubernetes-mixin-alerts
-      grafanaDashboardFolder: Kubernetes (upstream)
+      grafanaDashboardFolder: kubernetes-mixin
+      grafanaDashboardFolderParent: Upstream
       cadvisorSelector: job="integrations/kubernetes/cadvisor"
       kubeletSelector: job="integrations/kubernetes/kubelet"
       kubeApiserverSelector: job="integrations/kubernetes/kube-apiserver"
@@ -143,8 +144,8 @@ mixins:
         depth: 1
   kube-state-metrics:
     config:
+      # rules only - the mixin ships no dashboards, so no folder here
       mimirNamespace: kube-state-metrics
-      grafanaDashboardFolder: Kubernetes (upstream)
     source:
       git:
         url: https://github.com/kubernetes/kube-state-metrics.git
@@ -157,7 +158,8 @@ mixins:
     config:
       mimirNamespace: node-mixin
       mimirAlertNamespace: node-mixin-alerts
-      grafanaDashboardFolder: Nodes (upstream)
+      grafanaDashboardFolder: node-mixin
+      grafanaDashboardFolderParent: Upstream
       nodeExporterSelector: job="integrations/node_exporter"
     source:
       git:
@@ -170,7 +172,8 @@ mixins:
   alloy:
     config:
       mimirNamespace: alloy
-      grafanaDashboardFolder: Monitoring (upstream)
+      grafanaDashboardFolder: alloy-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/grafana/alloy.git
@@ -182,7 +185,8 @@ mixins:
   mimir:
     config:
       mimirNamespace: mimir
-      grafanaDashboardFolder: Monitoring (upstream)
+      grafanaDashboardFolder: mimir-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/grafana/mimir.git
@@ -194,7 +198,8 @@ mixins:
   loki:
     config:
       mimirNamespace: loki
-      grafanaDashboardFolder: Monitoring (upstream)
+      grafanaDashboardFolder: loki-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/grafana/loki.git
@@ -206,7 +211,8 @@ mixins:
   tempo:
     config:
       mimirNamespace: tempo
-      grafanaDashboardFolder: Monitoring (upstream)
+      grafanaDashboardFolder: tempo-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/grafana/tempo.git
@@ -218,7 +224,8 @@ mixins:
   alertmanager:
     config:
       mimirNamespace: alertmanager
-      grafanaDashboardFolder: Monitoring (upstream)
+      grafanaDashboardFolder: alertmanager-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/prometheus/alertmanager.git
@@ -231,7 +238,8 @@ mixins:
     config:
       mimirNamespace: cert-manager
       enableMultiCluster: true
-      grafanaDashboardFolder: Platform (upstream)
+      grafanaDashboardFolder: cert-manager-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/imusmanmalik/cert-manager-mixin.git
@@ -240,7 +248,8 @@ mixins:
   ingress-nginx:
     config:
       mimirNamespace: ingress-nginx
-      grafanaDashboardFolder: Platform (upstream)
+      grafanaDashboardFolder: ingress-nginx-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/adinhodovic/ingress-nginx-mixin.git
@@ -249,7 +258,8 @@ mixins:
   kubernetes-events-alloy:
     config:
       mimirNamespace: kubernetes-events
-      grafanaDashboardFolder: Platform (upstream)
+      grafanaDashboardFolder: kubernetes-events-mixin
+      grafanaDashboardFolderParent: Upstream
       # LogQL rules: they are loaded into Loki's ruler, not Mimir's
       lokiRuleGroups:
         - kubernetes-events-alloy.rules
@@ -260,7 +270,8 @@ mixins:
   opencost:
     config:
       mimirNamespace: opencost
-      grafanaDashboardFolder: Platform (upstream)
+      grafanaDashboardFolder: opencost-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       directory:
         path: /mixins/opencost-mixin
@@ -283,7 +294,8 @@ mixins:
     vendorDir: /source/mixins/argo-cd-mixin/vendor
     config:
       mimirNamespace: argo-cd
-      grafanaDashboardFolder: CI/CD (upstream)
+      grafanaDashboardFolder: argo-cd-mixin
+      grafanaDashboardFolderParent: Upstream
     source:
       git:
         url: https://github.com/adinhodovic/argo-cd-mixin.git
@@ -293,7 +305,11 @@ mixins:
     config:
       scenario: platform
       mimirNamespace: observ-viz-platform
-      grafanaDashboardFolder: Platform (observ-viz)
+      # title slug == folder uid on purpose: monitor-tools < 2026.9-r15 derives
+      # the uid from the title, and a plain "Platform" would collide with the
+      # workshop's own folder
+      grafanaDashboardFolder: Lab platform
+      grafanaDashboardFolderParent: Scenarios
     jpaths:
     - vendor/github.com/cznewt/observ-viz
     source:
@@ -303,12 +319,25 @@ mixins:
     config:
       scenario: monlab
       mimirNamespace: observ-viz-services
-      grafanaDashboardFolder: Services (observ-viz)
+      grafanaDashboardFolder: Lab services
+      grafanaDashboardFolderParent: Scenarios
     jpaths:
     - vendor/github.com/cznewt/observ-viz
     source:
       directory:
         path: /mixins/observ-viz-mixin
+  # the observ-viz reference library (Panels / Runtimes / Common / Deployments).
+  # Its boards carry their own nested folder, so no grafanaDashboardFolder here.
+  # Needs monitor-tools >= 2026.9-r15 (board-carried folders); until that image
+  # is published the reference boards are loaded from the observ-viz repo.
+  # observ-viz-reference:
+  #   config:
+  #     scenario: reference
+  #   jpaths:
+  #   - vendor/github.com/cznewt/observ-viz
+  #   source:
+  #     directory:
+  #       path: /mixins/observ-viz-mixin
 dashboards:
   kubernetes-views-global:
     source:
@@ -316,7 +345,8 @@ dashboards:
         id: 15757
         revision: 43
     config:
-      grafanaDashboardFolder: Kubernetes (upstream)
+      grafanaDashboardFolder: kubernetes-views
+      grafanaDashboardFolderParent: Upstream
       uid: kubernetes-views-global
       datasources:
         DS_PROMETHEUS: global-monitor-mimir-server
@@ -326,7 +356,8 @@ dashboards:
         id: 22413
         revision: 6
     config:
-      grafanaDashboardFolder: Kubernetes (upstream)
+      grafanaDashboardFolder: kubernetes-views
+      grafanaDashboardFolderParent: Upstream
       uid: k8s-node-metrics-multi-clusters
   pyroscope-overview:
     source:
@@ -334,7 +365,8 @@ dashboards:
         url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/pyroscope-mixin/pyroscope-overview.json
         sha256: 72c6d410677101f3317f74473930b17dd76e77a8c578c4d81e7e189f820c5a0b
     config:
-      grafanaDashboardFolder: Monitoring (upstream)
+      grafanaDashboardFolder: pyroscope-mixin
+      grafanaDashboardFolderParent: Upstream
       uid: pyroscope-overview
   kspan-overview:
     source:
@@ -342,7 +374,8 @@ dashboards:
         url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-overview.json
         sha256: 1f2924784316f5ef96cf3ec6698c9168990bc9e19a2f3582ecccc70436e17b6e
     config:
-      grafanaDashboardFolder: Platform (upstream)
+      grafanaDashboardFolder: kspan-mixin
+      grafanaDashboardFolderParent: Upstream
       uid: kspan-overview
   kspan-deployments:
     source:
@@ -350,7 +383,8 @@ dashboards:
         url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/kspan-mixin/kspan-deployments.json
         sha256: b99b8fd0b6679477721927008094e4a6477d333c7b4ce31f8ee31880d45a0079
     config:
-      grafanaDashboardFolder: Platform (upstream)
+      grafanaDashboardFolder: kspan-mixin
+      grafanaDashboardFolderParent: Upstream
       uid: kspan-deployments
   backstage-app-graph:
     source:
@@ -358,5 +392,6 @@ dashboards:
         url: https://raw.githubusercontent.com/cznewt/monitor-tools/main/backstage-mixin/backstage-app-graph.json
         sha256: 8f679ddf3617a87861234f956572ee7edfd62cc7b9d64e0de8061fc9cdd08cd9
     config:
-      grafanaDashboardFolder: CI/CD (upstream)
+      grafanaDashboardFolder: backstage-mixin
+      grafanaDashboardFolderParent: Upstream
       uid: backstage-app-graph
