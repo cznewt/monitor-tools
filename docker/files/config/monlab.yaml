@@ -122,6 +122,10 @@ pyrra:
             total:
               metric: cortex_request_duration_seconds_count
 mixins:
+  # No base mixin here: its flat boards are superseded by the tabbed observ-viz
+  # platform pair (Kubernetes / Clusters and Kubernetes / Cluster in the Lab
+  # platform folder), which carry the same overview with per-signal tabs, alerts
+  # and a runbook panel per alert.
   kubernetes:
     mixinDir: /source/mixins/kubernetes-mixin
     vendorDir: /source/mixins/kubernetes-mixin/vendor
@@ -275,20 +279,6 @@ mixins:
     source:
       directory:
         path: /mixins/opencost-mixin
-  base:
-    config:
-      mimirNamespace: base
-      grafanaDashboardFolder: Base
-      serverLinuxLink: /d/dashboardlink
-      # both label hierarchies: env > cluster > system (Base / Home, Base / Cluster)
-      # and system > env (Base / Systems, Base / System)
-      baseSetup:
-        - env-cluster-system
-        - system-env
-      baseClusterLink: /d/dashboardlink
-    source:
-      directory:
-        path: /mixins/base-mixin
   argo-cd:
     mixinDir: /source/mixins/argo-cd-mixin
     vendorDir: /source/mixins/argo-cd-mixin/vendor
