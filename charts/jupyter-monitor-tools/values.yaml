@@ -45,3 +45,16 @@ resources: {}
 nodeSelector: {}
 tolerations: []
 affinity: {}
+
+# Defaults satisfy the Kubernetes "restricted" Pod Security Standard. The
+# image (extra/jupyter-monitor-tools/docker/Dockerfile) already runs as a
+# non-root `ubuntu` user, so runAsNonRoot is safe with no image changes.
+podSecurityContext:
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
