@@ -306,8 +306,9 @@ mixins:
     config:
       scenario: monlab
       mimirNamespace: observ-viz-services
-      grafanaDashboardFolder: Lab services
-      grafanaDashboardFolderParent: Scenarios
+      # the profile's own folder (Lab) is carried on each board; the platform
+      # services it used to render are component boards now
+      grafanaDashboardFolder: Lab
     jpaths:
     - vendor/github.com/cznewt/observ-viz
     source:
