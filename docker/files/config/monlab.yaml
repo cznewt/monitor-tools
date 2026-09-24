@@ -122,10 +122,9 @@ pyrra:
             total:
               metric: cortex_request_duration_seconds_count
 mixins:
-  # No base mixin here: its flat boards are superseded by the tabbed observ-viz
-  # platform pair (Kubernetes / Clusters and Kubernetes / Cluster in the Lab
-  # platform folder), which carry the same overview with per-signal tabs, alerts
-  # and a runbook panel per alert.
+  # The base layer is the observ-viz base mixin below (observ-viz-base): the same
+  # Base / Home and Base / Cluster boards as the old flat base-mixin pair, but
+  # native schema v2 with tabs. The base-mixin itself is not used here.
   kubernetes:
     mixinDir: /source/mixins/kubernetes-mixin
     vendorDir: /source/mixins/kubernetes-mixin/vendor
@@ -311,6 +310,26 @@ mixins:
       mimirNamespace: observ-viz-services
       grafanaDashboardFolder: Lab services
       grafanaDashboardFolderParent: Scenarios
+    jpaths:
+    - vendor/github.com/cznewt/observ-viz
+    source:
+      directory:
+        path: /mixins/observ-viz-mixin
+  # the site's base layer - Base / Home (clusters/nodes/alerts/applications),
+  # Base / Clusters (servers + workload) and Base / Cluster (compute/network/
+  # storage/alerts/applications), tabbed native-v2 boards from observ-viz
+  # libs/common-lib/base.libsonnet. They name the Base folder themselves, so no
+  # grafanaDashboardFolder here. Rules: the node-count recording rule the
+  # Cluster board's $nodecount reads, and the Watchdog alert.
+  observ-viz-base:
+    config:
+      scenario: base
+      mimirNamespace: observ-viz-base
+      base:
+        # the lab labels workloads by namespace; app_part_of is unset here
+        appLabel: namespace
+        # no site-wide instance exclusions in the lab
+        selector: ''
     jpaths:
     - vendor/github.com/cznewt/observ-viz
     source:
