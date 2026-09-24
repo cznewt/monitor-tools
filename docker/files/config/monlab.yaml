@@ -290,15 +290,13 @@ mixins:
         url: https://github.com/adinhodovic/argo-cd-mixin.git
         ref: main
         depth: 1
+  # rules only: every board this profile used to render now lives in the
+  # library's own folders (Base, Reference / Deployments, Components), so it
+  # contributes its merged alert and recording rules and no dashboards
   observ-viz-platform:
     config:
       scenario: platform
       mimirNamespace: observ-viz-platform
-      # title slug == folder uid on purpose: monitor-tools < 2026.9-r15 derives
-      # the uid from the title, and a plain "Platform" would collide with the
-      # workshop's own folder
-      grafanaDashboardFolder: Lab platform
-      grafanaDashboardFolderParent: Scenarios
     jpaths:
     - vendor/github.com/cznewt/observ-viz
     source:
