@@ -353,7 +353,7 @@ dashboards:
         id: 15757
         revision: 43
     config:
-      grafanaDashboardFolder: kubernetes-views
+      grafanaDashboardFolder: grafana-dashboards
       grafanaDashboardFolderParent: Upstream
       uid: kubernetes-views-global
       datasources:
@@ -364,7 +364,7 @@ dashboards:
         id: 22413
         revision: 6
     config:
-      grafanaDashboardFolder: kubernetes-views
+      grafanaDashboardFolder: grafana-dashboards
       grafanaDashboardFolderParent: Upstream
       uid: k8s-node-metrics-multi-clusters
   pyroscope-overview:
@@ -403,3 +403,106 @@ dashboards:
       grafanaDashboardFolder: backstage-mixin
       grafanaDashboardFolderParent: Upstream
       uid: backstage-app-graph
+  # Well-known community boards from grafana.com, pinned by revision. Each
+  # `datasources` key is the dashboard's own __input name - they disagree
+  # (DS_PROMETHEUS, DS_PROM, DS_THEMIS), so check the JSON before adding one.
+  node-exporter-full:
+    source:
+      grafana:
+        id: 1860
+        revision: 45
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: node-exporter-full
+  prometheus-overview:
+    source:
+      grafana:
+        id: 3662
+        revision: 2
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: prometheus-overview
+      datasources:
+        DS_THEMIS: global-monitor-mimir-server
+  redis-exporter:
+    source:
+      grafana:
+        id: 763
+        revision: 6
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: redis-exporter
+      datasources:
+        DS_PROM: global-monitor-mimir-server
+  postgres-database:
+    source:
+      grafana:
+        id: 9628
+        revision: 8
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: postgres-database
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  cadvisor-exporter:
+    source:
+      grafana:
+        id: 14282
+        revision: 1
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: cadvisor-exporter
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  ingress-nginx-controller:
+    source:
+      grafana:
+        id: 9614
+        revision: 1
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: ingress-nginx-controller
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  coredns:
+    source:
+      grafana:
+        id: 15762
+        revision: 22
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: coredns-system
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  # Sloth's own SLO boards. They read slo:sli_error:ratio_rate*, which Sloth
+  # generates; this lab's SLOs come from Pyrra, so they stay empty until
+  # something writes Sloth-shaped rules.
+  sloth-slo-detail:
+    source:
+      grafana:
+        id: 14348
+        revision: 5
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: sloth-slo-detail
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
+  sloth-slos-high-level:
+    source:
+      grafana:
+        id: 14643
+        revision: 2
+    config:
+      grafanaDashboardFolder: grafana-dashboards
+      grafanaDashboardFolderParent: Upstream
+      uid: sloth-slos-high-level
+      datasources:
+        DS_PROMETHEUS: global-monitor-mimir-server
