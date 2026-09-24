@@ -97,12 +97,15 @@ local dashboard(name, board, config) =
     local carried =
       std.prune([boardFolder(boards[name]) for name in std.objectFields(boards) if std.length(boardFolderChain(boards[name])) == 0])
       + std.flattenArrays([boardFolderChain(boards[name]) for name in std.objectFields(boards)]);
+    // std.prune drops the null parentUid/parentTitle of a top-level folder, so
+    // read both defensively: a board may name a folder with no parent at all.
+    local par(f, key) = if std.objectHas(f, key) then f[key] else null;
     // parents first, then the folders themselves: a folder that is both (the
     // middle of a chain) must keep its own parent, so its real entry wins.
     local carriedParents = std.foldl(function(acc, f) acc
-      + (if f.parentUid != null then { [f.parentUid + '.yaml']: folderResource(f.parentUid, f.parentTitle, config) } else {}), carried, {});
+      + (if par(f, 'parentUid') != null then { [par(f, 'parentUid') + '.yaml']: folderResource(par(f, 'parentUid'), par(f, 'parentTitle'), config) } else {}), carried, {});
     local carriedFolders = carriedParents + std.foldl(function(acc, f) acc
-      + { [f.uid + '.yaml']: folderResource(f.uid, f.title, config, f.parentUid) }, carried, {});
+      + { [f.uid + '.yaml']: folderResource(f.uid, f.title, config, par(f, 'parentUid')) }, carried, {});
     carriedFolders +
     (if !hasFolder(config) then {} else
       (if parentUid(config) != null
