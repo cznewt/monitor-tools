@@ -201,7 +201,7 @@ metadata:
   description: Anomaly scorer - statistical modules (sigma, IQR, EDM, Prophet) over PromQL series, exposed as a probe exporter
   tags: [observability, analytics]
   annotations:
-    backstage.io/kubernetes-namespace: global-monitor-anomaly-scorer
+    backstage.io/kubernetes-namespace: global-monitor-anomaly-exporter
 spec:
   type: service
   lifecycle: production
