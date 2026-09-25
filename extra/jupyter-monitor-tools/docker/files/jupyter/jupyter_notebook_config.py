@@ -6,8 +6,11 @@ if 'JUPYTER_PASSWORD' in os.environ:
 
 c.ServerApp.ip = '*'
 c.ServerApp.root_dir = '/source'
+# Terminals open bash: every code block in the courses is POSIX shell, and fish
+# rejects the first thing most of them do - `KEY="$VAR"` is a syntax error there.
+# fish is still installed for anyone who prefers it interactively.
 c.ServerApp.terminado_settings = {
-    "shell_command": ["/usr/bin/fish"]
+    "shell_command": ["/bin/bash", "-l"]
 }
 
 c.LanguageServerApp.language_servers = {
