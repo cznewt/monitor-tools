@@ -12,3 +12,22 @@ notebook
 jupyterthemes
 jupyterlab-lsp
 jupyter-server-proxy
+
+# the Advanced monitoring workshop runs its labs against these directly, so
+# they belong in the image rather than in a per-student venv on the volume
+# (two environments meant numpy/prophet and fastapi/redis were never both
+# importable from the same python)
+numpy
+redis
+fastapi
+uvicorn
+prometheus_client
+# the orders app imports pythonjsonlogger directly; today it only arrives as a
+# transitive jupyter-events dependency, which an upgrade could drop
+python-json-logger
+
+# tracing: the distro plus the exporter. The auto-instrumentations that match
+# what is installed here (fastapi, redis, requests, ...) are added by
+# `opentelemetry-bootstrap` in the Dockerfile, right after this file.
+opentelemetry-distro
+opentelemetry-exporter-otlp

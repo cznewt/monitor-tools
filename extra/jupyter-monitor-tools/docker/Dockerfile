@@ -37,6 +37,9 @@ RUN chmod +x /usr/local/bin/seed-notebooks && \
     chown -R ubuntu:ubuntu /opt/notebooks
 
 RUN uv pip install --system --break-system-packages --no-cache-dir -r /requirements-notebook.txt && \
+    opentelemetry-bootstrap -a requirements > /tmp/otel-requirements.txt && \
+    uv pip install --system --break-system-packages --no-cache-dir -r /tmp/otel-requirements.txt && \
+    rm -f /tmp/otel-requirements.txt && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 USER ubuntu
