@@ -38,6 +38,7 @@ do-all
 
 ### Documentation
 
-- [Scripts Documentation](docs/scripts.md)
-- [Software Documentation](docs/software.md)
-- [Configuration Documentation](docs/configuration.md)
+- [Scripts Documentation](scripts.md)
+- [Software Documentation](software.md)
+- [Configuration Documentation](configuration.md)
+- [Demo apps](demo-apps.md) - the `demo-apps` chart: an instrumented online store to monitor, with incidents on demand

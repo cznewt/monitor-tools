@@ -109,7 +109,8 @@ docker run --rm \
 
 ### Helm
 
-Two charts are published to GHCR as OCI artifacts:
+Three charts are published to GHCR as OCI artifacts. Two of them run
+monitor-tools:
 
 ```bash
 # Headless: ConfigMap + Secret + Job (or CronJob) running do-all
@@ -151,6 +152,16 @@ The `monitor-tools` chart additionally exposes a `job:` block: set
 `job.schedule` to render a `CronJob` instead of a one-shot `Job`, and tweak
 `job.command` for `apply-resources`, `do-all && apply-resources`, etc.
 
+The third, `demo-apps`, is something to monitor: an instrumented online store
+(per runtime a logging, a Prometheus-metrics and an OTLP-traces app, plus log,
+metric and service-graph generators) with incident windows on a schedule or on
+demand - see [Demo apps](docs/demo-apps.md).
+
+```bash
+helm upgrade --install demo oci://ghcr.io/cznewt/charts/demo-apps --version 0.3.1 \
+  --namespace demo-dev --create-namespace --set environment=dev
+```
+
 ## Tools
 
 | Tool | Version | Description |
@@ -171,3 +182,4 @@ The `monitor-tools` chart additionally exposes a `job:` block: set
 - [Software Documentation](docs/software.md)
 - [Configuration Documentation](docs/configuration.md)
 - [Mixins Documentation](docs/mixins.md)
+- [Demo apps](docs/demo-apps.md) - the `demo-apps` chart: install, incidents, what to look for

@@ -10,6 +10,7 @@ nav:
     - Scripts: scripts.md
     - Configuration: configuration.md
     - Examples: examples.md
+    - Demo apps: demo-apps.md
   - Reference:
     - Software: software.md
 
