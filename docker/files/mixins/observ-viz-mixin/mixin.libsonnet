@@ -23,13 +23,14 @@
 //              Kubernetes) plus its alert and recording groups. `rulesOnly`
 //              lists libraries whose groups are merged but whose boards are
 //              skipped (another mixin owns them); `libConfig` maps a library
-//              name to the config passed to its new().
+//              name to the config passed to its new(); `rules: false` renders
+//              the boards only (a site whose rules come from a scenario).
 // All three carry their own Grafana folder in each board's metadata, so the
 // config's grafanaDashboardFolder does not apply to them. `config.base` is passed
 // to the board builders (clusterLabel / nodeLabel / appLabel / selector / titles /
 // folder), e.g. config: { scenario: base, base: { appLabel: namespace } }.
 {
-  _config+:: { scenario: 'platform', base: {}, libs: [], rulesOnly: [], libConfig: {} },
+  _config+:: { scenario: 'platform', base: {}, libs: [], rulesOnly: [], libConfig: {}, rules: true },
   local isReference = $._config.scenario == 'reference',
   local isBase = $._config.scenario == 'base',
   local isLibs = $._config.scenario == 'libs',
@@ -86,11 +87,11 @@
     if isBase
     then { groups: [{ name: 'base-watchdog', rules: [base.watchdogAlert] }] }
     else if isReference then { groups: [] }
-    else if isLibs then { groups: libAlerts }
+    else if isLibs then { groups: if $._config.rules then libAlerts else [] }
     else s.prometheusAlerts,
   prometheusRules+::
     if isBase then { groups: baseRules }
     else if isReference then { groups: [] }
-    else if isLibs then { groups: libRules }
+    else if isLibs then { groups: if $._config.rules then libRules else [] }
     else s.prometheusRules,
 }

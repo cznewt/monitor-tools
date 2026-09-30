@@ -23,7 +23,10 @@ Three `config.scenario` values are not scenarios:
   library whose board another mixin already renders (system.systemd,
   system.processExporter and system.windowsService share their uids with the
   reference library's Platform / Deployments boards). `libConfig` maps a
-  library name to the config its `new()` gets. Identical groups that
+  library name to the config its `new()` gets. `rules: false` renders the
+  boards only, for a site whose alert and recording groups already come from a
+  scenario (monlab's `platform` and `monlab` scenarios) - the same groups in a
+  second ruler namespace would fire every alert twice. Identical groups that
   two libraries both emit (a library embedding another pack) are kept once;
   two different groups under one name fail the render, because a Mimir
   namespace holds a group name once.
