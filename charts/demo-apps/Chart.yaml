@@ -1,0 +1,6 @@
+apiVersion: v2
+name: demo-apps
+description: Instrumented demo services for monitoring labs - per runtime (Python, Go, Rust) a logging, a Prometheus-client metrics and an OTLP traces app, each switchable, plus activity generators (a service-graph trace generator, a JSON access-log generator and an HTTP-metrics generator).
+type: application
+version: 0.1.0
+appVersion: "2026.09-r1"

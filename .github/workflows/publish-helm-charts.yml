@@ -36,11 +36,12 @@ jobs:
         run: |
           helm lint charts/monitor-tools
           helm lint charts/jupyter-monitor-tools
+          helm lint charts/demo-apps
 
       - name: Package and push each chart
         run: |
           mkdir -p /tmp/charts
-          for chart in charts/monitor-tools charts/jupyter-monitor-tools; do
+          for chart in charts/monitor-tools charts/jupyter-monitor-tools charts/demo-apps; do
             helm package "$chart" -d /tmp/charts
           done
           for pkg in /tmp/charts/*.tgz; do

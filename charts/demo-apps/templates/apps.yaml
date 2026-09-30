@@ -1,0 +1,91 @@
+{{- /*
+Per runtime and signal one Deployment demo-<signal>-<runtime> (+ a Service for
+the metrics app). Names, selectors and pod labels match the plain manifests the
+lab ran before this chart, so a release can adopt those objects in place.
+*/ -}}
+{{- $signals := list
+  (dict "key" "logging" "name" "logging" "label" "logs")
+  (dict "key" "metricsProm" "name" "metrics-prom" "label" "metrics")
+  (dict "key" "traces" "name" "traces" "label" "traces") }}
+{{- range $runtime, $rt := .Values.runtimes }}
+{{- if $rt.enabled }}
+{{- range $s := $signals }}
+{{- $cfg := index $rt $s.key }}
+{{- if $cfg.enabled }}
+{{- $name := printf "demo-%s-%s" $s.name $runtime }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    signal: {{ $s.label }}
+    {{- include "demo-apps.labels" $ | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $name }}
+        app.kubernetes.io/part-of: {{ $.Values.partOf }}
+        signal: {{ $s.label }}
+      {{- if eq $s.key "metricsProm" }}
+      annotations:
+        # k8s-monitoring annotation autodiscovery
+        k8s.grafana.com/scrape: "true"
+        k8s.grafana.com/metrics.portNumber: {{ $cfg.port | quote }}
+        k8s.grafana.com/metrics.container: app
+      {{- end }}
+    spec:
+      {{- with $.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- include "demo-apps.scheduling" $ | nindent 6 }}
+      containers:
+        - name: app
+          image: {{ include "demo-apps.image" (dict "root" $ "signal" $s.name "runtime" $runtime "override" $cfg.image) }}
+          imagePullPolicy: {{ $.Values.imagePullPolicy }}
+          {{- if eq $s.key "metricsProm" }}
+          ports:
+            - name: metrics
+              containerPort: {{ $cfg.port }}
+          {{- end }}
+          {{- if eq $s.key "traces" }}
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: {{ $rt.traceServiceName | quote }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ $.Values.otlp.endpoint | quote }}
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: {{ $.Values.otlp.protocol | quote }}
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: {{ printf "service.namespace=%s,deployment.environment=%s,language=%s" $.Values.serviceNamespace $.Values.environment $runtime | quote }}
+          {{- end }}
+          resources:
+            {{- toYaml (index $.Values.resources $s.key) | nindent 12 }}
+{{- if eq $s.key "metricsProm" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  labels:
+    app.kubernetes.io/name: {{ $name }}
+    {{- include "demo-apps.labels" $ | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/name: {{ $name }}
+  ports:
+    - name: metrics
+      port: {{ $cfg.port }}
+      targetPort: {{ $cfg.port }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

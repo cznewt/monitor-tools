@@ -1,0 +1,128 @@
+# One release per environment (namespace). Every enabled runtime runs its
+# logging, metrics (Prometheus client) and traces (OTLP SDK) demo app, next to
+# the activity generators. Object names are fixed (demo-<signal>-<runtime>,
+# demo-traces-graph, ...), so install at most one release per namespace.
+
+# A demo app's image defaults to <imageRegistry>/demo-<signal>-<runtime>:<imageTag>
+# (signal: logging | metrics-prom | traces); set runtimes.<runtime>.<signal>.image
+# to override one.
+imageRegistry: ghcr.io/cznewt
+imageTag: 2026.09-r1
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+#  - name: ghcr-registry
+
+# OTel resource attributes of the traces apps (service.namespace,
+# deployment.environment), also passed to the generators
+environment: workshop
+serviceNamespace: onlinestore
+# app.kubernetes.io/part-of of every object
+partOf: demo-apps
+
+# where the traces apps send OTLP (the k8s-monitoring Alloy receiver by default)
+otlp:
+  endpoint: http://k8s-monitoring-alloy-receiver.kube-monitor.svc:4317
+  protocol: grpc
+
+nodeSelector: {}
+tolerations: []
+
+runtimes:
+  go:
+    enabled: true
+    # OTEL_SERVICE_NAME of the traces app
+    traceServiceName: warehouse
+    logging:
+      enabled: true
+      image: ""
+    metricsProm:
+      enabled: true
+      image: ""
+      port: 9100
+    traces:
+      enabled: true
+      image: ""
+  python:
+    enabled: true
+    traceServiceName: checkout
+    logging:
+      enabled: true
+      image: ""
+    metricsProm:
+      enabled: true
+      image: ""
+      port: 9100
+    traces:
+      enabled: true
+      image: ""
+  rust:
+    enabled: true
+    traceServiceName: payments
+    logging:
+      enabled: true
+      image: ""
+    metricsProm:
+      enabled: true
+      image: ""
+      port: 9100
+    traces:
+      enabled: true
+      image: ""
+
+# per signal, for every runtime
+resources:
+  logging:
+    requests: { cpu: 10m, memory: 32Mi }
+    limits: { cpu: 200m, memory: 128Mi }
+  metricsProm:
+    requests: { cpu: 10m, memory: 32Mi }
+    limits: { cpu: 200m, memory: 128Mi }
+  traces:
+    requests: { cpu: 10m, memory: 48Mi }
+    limits: { cpu: 200m, memory: 192Mi }
+
+# Activity generators: stdlib Python scripts (files/) on a plain Python image,
+# so they need no image of their own.
+generators:
+  image: mirror.gcr.io/library/python:3.12-slim
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests: { cpu: 10m, memory: 32Mi }
+    limits: { cpu: 100m, memory: 128Mi }
+  # The logs and metrics generators open an incident window every everySeconds
+  # for durationSeconds: the error ratio and the latency jump together, so
+  # error-rate and latency alerts have something to fire on. everySeconds: 0
+  # turns incidents off.
+  incident:
+    everySeconds: 1800
+    durationSeconds: 300
+    errorRatio: 0.5
+    latencyFactor: 5
+
+  # one three-service checkout trace per tick (storefront -> checkout ->
+  # payments) as OTLP/HTTP JSON: client/server span pairs Tempo's service-graph
+  # processor turns into edges. Posts with an X-Scope-OrgID header.
+  tracesGraph:
+    enabled: true
+    endpoint: http://k8s-monitoring-alloy-receiver.kube-monitor.svc:4318/v1/traces
+    tenant: anonymous
+    intervalSeconds: 2
+    errorRatio: 0.08
+
+  # JSON access-log lines on stdout (level, route, method, status, latency_ms,
+  # trace_id), collected like any pod's logs
+  logs:
+    enabled: true
+    serviceName: storefront
+    ratePerSecond: 2
+    errorRatio: 0.05
+
+  # Prometheus metrics of a simulated HTTP service under the OTel names the
+  # observ-viz HTTP server / RED boards read
+  # (http_server_request_duration_seconds{http_request_method, http_route,
+  # http_response_status_code}, http_server_active_requests)
+  metrics:
+    enabled: true
+    port: 9100
+    ratePerSecond: 5
+    errorRatio: 0.05

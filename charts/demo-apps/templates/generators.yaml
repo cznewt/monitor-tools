@@ -1,0 +1,122 @@
+{{- /*
+Activity generators: stdlib Python scripts from files/, each mounted from a
+ConfigMap at /app/gen.py and run on generators.image. demo-traces-graph keeps
+the name, selector and mount the lab's plain manifest used.
+*/ -}}
+{{- $g := .Values.generators }}
+{{- $incidentEnv := list
+  (dict "name" "INCIDENT_EVERY_SECONDS" "value" $g.incident.everySeconds)
+  (dict "name" "INCIDENT_DURATION_SECONDS" "value" $g.incident.durationSeconds)
+  (dict "name" "INCIDENT_ERROR_RATIO" "value" $g.incident.errorRatio)
+  (dict "name" "INCIDENT_LATENCY_FACTOR" "value" $g.incident.latencyFactor) }}
+{{- $gens := list }}
+{{- if $g.tracesGraph.enabled }}
+{{- $gens = append $gens (dict "name" "demo-traces-graph" "file" "files/gen-traces-graph.py" "signal" "traces" "port" 0 "env" (list
+  (dict "name" "OTLP_HTTP_ENDPOINT" "value" $g.tracesGraph.endpoint)
+  (dict "name" "TENANT" "value" $g.tracesGraph.tenant)
+  (dict "name" "INTERVAL_SECONDS" "value" $g.tracesGraph.intervalSeconds)
+  (dict "name" "ERROR_RATIO" "value" $g.tracesGraph.errorRatio)
+  (dict "name" "SERVICE_NAMESPACE" "value" .Values.serviceNamespace)
+  (dict "name" "DEPLOYMENT_ENVIRONMENT" "value" .Values.environment))) }}
+{{- end }}
+{{- if $g.logs.enabled }}
+{{- $gens = append $gens (dict "name" "demo-logs-generator" "file" "files/gen-logs.py" "signal" "logs" "port" 0 "env" (concat (list
+  (dict "name" "SERVICE_NAME" "value" $g.logs.serviceName)
+  (dict "name" "SERVICE_NAMESPACE" "value" .Values.serviceNamespace)
+  (dict "name" "DEPLOYMENT_ENVIRONMENT" "value" .Values.environment)
+  (dict "name" "RATE_PER_SECOND" "value" $g.logs.ratePerSecond)
+  (dict "name" "ERROR_RATIO" "value" $g.logs.errorRatio)) $incidentEnv)) }}
+{{- end }}
+{{- if $g.metrics.enabled }}
+{{- $gens = append $gens (dict "name" "demo-metrics-generator" "file" "files/gen-metrics.py" "signal" "metrics" "port" $g.metrics.port "env" (concat (list
+  (dict "name" "PORT" "value" $g.metrics.port)
+  (dict "name" "RATE_PER_SECOND" "value" $g.metrics.ratePerSecond)
+  (dict "name" "ERROR_RATIO" "value" $g.metrics.errorRatio)) $incidentEnv)) }}
+{{- end }}
+{{- range $gen := $gens }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $gen.name }}
+  labels:
+    app.kubernetes.io/name: {{ $gen.name }}
+    signal: {{ $gen.signal }}
+    {{- include "demo-apps.labels" $ | nindent 4 }}
+data:
+  gen.py: |
+    {{- $.Files.Get $gen.file | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $gen.name }}
+  labels:
+    app.kubernetes.io/name: {{ $gen.name }}
+    signal: {{ $gen.signal }}
+    {{- include "demo-apps.labels" $ | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $gen.name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ $gen.name }}
+        app.kubernetes.io/part-of: {{ $.Values.partOf }}
+        signal: {{ $gen.signal }}
+      annotations:
+        # restart when the script changes
+        checksum/script: {{ $.Files.Get $gen.file | sha256sum }}
+        {{- if $gen.port }}
+        k8s.grafana.com/scrape: "true"
+        k8s.grafana.com/metrics.portNumber: {{ $gen.port | quote }}
+        k8s.grafana.com/metrics.container: app
+        {{- end }}
+    spec:
+      {{- include "demo-apps.scheduling" $ | nindent 6 }}
+      containers:
+        - name: app
+          image: {{ $.Values.generators.image }}
+          imagePullPolicy: {{ $.Values.generators.imagePullPolicy }}
+          command: ["python", "/app/gen.py"]
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            {{- range $e := $gen.env }}
+            - name: {{ $e.name }}
+              value: {{ $e.value | toString | quote }}
+            {{- end }}
+          {{- if $gen.port }}
+          ports:
+            - name: metrics
+              containerPort: {{ $gen.port }}
+          {{- end }}
+          resources:
+            {{- toYaml $.Values.generators.resources | nindent 12 }}
+          volumeMounts:
+            - name: script
+              mountPath: /app
+      volumes:
+        - name: script
+          configMap:
+            name: {{ $gen.name }}
+{{- if $gen.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $gen.name }}
+  labels:
+    app.kubernetes.io/name: {{ $gen.name }}
+    {{- include "demo-apps.labels" $ | nindent 4 }}
+spec:
+  selector:
+    app.kubernetes.io/name: {{ $gen.name }}
+  ports:
+    - name: metrics
+      port: {{ $gen.port }}
+      targetPort: {{ $gen.port }}
+{{- end }}
+{{- end }}
