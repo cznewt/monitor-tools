@@ -8,8 +8,10 @@ case "${1:-}" in -h|--help) sed -n '2p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; e
 n=0
 for p in $(managed_ports); do
   state=$(ready "$p" && echo ready || echo "not ready")
-  printf '%-6s pid %-7s %-9s %s\n' ":$p" "$(cat "$STATE_DIR/$p.pid")" "$state" "$(cat "$STATE_DIR/$p.config")"
-  printf '       UI /proxy/absolute/%s/graph   log %s\n' "$p" "$LOG_DIR/alloy-$p.log"
+  cfg=$(cat "$STATE_DIR/$p.config")
+  printf '%-6s pid %-7s %-9s %s\n' ":$p" "$(cat "$STATE_DIR/$p.pid")" "$state" "$cfg"
+  [ -d "$cfg" ] && printf '       files %s\n' "$(cd "$cfg" && echo *.alloy)"
+  printf '       UI /proxy/absolute/%s/graph   log %s\n' "$p" "$(log_of "$p")"
   n=$((n + 1))
 done
 for pid in $(unmanaged_pids); do
@@ -19,4 +21,4 @@ for pid in $(unmanaged_pids); do
   printf '%-6s pid %-7s %-9s %s   (started by hand, not by alloy-start)\n' ":${p:-?}" "$pid" "$state" "$cfg"
   n=$((n + 1))
 done
-[ "$n" -gt 0 ] || echo "no alloy running"
+[ "$n" -gt 0 ] || echo "no alloy running - alloy-start starts yours ($MAIN_DIR on :$MAIN_PORT)"

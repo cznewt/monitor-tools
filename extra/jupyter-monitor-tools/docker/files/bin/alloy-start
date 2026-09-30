@@ -1,27 +1,23 @@
 #!/usr/bin/env bash
 # Start Alloy in the background on a config file or a directory of *.alloy files.
 #
-#   alloy-start                          the default config (below) - the examples on :12349
-#   alloy-start <port>                   the default config on that port
-#   alloy-start <file or dir> [port]
+#   alloy-start                          your Alloy: /source/work/alloy on :12345
+#   alloy-start <port>                   your Alloy on that port
+#   alloy-start <file or dir> [port]     another config, on the first free port from 12346
 #
-# The default config is $ALLOY_CONFIG, else the current directory when it holds
-# *.alloy files, else the workshop's examples directory
-# (/source/work/advanced-monitoring/lab-config/alloy, port 12349 unless given).
-# The port is otherwise the given one, $ALLOY_PORT, the port an Alloy with the
-# same config already had, or the first free one from 12345. An Alloy already
-# running the same config, or on the requested port, is stopped first. Alloy runs
+# Your Alloy is every *.alloy file in /source/work/alloy ($ALLOY_MAIN_DIR) run as
+# one config; an empty directory first gets the course's base files - the Mimir
+# and Loki endpoints - from $ALLOY_SEED_DIR. $ALLOY_CONFIG replaces the default
+# config and $ALLOY_PORT the default port. A config that is running already is
+# validated and reloaded in place, unless another port is asked for. Alloy runs
 # detached from the notebook kernel until alloy-stop; its UI is
 # /proxy/absolute/<port>/graph behind jupyter-server-proxy. State lives in
 # $ALLOY_STATE_DIR (default /tmp/alloy-lab), logs in $ALLOY_LOG_DIR (default
-# /source/work/logs).
+# /source/work/logs/alloy).
 set -euo pipefail
 . "$(dirname "$(readlink -f "$0")")/alloy-lib"
 
-EXAMPLES_DIR=/source/work/advanced-monitoring/lab-config/alloy
-EXAMPLES_PORT=12349
-
-case "${1:-}" in -h|--help) sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; esac
+case "${1:-}" in -h|--help) sed -n '2,16p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; esac
 arg="${1:-}"
 port="${2:-${ALLOY_PORT:-}}"
 if [ -n "$arg" ] && [ -z "${arg//[0-9]/}" ]; then port="$arg"; arg=""; fi   # a port alone
@@ -32,21 +28,40 @@ if [ -n "$arg" ]; then
 elif [ -n "${ALLOY_CONFIG:-}" ]; then
   config=$(readlink -f "$ALLOY_CONFIG")
   [ -e "$config" ] || die "no such config: \$ALLOY_CONFIG=$ALLOY_CONFIG"
-elif compgen -G "$PWD/*.alloy" >/dev/null; then
-  config="$PWD"
-elif [ -d "$EXAMPLES_DIR" ]; then
-  config="$EXAMPLES_DIR"
-  port="${port:-$EXAMPLES_PORT}"
 else
-  die "no config given, no *.alloy here and no $EXAMPLES_DIR (alloy-start --help)"
+  mkdir -p "$MAIN_DIR"
+  config=$(readlink -f "$MAIN_DIR")
+  if ! compgen -G "$config/*.alloy" >/dev/null; then
+    compgen -G "$SEED_DIR/*.alloy" >/dev/null || die "no *.alloy in $MAIN_DIR yet, and no base files in $SEED_DIR to begin with"
+    for f in "$SEED_DIR"/*.alloy; do [ -e "$config/${f##*/}" ] || cp "$f" "$config/"; done
+    echo "$MAIN_DIR was empty - copied the base files from $SEED_DIR: $(cd "$config" && echo *.alloy)"
+  fi
 fi
+[ "$config" = "$(readlink -f "$MAIN_DIR")" ] && port="${port:-$MAIN_PORT}"
+
+where() {
+  [ -d "$config" ] && echo "  files:  $(cd "$config" && echo *.alloy)"
+  cat <<EOF
+  UI:     /proxy/absolute/$1/graph on your notebook host
+  logs:   $(log_of "$1")
+  reload: alloy-reload $1      stop: alloy-stop $1
+EOF
+}
 
 alloy validate "$config" >/dev/null 2>"$STATE_DIR/validate.err" || { cat "$STATE_DIR/validate.err" >&2; die "alloy validate failed for $config"; }
 
-# the same config running already: it is replaced, and keeps its port unless another was asked for
+# the same config running already: reloaded where it runs, unless another port is asked for
 same=""
 for p in $(managed_ports); do
-  if [ "$(cat "$STATE_DIR/$p.config")" = "$config" ]; then same="$same $p"; port="${port:-$p}"; fi
+  [ "$(cat "$STATE_DIR/$p.config")" = "$config" ] || continue
+  if [ -z "$port" ] || [ "$port" = "$p" ]; then
+    out=$(curl -s -m 30 -X POST "http://127.0.0.1:$p/-/reload" 2>&1) && echo "$out" | grep -qi reloaded \
+      || die "alloy on :$p runs $config but did not reload: ${out:-no answer} - alloy-stop $p, then alloy-start"
+    echo "alloy on :$p (pid $(cat "$STATE_DIR/$p.pid")) runs $config already - reloaded"
+    where "$p"
+    exit 0
+  fi
+  same="$same $p"
 done
 # check the port before stopping anything, so a failed start leaves the running Alloys alone
 if [ -n "$port" ] && [ ! -f "$STATE_DIR/$port.pid" ] && listening "$port"; then
@@ -59,12 +74,13 @@ for p in $same; do stop_port "$p"; done
 if [ -n "$port" ]; then
   stop_port "$port"
 else
-  port=12345
+  # the first free one after your Alloy's port, which stays free for it
+  port=$((MAIN_PORT + 1))
   while listening "$port" || [ -f "$STATE_DIR/$port.pid" ]; do port=$((port + 1)); done
 fi
 
 log="$LOG_DIR/alloy-$port.log"
-rm -f "$STATE_DIR/$port.pid"
+rm -f "${STATE_DIR:?}/${port:?}.pid"
 # a session of its own, so it outlives the notebook kernel; the shell writes its
 # pid and then becomes alloy, so the pid file always names the alloy process
 setsid bash -c 'echo $$ >"$0"; exec alloy run "$@"' "$STATE_DIR/$port.pid" \
@@ -75,17 +91,14 @@ setsid bash -c 'echo $$ >"$0"; exec alloy run "$@"' "$STATE_DIR/$port.pid" \
 for _ in $(seq 1 20); do [ -s "$STATE_DIR/$port.pid" ] && break; sleep 0.1; done
 pid=$(cat "$STATE_DIR/$port.pid")
 echo "$config" >"$STATE_DIR/$port.config"
+echo "$log" >"$STATE_DIR/$port.log"
 
 for _ in $(seq 1 30); do
   if ready "$port"; then break; fi
-  kill -0 "$pid" 2>/dev/null || { tail -20 "$log" >&2; rm -f "$STATE_DIR/$port."{pid,config}; die "alloy exited, log: $log"; }
+  kill -0 "$pid" 2>/dev/null || { tail -20 "$log" >&2; rm -f "${STATE_DIR:?}/${port:?}."{pid,config,log}; die "alloy exited, log: $log"; }
   sleep 1
 done
 ready "$port" || { tail -20 "$log" >&2; die "alloy on :$port is not ready after 30 s, log: $log"; }
 
-cat <<EOF
-alloy on :$port (pid $pid) - $config
-  UI:     /proxy/absolute/$port/graph on your notebook host
-  logs:   $log
-  reload: alloy-reload $port      stop: alloy-stop $port
-EOF
+echo "alloy on :$port (pid $pid) - $config"
+where "$port"

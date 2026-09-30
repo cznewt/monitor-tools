@@ -1,7 +1,13 @@
 # shellcheck shell=bash
 # Shared by alloy-start, alloy-stop, alloy-reload and alloy-status (sourced, not run).
 STATE_DIR="${ALLOY_STATE_DIR:-/tmp/alloy-lab}"
-LOG_DIR="${ALLOY_LOG_DIR:-/source/work/logs}"
+# a directory of its own: the lessons ship /source/work/logs/*.log to Loki
+LOG_DIR="${ALLOY_LOG_DIR:-/source/work/logs/alloy}"
+# your Alloy: every *.alloy file in one directory, run as one config on one port
+MAIN_DIR="${ALLOY_MAIN_DIR:-/source/work/alloy}"
+MAIN_PORT="${ALLOY_MAIN_PORT:-12345}"
+# the base files alloy-start copies into an empty MAIN_DIR: the Mimir and Loki endpoints
+SEED_DIR="${ALLOY_SEED_DIR:-/source/work/advanced-monitoring/lab-config/alloy/base}"
 mkdir -p "$STATE_DIR"
 mkdir -p "$LOG_DIR" 2>/dev/null || LOG_DIR="$STATE_DIR"
 
@@ -18,7 +24,7 @@ managed_ports() {
   for f in "$STATE_DIR"/*.pid; do
     [ -e "$f" ] || continue
     p=$(basename "$f" .pid)
-    if kill -0 "$(cat "$f")" 2>/dev/null; then echo "$p"; else rm -f "$STATE_DIR/$p."{pid,config}; fi
+    if kill -0 "$(cat "$f")" 2>/dev/null; then echo "$p"; else rm -f "${STATE_DIR:?}/${p:?}."{pid,config,log}; fi
   done | sort -n
 }
 
@@ -33,8 +39,11 @@ stop_port() {
   local p=$1
   [ -f "$STATE_DIR/$p.pid" ] || return 0
   stop_pid "$(cat "$STATE_DIR/$p.pid")"
-  rm -f "$STATE_DIR/$p."{pid,config}
+  rm -f "${STATE_DIR:?}/${p:?}."{pid,config,log}
 }
+
+# the log alloy-start wrote for the Alloy on a port
+log_of() { cat "$STATE_DIR/$1.log" 2>/dev/null || echo "$LOG_DIR/alloy-$1.log"; }
 
 # `alloy run` processes nobody registered - started by hand with nohup, as the lessons do
 unmanaged_pids() {
