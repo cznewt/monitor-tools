@@ -100,15 +100,20 @@ generators:
   resources:
     requests: { cpu: 10m, memory: 32Mi }
     limits: { cpu: 100m, memory: 128Mi }
-  # The logs and metrics generators open an incident window every everySeconds
-  # for durationSeconds: the error ratio and the latency jump together, so
-  # error-rate and latency alerts have something to fire on. everySeconds: 0
-  # turns incidents off.
+  # The generators open an incident window every everySeconds for
+  # durationSeconds: the error ratio and the latency jump together (traces:
+  # the failed-trace share and every span's duration), so error-rate and
+  # latency alerts have something to fire on. everySeconds: 0 turns the
+  # schedule off. On demand, at any time, through the metrics generator:
+  #   curl -X POST 'http://demo-metrics-generator:9100/incident?seconds=300'
+  #   (optional &errorRatio=0.5&latencyFactor=5; GET shows, DELETE ends it)
+  # The logs and traces generators poll it every pollSeconds and follow.
   incident:
     everySeconds: 1800
     durationSeconds: 300
     errorRatio: 0.5
     latencyFactor: 5
+    pollSeconds: 5
 
   # one three-service checkout trace per tick (storefront -> checkout ->
   # payments) as OTLP/HTTP JSON: client/server span pairs Tempo's service-graph

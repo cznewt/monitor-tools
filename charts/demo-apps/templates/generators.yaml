@@ -2,7 +2,10 @@
 Activity generators: stdlib Python scripts from files/, each mounted from a
 ConfigMap at /app/gen.py and run on generators.image. demo-traces-graph keeps
 the name, selector and mount the lab's plain manifest used. generators.enabled
-switches all of them off at once.
+switches all of them off at once. The metrics generator is the release's
+incident switch (POST/GET/DELETE /incident); with it on, the logs and traces
+generators follow it through INCIDENT_URL. Recreate rollouts: a generator never
+needs a surge pod, so a tight namespace quota cannot stall an upgrade.
 */ -}}
 {{- $g := .Values.generators }}
 {{- $incidentEnv := list
@@ -10,15 +13,21 @@ switches all of them off at once.
   (dict "name" "INCIDENT_DURATION_SECONDS" "value" $g.incident.durationSeconds)
   (dict "name" "INCIDENT_ERROR_RATIO" "value" $g.incident.errorRatio)
   (dict "name" "INCIDENT_LATENCY_FACTOR" "value" $g.incident.latencyFactor) }}
+{{- $followEnv := list }}
+{{- if $g.metrics.enabled }}
+{{- $followEnv = list
+  (dict "name" "INCIDENT_URL" "value" (printf "http://demo-metrics-generator:%v/incident" $g.metrics.port))
+  (dict "name" "INCIDENT_POLL_SECONDS" "value" $g.incident.pollSeconds) }}
+{{- end }}
 {{- $gens := list }}
 {{- if and $g.enabled $g.tracesGraph.enabled }}
-{{- $gens = append $gens (dict "name" "demo-traces-graph" "file" "files/gen-traces-graph.py" "signal" "traces" "port" 0 "env" (list
+{{- $gens = append $gens (dict "name" "demo-traces-graph" "file" "files/gen-traces-graph.py" "signal" "traces" "port" 0 "env" (concat (list
   (dict "name" "OTLP_HTTP_ENDPOINT" "value" $g.tracesGraph.endpoint)
   (dict "name" "TENANT" "value" $g.tracesGraph.tenant)
   (dict "name" "INTERVAL_SECONDS" "value" $g.tracesGraph.intervalSeconds)
   (dict "name" "ERROR_RATIO" "value" $g.tracesGraph.errorRatio)
   (dict "name" "SERVICE_NAMESPACE" "value" .Values.serviceNamespace)
-  (dict "name" "DEPLOYMENT_ENVIRONMENT" "value" .Values.environment))) }}
+  (dict "name" "DEPLOYMENT_ENVIRONMENT" "value" .Values.environment)) $incidentEnv $followEnv)) }}
 {{- end }}
 {{- if and $g.enabled $g.logs.enabled }}
 {{- $gens = append $gens (dict "name" "demo-logs-generator" "file" "files/gen-logs.py" "signal" "logs" "port" 0 "env" (concat (list
@@ -26,7 +35,7 @@ switches all of them off at once.
   (dict "name" "SERVICE_NAMESPACE" "value" .Values.serviceNamespace)
   (dict "name" "DEPLOYMENT_ENVIRONMENT" "value" .Values.environment)
   (dict "name" "RATE_PER_SECOND" "value" $g.logs.ratePerSecond)
-  (dict "name" "ERROR_RATIO" "value" $g.logs.errorRatio)) $incidentEnv)) }}
+  (dict "name" "ERROR_RATIO" "value" $g.logs.errorRatio)) $incidentEnv $followEnv)) }}
 {{- end }}
 {{- if and $g.enabled $g.metrics.enabled }}
 {{- $gens = append $gens (dict "name" "demo-metrics-generator" "file" "files/gen-metrics.py" "signal" "metrics" "port" $g.metrics.port "env" (concat (list
@@ -58,6 +67,8 @@ metadata:
     {{- include "demo-apps.labels" $ | nindent 4 }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ $gen.name }}

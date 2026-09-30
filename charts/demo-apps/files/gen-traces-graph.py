@@ -8,10 +8,16 @@ Every trace carries the client/server pairs a real distributed call would:
           payments  SERVER  POST /charge
 Tempo's service-graphs processor turns each pair into an edge, which is what
 the RED / Service graph board reads (traces_service_graph_request_total).
+Incident windows (the INCIDENT_* schedule, or with INCIDENT_URL set the
+release's incident switch - the metrics generator's GET /incident, polled
+every INCIDENT_POLL_SECONDS) raise the share of failed traces to the window's
+error ratio and stretch every span by its latency factor; the storefront
+server span carries demo.incident=true meanwhile.
 """
 import json
 import os
 import random
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -22,10 +28,44 @@ INTERVAL = float(os.environ.get("INTERVAL_SECONDS", "2"))
 ERROR_RATIO = float(os.environ.get("ERROR_RATIO", "0.08"))
 NAMESPACE = os.environ.get("SERVICE_NAMESPACE", "onlinestore")
 ENVIRONMENT = os.environ.get("DEPLOYMENT_ENVIRONMENT", "workshop")
+INCIDENT_EVERY = float(os.environ.get("INCIDENT_EVERY_SECONDS", "0"))
+INCIDENT_DURATION = float(os.environ.get("INCIDENT_DURATION_SECONDS", "300"))
+INCIDENT_ERROR_RATIO = float(os.environ.get("INCIDENT_ERROR_RATIO", "0.5"))
+INCIDENT_LATENCY_FACTOR = float(os.environ.get("INCIDENT_LATENCY_FACTOR", "5"))
+INCIDENT_URL = os.environ.get("INCIDENT_URL", "")
+INCIDENT_POLL = float(os.environ.get("INCIDENT_POLL_SECONDS", "5"))
 
 SERVER, CLIENT = 2, 3  # OTLP SpanKind
 STATUS_OK, STATUS_ERROR = 1, 2
+followed = {"state": None}
 
+
+def local_window(now):
+    """The scheduled window, computed from the clock like the metrics generator does."""
+    if INCIDENT_EVERY > 0 and (now % INCIDENT_EVERY) < INCIDENT_DURATION:
+        return {"active": True, "errorRatio": INCIDENT_ERROR_RATIO, "latencyFactor": INCIDENT_LATENCY_FACTOR}
+    return {"active": False, "errorRatio": ERROR_RATIO, "latencyFactor": 1.0}
+
+
+def follow():
+    """Poll the incident switch (the metrics generator); None while it cannot be reached."""
+    while True:
+        try:
+            with urllib.request.urlopen(INCIDENT_URL, timeout=3) as resp:
+                followed["state"] = json.load(resp)
+        except Exception:  # noqa: BLE001 - fall back to the local schedule
+            followed["state"] = None
+        time.sleep(INCIDENT_POLL)
+
+
+def window(now):
+    """The incident window in force: the switch's when it answers, else the schedule."""
+    state = followed["state"]
+    if state is None:
+        return local_window(now)
+    if state.get("active") and now < state.get("until", 0):
+        return {"active": True, "errorRatio": float(state["errorRatio"]), "latencyFactor": float(state["latencyFactor"])}
+    return {"active": False, "errorRatio": ERROR_RATIO, "latencyFactor": 1.0}
 
 def hexid(nbytes):
     return "%0*x" % (nbytes * 2, random.getrandbits(nbytes * 8))
@@ -76,21 +116,24 @@ def resource_spans(service, spans):
 def one_trace():
     trace_id = hexid(16)
     ids = [hexid(8) for _ in range(5)]
-    failed = random.random() < ERROR_RATIO
+    w = window(time.time())
+    failed = random.random() < w["errorRatio"]
     ms = 1_000_000
     now = int(time.time() * 1e9)
     # nested durations: the caller always outlives the callee
-    d_pay = random.randint(15, 120) * ms
-    d_pay_client = d_pay + random.randint(1, 8) * ms
-    d_checkout = d_pay_client + random.randint(5, 40) * ms
-    d_front_client = d_checkout + random.randint(1, 8) * ms
-    d_front = d_front_client + random.randint(5, 30) * ms
+    def stretch(low, high):
+        return int(random.randint(low, high) * ms * w["latencyFactor"])
+    d_pay = stretch(15, 120)
+    d_pay_client = d_pay + stretch(1, 8)
+    d_checkout = d_pay_client + stretch(5, 40)
+    d_front_client = d_checkout + stretch(1, 8)
+    d_front = d_front_client + stretch(5, 30)
     route = random.choice(["/cart/checkout", "/cart/checkout?express=1"])
     cart = "cart-" + hexid(4)
     front = [
         span("GET " + route, SERVER, trace_id, ids[0], None, now, d_front,
              {"http.request.method": "GET", "url.path": route, "cart.id": cart,
-              "http.response.status_code": 500 if failed else 200}, failed),
+              "http.response.status_code": 500 if failed else 200, "demo.incident": w["active"]}, failed),
         span("POST /checkout", CLIENT, trace_id, ids[1], ids[0], now + 4 * ms, d_front_client,
              {"peer.service": "checkout", "server.address": "checkout.onlinestore.svc",
               "http.request.method": "POST", "http.response.status_code": 500 if failed else 200}, failed),
@@ -118,6 +161,8 @@ def one_trace():
 
 
 def main():
+    if INCIDENT_URL:
+        threading.Thread(target=follow, daemon=True).start()
     sent = failed_sends = 0
     while True:
         body = json.dumps(one_trace()).encode()
