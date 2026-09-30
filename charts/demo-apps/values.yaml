@@ -27,6 +27,15 @@ otlp:
 nodeSelector: {}
 tolerations: []
 
+# Shortcuts: when non-empty they replace the per-runtime / per-signal
+# `enabled` flags below, e.g. --set enabledRuntimes={python} --set
+# enabledSignals={metricsProm} for one app. Signals: logging, metricsProm
+# (or metrics-prom), traces.
+enabledRuntimes: []
+enabledSignals: []
+
+# runtimes.<rt>.<signal>.name (optional) overrides the object name, default
+# demo-<signal>-<rt> - e.g. runtimes.python.metricsProm.name=metrics-app
 runtimes:
   go:
     enabled: true
@@ -84,6 +93,8 @@ resources:
 # Activity generators: stdlib Python scripts (files/) on a plain Python image,
 # so they need no image of their own.
 generators:
+  # all generators at once; each also has its own enabled flag
+  enabled: true
   image: mirror.gcr.io/library/python:3.12-slim
   imagePullPolicy: IfNotPresent
   resources:

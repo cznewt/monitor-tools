@@ -1,7 +1,8 @@
 {{- /*
 Activity generators: stdlib Python scripts from files/, each mounted from a
 ConfigMap at /app/gen.py and run on generators.image. demo-traces-graph keeps
-the name, selector and mount the lab's plain manifest used.
+the name, selector and mount the lab's plain manifest used. generators.enabled
+switches all of them off at once.
 */ -}}
 {{- $g := .Values.generators }}
 {{- $incidentEnv := list
@@ -10,7 +11,7 @@ the name, selector and mount the lab's plain manifest used.
   (dict "name" "INCIDENT_ERROR_RATIO" "value" $g.incident.errorRatio)
   (dict "name" "INCIDENT_LATENCY_FACTOR" "value" $g.incident.latencyFactor) }}
 {{- $gens := list }}
-{{- if $g.tracesGraph.enabled }}
+{{- if and $g.enabled $g.tracesGraph.enabled }}
 {{- $gens = append $gens (dict "name" "demo-traces-graph" "file" "files/gen-traces-graph.py" "signal" "traces" "port" 0 "env" (list
   (dict "name" "OTLP_HTTP_ENDPOINT" "value" $g.tracesGraph.endpoint)
   (dict "name" "TENANT" "value" $g.tracesGraph.tenant)
@@ -19,7 +20,7 @@ the name, selector and mount the lab's plain manifest used.
   (dict "name" "SERVICE_NAMESPACE" "value" .Values.serviceNamespace)
   (dict "name" "DEPLOYMENT_ENVIRONMENT" "value" .Values.environment))) }}
 {{- end }}
-{{- if $g.logs.enabled }}
+{{- if and $g.enabled $g.logs.enabled }}
 {{- $gens = append $gens (dict "name" "demo-logs-generator" "file" "files/gen-logs.py" "signal" "logs" "port" 0 "env" (concat (list
   (dict "name" "SERVICE_NAME" "value" $g.logs.serviceName)
   (dict "name" "SERVICE_NAMESPACE" "value" .Values.serviceNamespace)
@@ -27,7 +28,7 @@ the name, selector and mount the lab's plain manifest used.
   (dict "name" "RATE_PER_SECOND" "value" $g.logs.ratePerSecond)
   (dict "name" "ERROR_RATIO" "value" $g.logs.errorRatio)) $incidentEnv)) }}
 {{- end }}
-{{- if $g.metrics.enabled }}
+{{- if and $g.enabled $g.metrics.enabled }}
 {{- $gens = append $gens (dict "name" "demo-metrics-generator" "file" "files/gen-metrics.py" "signal" "metrics" "port" $g.metrics.port "env" (concat (list
   (dict "name" "PORT" "value" $g.metrics.port)
   (dict "name" "RATE_PER_SECOND" "value" $g.metrics.ratePerSecond)

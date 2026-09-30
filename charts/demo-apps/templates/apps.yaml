@@ -2,17 +2,25 @@
 Per runtime and signal one Deployment demo-<signal>-<runtime> (+ a Service for
 the metrics app). Names, selectors and pod labels match the plain manifests the
 lab ran before this chart, so a release can adopt those objects in place.
+enabledRuntimes / enabledSignals, when non-empty, replace the per-runtime and
+per-signal `enabled` flags; runtimes.<rt>.<signal>.name overrides a name.
 */ -}}
 {{- $signals := list
   (dict "key" "logging" "name" "logging" "label" "logs")
   (dict "key" "metricsProm" "name" "metrics-prom" "label" "metrics")
   (dict "key" "traces" "name" "traces" "label" "traces") }}
+{{- $onlyRuntimes := default (list) .Values.enabledRuntimes }}
+{{- $onlySignals := default (list) .Values.enabledSignals }}
 {{- range $runtime, $rt := .Values.runtimes }}
-{{- if $rt.enabled }}
+{{- $runtimeOn := $rt.enabled }}
+{{- if $onlyRuntimes }}{{ $runtimeOn = has $runtime $onlyRuntimes }}{{ end }}
+{{- if $runtimeOn }}
 {{- range $s := $signals }}
 {{- $cfg := index $rt $s.key }}
-{{- if $cfg.enabled }}
-{{- $name := printf "demo-%s-%s" $s.name $runtime }}
+{{- $signalOn := $cfg.enabled }}
+{{- if $onlySignals }}{{ $signalOn = or (has $s.key $onlySignals) (has $s.name $onlySignals) }}{{ end }}
+{{- if $signalOn }}
+{{- $name := $cfg.name | default (printf "demo-%s-%s" $s.name $runtime) }}
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -27,13 +27,25 @@ default image `<imageRegistry>/demo-<signal>-<runtime>:<imageTag>`
 One release per environment (namespace) - object names are fixed:
 
 ```sh
-helm upgrade --install demo oci://ghcr.io/cznewt/charts/demo-apps --version 0.1.0 \
+helm upgrade --install demo oci://ghcr.io/cznewt/charts/demo-apps --version 0.2.0 \
   --namespace demo-dev \
   --set environment=dev \
   --set generators.tracesGraph.tenant=dev
 ```
 
-Only one runtime, or only some signals:
+One app - e.g. a student's own metrics app in their namespace, under its own
+name (0.2.0):
+
+```sh
+helm upgrade --install lab-app oci://ghcr.io/cznewt/charts/demo-apps --version 0.2.0 \
+  --namespace "$LAB_NAMESPACE" \
+  --set partOf=lab-app \
+  --set "enabledRuntimes={$LAB_LANG}" --set "enabledSignals={metricsProm}" \
+  --set "runtimes.$LAB_LANG.metricsProm.name=metrics-app" \
+  --set generators.enabled=false
+```
+
+Or switch runtimes / signals off one by one (0.1.0 and later):
 
 ```yaml
 runtimes:
@@ -54,12 +66,16 @@ generators:
 | `environment` | `workshop` | `deployment.environment` of the traces apps and generators |
 | `serviceNamespace` | `onlinestore` | `service.namespace` of the traces apps and generators |
 | `otlp.endpoint` / `otlp.protocol` | Alloy receiver `:4317` / `grpc` | where the traces apps send OTLP |
+| `enabledRuntimes` | `[]` | when non-empty, only these runtimes render (replaces `runtimes.<rt>.enabled`; 0.2.0) |
+| `enabledSignals` | `[]` | when non-empty, only these signals render - `logging`, `metricsProm` (or `metrics-prom`), `traces` (replaces the per-signal `enabled`; 0.2.0) |
 | `runtimes.<go\|python\|rust>.enabled` | `true` | the runtime's three apps |
 | `runtimes.<rt>.<logging\|metricsProm\|traces>.enabled` | `true` | one app |
 | `runtimes.<rt>.<signal>.image` | `""` | image override |
+| `runtimes.<rt>.<signal>.name` | `demo-<signal>-<rt>` | object name override (Deployment, Service, `app.kubernetes.io/name`; 0.2.0) |
 | `runtimes.<rt>.traceServiceName` | warehouse / checkout / payments | `OTEL_SERVICE_NAME` |
 | `resources.<logging\|metricsProm\|traces>` | 10m/32-48Mi → 200m/128-192Mi | per signal |
 | `nodeSelector` / `tolerations` | `{}` / `[]` | every workload |
+| `generators.enabled` | `true` | all generators at once (0.2.0) |
 | `generators.image` | `mirror.gcr.io/library/python:3.12-slim` | the generators' runtime |
 | `generators.incident.*` | every 1800 s for 300 s, errors 50 %, latency x5 | incident window (`everySeconds: 0` = off) |
 | `generators.tracesGraph.*` | enabled, Alloy receiver `:4318/v1/traces`, tenant `anonymous`, every 2 s, 8 % errors | the service-graph trace generator |
@@ -78,3 +94,8 @@ for o in $(kubectl -n <ns> get deploy,svc,cm -l app.kubernetes.io/part-of=demo-a
   kubectl -n <ns> annotate "$o" meta.helm.sh/release-name=<release> meta.helm.sh/release-namespace=<ns> --overwrite
 done
 ```
+
+## Changes
+
+- **0.2.0** - additive, renders exactly what 0.1.0 renders with default values: `enabledRuntimes` / `enabledSignals` shortcuts, `runtimes.<rt>.<signal>.name` overrides, `generators.enabled` master switch.
+- **0.1.0** - first release.
