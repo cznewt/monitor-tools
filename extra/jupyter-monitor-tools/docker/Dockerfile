@@ -9,6 +9,14 @@ RUN curl -fSL -o "jsonnet-language-server" "https://github.com/grafana/jsonnet-l
     chmod a+x "jsonnet-language-server" && \
     mv "jsonnet-language-server" "/usr/local/bin/jsonnet-language-server"
 
+# the Advanced monitoring own-app lessons (4.1-4.3) install the demo-apps chart
+# (oci://ghcr.io/cznewt/charts/demo-apps) into each student's namespace
+ARG HELM_VERSION=4.3.0
+RUN curl -fsSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" | tar xz -C /tmp linux-amd64/helm && \
+    mv /tmp/linux-amd64/helm /usr/local/bin/helm && \
+    rm -rf /tmp/linux-amd64 && \
+    helm version --short
+
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-add-repository ppa:fish-shell/release-3 && \
     apt-get update && \
