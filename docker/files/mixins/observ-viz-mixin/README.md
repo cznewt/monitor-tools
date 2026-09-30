@@ -18,8 +18,12 @@ Three `config.scenario` values are not scenarios:
   `$nodecount` reads and the `Watchdog` alert.
 * `libs` renders a list of observ-viz libraries (dotted `g.libs` paths) - each
   library's boards in the folder it files them into (Platform / Kubernetes,
-  Workloads / Gaming, ...) plus its alert and recording groups. `libConfig`
-  maps a library name to the config its `new()` gets. Identical groups that
+  Workloads / Gaming, ...) plus its alert and recording groups. `rulesOnly`
+  lists libraries whose groups are merged but whose boards are skipped - for a
+  library whose board another mixin already renders (system.systemd,
+  system.processExporter and system.windowsService share their uids with the
+  reference library's Platform / Deployments boards). `libConfig` maps a
+  library name to the config its `new()` gets. Identical groups that
   two libraries both emit (a library embedding another pack) are kept once;
   two different groups under one name fail the render, because a Mimir
   namespace holds a group name once.

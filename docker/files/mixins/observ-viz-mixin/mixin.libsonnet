@@ -20,23 +20,27 @@
 //              config: { scenario: libs, libs: [kubernetes.cluster,
 //              services.mimir, applications.valheim] } - each library's boards
 //              (in the folder the library files them into, e.g. Platform /
-//              Kubernetes) plus its alert and recording groups. `libConfig`
-//              maps a library name to the config passed to its new().
+//              Kubernetes) plus its alert and recording groups. `rulesOnly`
+//              lists libraries whose groups are merged but whose boards are
+//              skipped (another mixin owns them); `libConfig` maps a library
+//              name to the config passed to its new().
 // All three carry their own Grafana folder in each board's metadata, so the
 // config's grafanaDashboardFolder does not apply to them. `config.base` is passed
 // to the board builders (clusterLabel / nodeLabel / appLabel / selector / titles /
 // folder), e.g. config: { scenario: base, base: { appLabel: namespace } }.
 {
-  _config+:: { scenario: 'platform', base: {}, libs: [], libConfig: {} },
+  _config+:: { scenario: 'platform', base: {}, libs: [], rulesOnly: [], libConfig: {} },
   local isReference = $._config.scenario == 'reference',
   local isBase = $._config.scenario == 'base',
   local isLibs = $._config.scenario == 'libs',
   // `libs`: resolve each dotted name under g.libs and build it
   local lookup(name) = std.foldl(function(o, k) o[k], std.split(name, '.'), (import 'g.libsonnet').libs),
-  local libs = [
-    lookup(n).new(if std.objectHas($._config.libConfig, n) then $._config.libConfig[n] else {})
-    for n in $._config.libs
-  ],
+  local build(n) = lookup(n).new(if std.objectHas($._config.libConfig, n) then $._config.libConfig[n] else {}),
+  local libs = [build(n) for n in $._config.libs],
+  // `rulesOnly`: libraries whose rule groups are wanted but whose boards another
+  // mixin owns (system.systemd / processExporter / windowsService boards are
+  // the reference library's Platform / Deployments boards, same uids)
+  local ruleLibs = libs + [build(n) for n in $._config.rulesOnly],
   local libBoards = std.foldl(function(acc, lib) acc + (
     local dbs = if std.objectHas(lib.grafana, 'dashboards') then lib.grafana.dashboards
       else { [lib.config.uid + '.json']: lib.grafana.dashboard };
@@ -54,11 +58,11 @@
     else error 'observ-viz libs: two different rule groups named "%s"' % g.name, groups, []),
   local libAlerts = dedupe(std.flattenArrays([
     if std.objectHas(lib, 'prometheus') then lib.prometheus.alerts else []
-    for lib in libs
+    for lib in ruleLibs
   ])),
   local libRules = dedupe(std.flattenArrays([
     if std.objectHas(lib, 'prometheus') && std.objectHas(lib.prometheus, 'rules') then lib.prometheus.rules else []
-    for lib in libs
+    for lib in ruleLibs
   ])),
   local reference = (import 'libs/reference-lib/mixin.libsonnet'),
   local base = (import 'libs/common-lib/base.libsonnet'),
