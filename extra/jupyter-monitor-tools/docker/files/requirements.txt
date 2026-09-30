@@ -19,7 +19,9 @@ jupyter-server-proxy
 # importable from the same python)
 numpy
 redis
-fastapi
+# 0.142 added native OpenTelemetry that exits at startup when
+# opentelemetry-instrument exports OTLP over gRPC (lesson 4.3)
+fastapi==0.141.1
 uvicorn
 prometheus_client
 # the orders app imports pythonjsonlogger directly; today it only arrives as a
