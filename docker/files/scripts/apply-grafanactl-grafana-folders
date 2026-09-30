@@ -2,8 +2,9 @@
 # Ensure the folders app-platform dashboards are annotated with (legacy
 # /api/folders: create, or update the title when it exists). A folder that
 # names a parent in its grafana.app/folder annotation is nested under it -
-# created with parentUid, and moved when it already exists. Parents are
-# applied first. Same auth env as apply-grafanactl-grafana-dashboards.
+# created with parentUid, and moved when it already exists elsewhere; one
+# without the annotation is moved back to the root. Parents are applied
+# first. Same auth env as apply-grafanactl-grafana-dashboards.
 
 BUILD_DIR="${BUILD_DIR:=/build/default/grafanactl/grafana-folders}"
 
@@ -30,9 +31,28 @@ apply_folder() {
     200|201) echo "OK   folder $uid ($title)${parent:+ under $parent} created" ;;
     409|412)
       curl -s -o /dev/null "${AUTH[@]}" -H "Content-Type: application/json" -X PUT "$GRAFANA_URL/api/folders/$uid" -d "$(jq -n --arg t "$title" '{title:$t,overwrite:true}')"
-      # keep an existing folder where the config says it belongs
-      [ -n "$parent" ] && curl -s -o /dev/null "${AUTH[@]}" -H "Content-Type: application/json" -X POST "$GRAFANA_URL/api/folders/$uid/move" -d "$(jq -n --arg p "$parent" '{parentUid:$p}')"
-      echo "OK   folder $uid ($title)${parent:+ under $parent} exists" ;;
+      # keep an existing folder where the config says it belongs: under its
+      # parent, or at the root for a top-level one ({"parentUid": ""}).
+      live_parent=$(curl -s "${AUTH[@]}" "$GRAFANA_URL/api/folders/$uid" | jq -r '.parentUid // ""')
+      if [ "$live_parent" = "$parent" ]; then
+        echo "OK   folder $uid ($title)${parent:+ under $parent} exists"
+      else
+        code=$(curl -s -o /tmp/resp.json -w "%{http_code}" "${AUTH[@]}" -H "Content-Type: application/json" -X POST "$GRAFANA_URL/api/folders/$uid/move" -d "$(jq -n --arg p "$parent" '{parentUid:$p}')")
+        if [ "$code" != 200 ]; then
+          echo "FAIL folder $uid move from '${live_parent:-root}' HTTP $code: $(head -c 200 /tmp/resp.json)"
+        elif [ -n "$parent" ]; then
+          echo "OK   folder $uid ($title) moved under $parent"
+        else
+          # a folder moved to the root loses the grants it inherited from its
+          # old parent - restore the usual role grants (needs the right to
+          # set permissions on it; warn when these credentials lack it)
+          for rp in Viewer:View Editor:Edit; do
+            g=$(curl -s -o /dev/null -w "%{http_code}" "${AUTH[@]}" -H "Content-Type: application/json" -X POST "$GRAFANA_URL/api/access-control/folders/$uid/builtInRoles/${rp%:*}" -d "{\"permission\":\"${rp#*:}\"}")
+            [ "$g" = 200 ] || echo "WARN folder $uid: could not grant ${rp%:*} ${rp#*:} after the move to the root (HTTP $g)"
+          done
+          echo "OK   folder $uid ($title) moved to the root"
+        fi
+      fi ;;
     *) echo "FAIL folder $uid HTTP $code: $(head -c 200 /tmp/resp.json)" ;;
   esac
 }
