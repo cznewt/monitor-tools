@@ -16,14 +16,50 @@
 //              Base / Cluster, the tabbed fleet boards from
 //              libs/common-lib/base.libsonnet, plus the node-count recording
 //              rule the Cluster board's $nodecount reads and the Watchdog alert.
-// Both carry their own Grafana folder in each board's metadata, so the config's
-// grafanaDashboardFolder does not apply to them. `config.base` is passed to the
-// board builders (clusterLabel / nodeLabel / appLabel / selector / titles /
+//   libs       a list of observ-viz libraries (dotted g.libs paths), e.g.
+//              config: { scenario: libs, libs: [kubernetes.cluster,
+//              services.mimir, applications.valheim] } - each library's boards
+//              (in the folder the library files them into, e.g. Platform /
+//              Kubernetes) plus its alert and recording groups. `libConfig`
+//              maps a library name to the config passed to its new().
+// All three carry their own Grafana folder in each board's metadata, so the
+// config's grafanaDashboardFolder does not apply to them. `config.base` is passed
+// to the board builders (clusterLabel / nodeLabel / appLabel / selector / titles /
 // folder), e.g. config: { scenario: base, base: { appLabel: namespace } }.
 {
-  _config+:: { scenario: 'platform', base: {} },
+  _config+:: { scenario: 'platform', base: {}, libs: [], libConfig: {} },
   local isReference = $._config.scenario == 'reference',
   local isBase = $._config.scenario == 'base',
+  local isLibs = $._config.scenario == 'libs',
+  // `libs`: resolve each dotted name under g.libs and build it
+  local lookup(name) = std.foldl(function(o, k) o[k], std.split(name, '.'), (import 'g.libsonnet').libs),
+  local libs = [
+    lookup(n).new(if std.objectHas($._config.libConfig, n) then $._config.libConfig[n] else {})
+    for n in $._config.libs
+  ],
+  local libBoards = std.foldl(function(acc, lib) acc + (
+    local dbs = if std.objectHas(lib.grafana, 'dashboards') then lib.grafana.dashboards
+      else { [lib.config.uid + '.json']: lib.grafana.dashboard };
+    { [k]: dbs[k].toResource() for k in std.objectFields(dbs) }
+  ), libs, {}),
+  // Libraries that embed another pack emit its groups again (Salt
+  // infrastructure carries salt-jobs and salt-conformity): keep one copy of an
+  // identical group, and fail on two different groups under one name - a Mimir
+  // namespace holds a group name once, so the second would silently replace
+  // the first.
+  local dedupe(groups) = std.foldl(function(acc, g)
+    local seen = [x for x in acc if x.name == g.name];
+    if std.length(seen) == 0 then acc + [g]
+    else if seen[0] == g then acc
+    else error 'observ-viz libs: two different rule groups named "%s"' % g.name, groups, []),
+  local libAlerts = dedupe(std.flattenArrays([
+    if std.objectHas(lib, 'prometheus') then lib.prometheus.alerts else []
+    for lib in libs
+  ])),
+  local libRules = dedupe(std.flattenArrays([
+    if std.objectHas(lib, 'prometheus') && std.objectHas(lib.prometheus, 'rules') then lib.prometheus.rules else []
+    for lib in libs
+  ])),
   local reference = (import 'libs/reference-lib/mixin.libsonnet'),
   local base = (import 'libs/common-lib/base.libsonnet'),
   local baseBoards =
@@ -34,20 +70,23 @@
     { [name]: boards[name].toResource() for name in std.objectFields(boards) },
   local baseRules = base.clusterDetail.new($._config.base).prometheus.rules,
   local s =
-    if isReference || isBase then {}
+    if isReference || isBase || isLibs then {}
     else (import 'scenarios/main.libsonnet')[$._config.scenario].asMonitoringMixin(),
   grafanaDashboards+::
     if isReference
     then { [name]: reference.grafanaDashboards[name].toResource() for name in std.objectFields(reference.grafanaDashboards) }
     else if isBase then baseBoards
+    else if isLibs then libBoards
     else s.grafanaDashboards,
   prometheusAlerts+::
     if isBase
     then { groups: [{ name: 'base-watchdog', rules: [base.watchdogAlert] }] }
     else if isReference then { groups: [] }
+    else if isLibs then { groups: libAlerts }
     else s.prometheusAlerts,
   prometheusRules+::
     if isBase then { groups: baseRules }
     else if isReference then { groups: [] }
+    else if isLibs then { groups: libRules }
     else s.prometheusRules,
 }
