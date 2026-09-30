@@ -1,0 +1,51 @@
+# shellcheck shell=bash
+# Shared by alloy-start, alloy-stop, alloy-reload and alloy-status (sourced, not run).
+STATE_DIR="${ALLOY_STATE_DIR:-/tmp/alloy-lab}"
+LOG_DIR="${ALLOY_LOG_DIR:-/source/work/logs}"
+mkdir -p "$STATE_DIR"
+mkdir -p "$LOG_DIR" 2>/dev/null || LOG_DIR="$STATE_DIR"
+
+die() { echo "$(basename "$0"): $*" >&2; exit 1; }
+
+# something accepts connections on 127.0.0.1:<port>
+listening() { (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null; }
+
+ready() { curl -s -m 2 "http://127.0.0.1:$1/-/ready" 2>/dev/null | grep -qi ready; }
+
+# ports of the Alloys alloy-start started (stale entries of dead processes are dropped)
+managed_ports() {
+  local f p
+  for f in "$STATE_DIR"/*.pid; do
+    [ -e "$f" ] || continue
+    p=$(basename "$f" .pid)
+    if kill -0 "$(cat "$f")" 2>/dev/null; then echo "$p"; else rm -f "$STATE_DIR/$p."{pid,config}; fi
+  done | sort -n
+}
+
+stop_pid() {
+  local pid=$1
+  kill "$pid" 2>/dev/null || return 0
+  for _ in $(seq 1 20); do kill -0 "$pid" 2>/dev/null || return 0; sleep 0.5; done
+  kill -9 "$pid" 2>/dev/null || true
+}
+
+stop_port() {
+  local p=$1
+  [ -f "$STATE_DIR/$p.pid" ] || return 0
+  stop_pid "$(cat "$STATE_DIR/$p.pid")"
+  rm -f "$STATE_DIR/$p."{pid,config}
+}
+
+# `alloy run` processes nobody registered - started by hand with nohup, as the lessons do
+unmanaged_pids() {
+  local pid managed
+  managed=" $(for p in $(managed_ports); do cat "$STATE_DIR/$p.pid"; done | tr '\n' ' ') "
+  for pid in $(pgrep -f '^alloy run' || true); do
+    case "$managed" in *" $pid "*) ;; *) echo "$pid" ;; esac
+  done
+}
+
+# the port an `alloy run` process listens on, from its command line
+pid_port() {
+  tr '\0' '\n' <"/proc/$1/cmdline" 2>/dev/null | sed -n 's/^--server.http.listen-addr=.*:\([0-9]*\)$/\1/p' | head -1
+}

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Stop Alloys.
+#
+#   alloy-stop                 every Alloy - the ones alloy-start started and any `alloy run` started by hand
+#   alloy-stop <port>          the one on that port
+#   alloy-stop <config path>   the one alloy-start started on that config
+set -euo pipefail
+. "$(dirname "$(readlink -f "$0")")/alloy-lib"
+
+target="${1:-all}"
+stopped=0
+case "$target" in
+  -h|--help) sed -n '2,7p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+  all)
+    for p in $(managed_ports); do stop_port "$p"; echo "stopped alloy on :$p"; stopped=$((stopped + 1)); done
+    for pid in $(unmanaged_pids); do
+      p=$(pid_port "$pid"); stop_pid "$pid"; echo "stopped alloy pid $pid${p:+ on :$p} (not started by alloy-start)"; stopped=$((stopped + 1))
+    done ;;
+  *[!0-9]*)
+    config=$(readlink -f "$target")
+    for p in $(managed_ports); do
+      if [ "$(cat "$STATE_DIR/$p.config")" = "$config" ]; then stop_port "$p"; echo "stopped alloy on :$p"; stopped=$((stopped + 1)); fi
+    done ;;
+  *)
+    if [ -f "$STATE_DIR/$target.pid" ]; then
+      stop_port "$target"; echo "stopped alloy on :$target"; stopped=1
+    else
+      for pid in $(unmanaged_pids); do
+        if [ "$(pid_port "$pid")" = "$target" ]; then stop_pid "$pid"; echo "stopped alloy pid $pid on :$target (not started by alloy-start)"; stopped=1; fi
+      done
+    fi ;;
+esac
+[ "$stopped" -gt 0 ] || echo "no alloy matched '$target'"

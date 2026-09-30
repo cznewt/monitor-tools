@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Reload running Alloys after a config change, without restarting them.
+#
+#   alloy-reload           every running Alloy
+#   alloy-reload <port>    the one on that port
+#
+# Configs alloy-start knows are validated first; a config that does not
+# validate is not reloaded, and the running one keeps its old configuration.
+set -euo pipefail
+. "$(dirname "$(readlink -f "$0")")/alloy-lib"
+
+case "${1:-}" in -h|--help) sed -n '2,8p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; esac
+
+ports="${1:-}"
+if [ -z "$ports" ]; then
+  ports="$(managed_ports) $(for pid in $(unmanaged_pids); do pid_port "$pid"; done)"
+fi
+[ -n "$(echo $ports)" ] || die "no alloy is running (alloy-start starts one)"
+
+rc=0
+for p in $ports; do
+  if [ -f "$STATE_DIR/$p.config" ]; then
+    config=$(cat "$STATE_DIR/$p.config")
+    if ! alloy validate "$config" >/dev/null 2>"$STATE_DIR/validate.err"; then
+      cat "$STATE_DIR/validate.err" >&2
+      echo "alloy on :$p: $config does not validate - not reloaded" >&2; rc=1; continue
+    fi
+  fi
+  if out=$(curl -s -m 30 -X POST "http://127.0.0.1:$p/-/reload" 2>&1) && echo "$out" | grep -qi 'reloaded'; then
+    echo "alloy on :$p: reloaded"
+  else
+    echo "alloy on :$p: reload failed - ${out:-no answer}" >&2; rc=1
+  fi
+done
+exit "$rc"

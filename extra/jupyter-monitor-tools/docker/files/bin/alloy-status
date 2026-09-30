@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# List the Alloys running in this notebook: port, pid, ready or not, config and log.
+set -euo pipefail
+. "$(dirname "$(readlink -f "$0")")/alloy-lib"
+
+case "${1:-}" in -h|--help) sed -n '2p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; esac
+
+n=0
+for p in $(managed_ports); do
+  state=$(ready "$p" && echo ready || echo "not ready")
+  printf '%-6s pid %-7s %-9s %s\n' ":$p" "$(cat "$STATE_DIR/$p.pid")" "$state" "$(cat "$STATE_DIR/$p.config")"
+  printf '       UI /proxy/absolute/%s/graph   log %s\n' "$p" "$LOG_DIR/alloy-$p.log"
+  n=$((n + 1))
+done
+for pid in $(unmanaged_pids); do
+  p=$(pid_port "$pid")
+  state=$([ -n "$p" ] && ready "$p" && echo ready || echo "?")
+  cfg=$(tr '\0' '\n' <"/proc/$pid/cmdline" 2>/dev/null | grep -v '^-' | tail -1)
+  printf '%-6s pid %-7s %-9s %s   (started by hand, not by alloy-start)\n' ":${p:-?}" "$pid" "$state" "$cfg"
+  n=$((n + 1))
+done
+[ "$n" -gt 0 ] || echo "no alloy running"

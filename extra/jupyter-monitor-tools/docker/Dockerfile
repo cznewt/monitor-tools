@@ -17,6 +17,11 @@ RUN curl -fsSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz" | 
     rm -rf /tmp/linux-amd64 && \
     helm version --short
 
+# alloy-start / alloy-stop / alloy-reload / alloy-status: run lesson and example
+# Alloys in the background by config path, with their port, UI prefix and log
+COPY ./files/bin/ /usr/local/bin/
+RUN chmod +x /usr/local/bin/alloy-start /usr/local/bin/alloy-stop /usr/local/bin/alloy-reload /usr/local/bin/alloy-status
+
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-add-repository ppa:fish-shell/release-3 && \
     apt-get update && \

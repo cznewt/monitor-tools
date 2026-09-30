@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Start Alloy in the background on a config file or a directory of *.alloy files.
+#
+#   alloy-start <config file or directory> [port]
+#
+# The port is the second argument, $ALLOY_PORT, the port an Alloy with the same
+# config already had, or the first free one from 12345. An Alloy already running
+# the same config, or on the requested port, is stopped first. Alloy runs detached
+# from the notebook kernel until alloy-stop; its UI is /proxy/absolute/<port>/graph
+# behind jupyter-server-proxy. State lives in $ALLOY_STATE_DIR (default /tmp/alloy-lab),
+# logs in $ALLOY_LOG_DIR (default /source/work/logs).
+set -euo pipefail
+. "$(dirname "$(readlink -f "$0")")/alloy-lib"
+
+[ $# -ge 1 ] || { sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 2; }
+config=$(readlink -f "$1")
+[ -e "$config" ] || die "no such config: $1"
+port="${2:-${ALLOY_PORT:-}}"
+
+alloy validate "$config" >/dev/null 2>"$STATE_DIR/validate.err" || { cat "$STATE_DIR/validate.err" >&2; die "alloy validate failed for $config"; }
+
+# the same config running already: it is replaced, and keeps its port unless another was asked for
+same=""
+for p in $(managed_ports); do
+  if [ "$(cat "$STATE_DIR/$p.config")" = "$config" ]; then same="$same $p"; port="${port:-$p}"; fi
+done
+# check the port before stopping anything, so a failed start leaves the running Alloys alone
+if [ -n "$port" ] && [ ! -f "$STATE_DIR/$port.pid" ] && listening "$port"; then
+  for pid in $(unmanaged_pids); do
+    [ "$(pid_port "$pid")" = "$port" ] && die "port $port is used by an alloy started by hand (pid $pid) - alloy-stop $port stops it"
+  done
+  die "port $port is in use by another process"
+fi
+for p in $same; do stop_port "$p"; done
+if [ -n "$port" ]; then
+  stop_port "$port"
+else
+  port=12345
+  while listening "$port" || [ -f "$STATE_DIR/$port.pid" ]; do port=$((port + 1)); done
+fi
+
+log="$LOG_DIR/alloy-$port.log"
+rm -f "$STATE_DIR/$port.pid"
+# a session of its own, so it outlives the notebook kernel; the shell writes its
+# pid and then becomes alloy, so the pid file always names the alloy process
+setsid bash -c 'echo $$ >"$0"; exec alloy run "$@"' "$STATE_DIR/$port.pid" \
+  --server.http.listen-addr="127.0.0.1:$port" \
+  --server.http.ui-path-prefix="/proxy/absolute/$port" \
+  --storage.path="$STATE_DIR/$port.data" \
+  "$config" >"$log" 2>&1 </dev/null &
+for _ in $(seq 1 20); do [ -s "$STATE_DIR/$port.pid" ] && break; sleep 0.1; done
+pid=$(cat "$STATE_DIR/$port.pid")
+echo "$config" >"$STATE_DIR/$port.config"
+
+for _ in $(seq 1 30); do
+  if ready "$port"; then break; fi
+  kill -0 "$pid" 2>/dev/null || { tail -20 "$log" >&2; rm -f "$STATE_DIR/$port."{pid,config}; die "alloy exited, log: $log"; }
+  sleep 1
+done
+ready "$port" || { tail -20 "$log" >&2; die "alloy on :$port is not ready after 30 s, log: $log"; }
+
+cat <<EOF
+alloy on :$port (pid $pid) - $config
+  UI:     /proxy/absolute/$port/graph on your notebook host
+  logs:   $log
+  reload: alloy-reload $port      stop: alloy-stop $port
+EOF
