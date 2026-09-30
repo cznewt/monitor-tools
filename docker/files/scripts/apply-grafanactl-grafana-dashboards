@@ -25,9 +25,15 @@ for yaml_file in $yaml_files; do
     rv=$(jq -r '.metadata.resourceVersion // empty' /tmp/live.json)
     body=$(yq eval -o=json "$yaml_file" | jq --arg rv "$rv" '.metadata.resourceVersion = $rv')
     code=$(printf '%s' "$body" | curl -s -o /tmp/resp.json -w "%{http_code}" "${AUTH[@]}" -H "Content-Type: application/json" -X PUT "$base/$name" --data-binary @-)
-  else
+  elif [ "$live" = "404" ]; then
     body=$(yq eval -o=json "$yaml_file")
     code=$(printf '%s' "$body" | curl -s -o /tmp/resp.json -w "%{http_code}" "${AUTH[@]}" -H "Content-Type: application/json" -X POST "$base" --data-binary @-)
+  else
+    # any other answer (403: the board exists but these credentials can't
+    # read it, e.g. moved to the root where only its creator has access) must
+    # not turn into a create, which only reports a misleading 409 AlreadyExists
+    echo "FAIL $name ($apiVersion) cannot read the live board (HTTP $live) - grant these credentials access to it or its folder"; fail=1
+    continue
   fi
   if [ "$code" = "200" ] || [ "$code" = "201" ]; then
     echo "OK   $name ($apiVersion) -> $GRAFANA_URL/d/$name"

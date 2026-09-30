@@ -8,6 +8,11 @@ scenario with `config.scenario` (`platform`, `monlab`, `kubernetes`, `lgtm`,
 `linux-server`, ...). Alerts and recording rules flow through mimirtool as for
 any other mixin.
 
+The image vendors observ-viz at the commit `jsonnetfile.json` pins (`jb install`
+at build time). To ship observ-viz changes, bump that pin together with
+`VERSION`: CI builds with a layer cache, and a `VERSION`-only rebuild reuses
+the cached vendor layer, so it would keep the observ-viz the previous image had.
+
 Three `config.scenario` values are not scenarios:
 
 * `reference` renders the reference library (Panels / Runtimes / Common /

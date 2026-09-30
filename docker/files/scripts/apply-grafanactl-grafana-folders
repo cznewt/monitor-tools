@@ -37,11 +37,34 @@ apply_folder() {
   esac
 }
 
-# parents (no grafana.app/folder annotation) first, then the nested ones
+# Parents before children at any depth: each pass applies the folders whose
+# parent is not still waiting in this set (top level, applied in an earlier
+# pass, or managed elsewhere). A tree three levels deep (Platform /
+# Infrastructure / Compute) needs three passes; with only "top level first"
+# a grandchild could be created before its parent and fail with 404.
+declare -A uid_of parent_of
 for yaml_file in $yaml_files; do
-  [ -z "$(yq eval '.metadata.annotations."grafana.app/folder" // ""' "$yaml_file")" ] && apply_folder "$yaml_file"
+  uid_of[$yaml_file]=$(yq eval '.metadata.name' "$yaml_file")
+  parent_of[$yaml_file]=$(yq eval '.metadata.annotations."grafana.app/folder" // ""' "$yaml_file")
 done
-for yaml_file in $yaml_files; do
-  [ -n "$(yq eval '.metadata.annotations."grafana.app/folder" // ""' "$yaml_file")" ] && apply_folder "$yaml_file"
+pending=($yaml_files)
+while [ ${#pending[@]} -gt 0 ]; do
+  waiting=" "
+  for yaml_file in "${pending[@]}"; do waiting+="${uid_of[$yaml_file]} "; done
+  next=()
+  for yaml_file in "${pending[@]}"; do
+    parent=${parent_of[$yaml_file]}
+    if [ -n "$parent" ] && [ "$parent" != "${uid_of[$yaml_file]}" ] && [[ "$waiting" == *" $parent "* ]]; then
+      next+=("$yaml_file")
+    else
+      apply_folder "$yaml_file"
+    fi
+  done
+  if [ ${#next[@]} -eq ${#pending[@]} ]; then
+    # parent cycle: apply the rest as they are rather than loop forever
+    for yaml_file in "${next[@]}"; do apply_folder "$yaml_file"; done
+    break
+  fi
+  pending=("${next[@]}")
 done
 exit 0
