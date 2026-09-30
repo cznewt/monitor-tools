@@ -4,8 +4,10 @@ ConfigMap at /app/gen.py and run on generators.image. demo-traces-graph keeps
 the name, selector and mount the lab's plain manifest used. generators.enabled
 switches all of them off at once. The metrics generator is the release's
 incident switch (POST/GET/DELETE /incident); with it on, the logs and traces
-generators follow it through INCIDENT_URL. Recreate rollouts: a generator never
-needs a surge pod, so a tight namespace quota cannot stall an upgrade.
+generators follow it through INCIDENT_URL. Rollouts stop the old pod before
+starting the new one (maxSurge 0 - Recreate in effect for one replica, without
+the RollingUpdate -> Recreate switch server-side apply rejects on an existing
+Deployment), so a tight namespace quota cannot stall an upgrade.
 */ -}}
 {{- $g := .Values.generators }}
 {{- $incidentEnv := list
@@ -68,7 +70,10 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ $gen.name }}

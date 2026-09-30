@@ -45,8 +45,9 @@ storefront server span carries `demo.incident=true`). While the switch cannot
 be reached they fall back to the schedule. The metrics generator exports the
 state as `demo_incident_active` and `demo_incident_seconds_remaining`.
 
-Generators roll out with `strategy: Recreate`: an upgrade never needs a surge
-pod, so a tight namespace quota cannot stall it.
+Generators roll out without a surge pod (`maxSurge: 0`, `maxUnavailable: 1` -
+Recreate in effect for their one replica), so a tight namespace quota cannot
+stall an upgrade.
 
 Image sources: `monitor-tools/extra/app-instrumentation/{logging,metrics,traces}/*/<runtime>`;
 default image `<imageRegistry>/demo-<signal>-<runtime>:<imageTag>`
@@ -57,7 +58,7 @@ default image `<imageRegistry>/demo-<signal>-<runtime>:<imageTag>`
 One release per environment (namespace) - object names are fixed:
 
 ```sh
-helm upgrade --install demo oci://ghcr.io/cznewt/charts/demo-apps --version 0.3.0 \
+helm upgrade --install demo oci://ghcr.io/cznewt/charts/demo-apps --version 0.3.1 \
   --namespace demo-dev \
   --set environment=dev \
   --set generators.tracesGraph.tenant=dev
@@ -67,7 +68,7 @@ One app - e.g. a student's own metrics app in their namespace, under its own
 name (0.2.0):
 
 ```sh
-helm upgrade --install lab-app oci://ghcr.io/cznewt/charts/demo-apps --version 0.3.0 \
+helm upgrade --install lab-app oci://ghcr.io/cznewt/charts/demo-apps --version 0.3.1 \
   --namespace "$LAB_NAMESPACE" \
   --set partOf=lab-app \
   --set "enabledRuntimes={$LAB_LANG}" --set "enabledSignals={metricsProm}" \
@@ -127,6 +128,7 @@ done
 
 ## Changes
 
+- **0.3.1** - generators roll out with `maxSurge: 0` / `maxUnavailable: 1` instead of `strategy: Recreate`: server-side apply cannot switch an existing Deployment from RollingUpdate to Recreate (`spec.strategy.rollingUpdate: Forbidden`), so upgrading a 0.2.0 release to 0.3.0 fails - use 0.3.1.
 - **0.3.0** - incidents on demand: `POST` / `GET` / `DELETE /incident` on the metrics generator, followed by the logs and traces generators (`generators.incident.pollSeconds`); `demo_incident_active` / `demo_incident_seconds_remaining`; the traces generator now has incident windows too (failed-trace share and span durations); generators roll out with `strategy: Recreate`.
 - **0.2.0** - additive, renders exactly what 0.1.0 renders with default values: `enabledRuntimes` / `enabledSignals` shortcuts, `runtimes.<rt>.<signal>.name` overrides, `generators.enabled` master switch.
 - **0.1.0** - first release.
