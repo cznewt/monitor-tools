@@ -1,21 +1,45 @@
 #!/usr/bin/env bash
 # Start Alloy in the background on a config file or a directory of *.alloy files.
 #
-#   alloy-start <config file or directory> [port]
+#   alloy-start                          the default config (below) - the examples on :12349
+#   alloy-start <port>                   the default config on that port
+#   alloy-start <file or dir> [port]
 #
-# The port is the second argument, $ALLOY_PORT, the port an Alloy with the same
-# config already had, or the first free one from 12345. An Alloy already running
-# the same config, or on the requested port, is stopped first. Alloy runs detached
-# from the notebook kernel until alloy-stop; its UI is /proxy/absolute/<port>/graph
-# behind jupyter-server-proxy. State lives in $ALLOY_STATE_DIR (default /tmp/alloy-lab),
-# logs in $ALLOY_LOG_DIR (default /source/work/logs).
+# The default config is $ALLOY_CONFIG, else the current directory when it holds
+# *.alloy files, else the workshop's examples directory
+# (/source/work/advanced-monitoring/lab-config/alloy, port 12349 unless given).
+# The port is otherwise the given one, $ALLOY_PORT, the port an Alloy with the
+# same config already had, or the first free one from 12345. An Alloy already
+# running the same config, or on the requested port, is stopped first. Alloy runs
+# detached from the notebook kernel until alloy-stop; its UI is
+# /proxy/absolute/<port>/graph behind jupyter-server-proxy. State lives in
+# $ALLOY_STATE_DIR (default /tmp/alloy-lab), logs in $ALLOY_LOG_DIR (default
+# /source/work/logs).
 set -euo pipefail
 . "$(dirname "$(readlink -f "$0")")/alloy-lib"
 
-[ $# -ge 1 ] || { sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 2; }
-config=$(readlink -f "$1")
-[ -e "$config" ] || die "no such config: $1"
+EXAMPLES_DIR=/source/work/advanced-monitoring/lab-config/alloy
+EXAMPLES_PORT=12349
+
+case "${1:-}" in -h|--help) sed -n '2,19p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; esac
+arg="${1:-}"
 port="${2:-${ALLOY_PORT:-}}"
+if [ -n "$arg" ] && [ -z "${arg//[0-9]/}" ]; then port="$arg"; arg=""; fi   # a port alone
+
+if [ -n "$arg" ]; then
+  config=$(readlink -f "$arg")
+  [ -e "$config" ] || die "no such config: $arg"
+elif [ -n "${ALLOY_CONFIG:-}" ]; then
+  config=$(readlink -f "$ALLOY_CONFIG")
+  [ -e "$config" ] || die "no such config: \$ALLOY_CONFIG=$ALLOY_CONFIG"
+elif compgen -G "$PWD/*.alloy" >/dev/null; then
+  config="$PWD"
+elif [ -d "$EXAMPLES_DIR" ]; then
+  config="$EXAMPLES_DIR"
+  port="${port:-$EXAMPLES_PORT}"
+else
+  die "no config given, no *.alloy here and no $EXAMPLES_DIR (alloy-start --help)"
+fi
 
 alloy validate "$config" >/dev/null 2>"$STATE_DIR/validate.err" || { cat "$STATE_DIR/validate.err" >&2; die "alloy validate failed for $config"; }
 
