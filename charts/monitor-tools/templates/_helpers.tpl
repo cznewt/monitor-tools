@@ -29,7 +29,7 @@ app: {{ .Release.Name }}-monitor-tools
 {{- define "monitor-tools.podSpec" -}}
 containers:
   - name: monitor-tools
-    image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+    image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
     imagePullPolicy: {{ .Values.image.pullPolicy }}
     command: {{ toJson .Values.job.command }}
     {{- if or .Values.env .Values.existingSecret }}

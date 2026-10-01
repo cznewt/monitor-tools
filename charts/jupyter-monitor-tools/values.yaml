@@ -1,7 +1,9 @@
 image:
   repository: ghcr.io/cznewt/jupyter-monitor-tools
   pullPolicy: IfNotPresent
-  tag: "latest"
+  # empty = the chart appVersion (the monitor-tools release it was published with);
+  # set "latest" to follow every new build
+  tag: ""
 
 service:
   type: ClusterIP
