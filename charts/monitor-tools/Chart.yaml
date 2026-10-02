@@ -2,5 +2,5 @@ apiVersion: v2
 name: monitor-tools
 description: Headless monitor-tools chart — ConfigMap with env configs, Secret with apply-time credentials (or existingSecret), and a one-shot Job (or CronJob) running do-all.
 type: application
-version: 0.2.4
-appVersion: "2026.9-r39"
+version: 0.2.5
+appVersion: "2026.9-r40"
