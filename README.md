@@ -115,12 +115,12 @@ monitor-tools:
 ```bash
 # Headless: ConfigMap + Secret + Job (or CronJob) running do-all
 helm install mt oci://ghcr.io/cznewt/charts/monitor-tools \
-  --version 0.2.10 \
+  --version 0.2.11 \
   -f my-values.yaml
 
 # JupyterLab + monitor-tools with the same ConfigMap + Secret wiring
 helm install jmt oci://ghcr.io/cznewt/charts/jupyter-monitor-tools \
-  --version 0.3.9 \
+  --version 0.3.10 \
   -f my-values.yaml
 ```
 
