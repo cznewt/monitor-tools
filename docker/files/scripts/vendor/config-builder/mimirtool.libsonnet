@@ -14,7 +14,9 @@
     // kubernetes-mixin + kubernetes-mixin-alerts, the layout mimirtool users
     // commonly load upstream mixins in.
     local alertNamespace = (if std.objectHasAll(config, 'mimirAlertNamespace') then config.mimirAlertNamespace else namespace);
-    local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
+    // mimirAlerts: false keeps a mixin's dashboards and recording rules but not
+    // its alert groups (e.g. when another mixin alerts on the same things)
+    local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') && std.get(config, 'mimirAlerts', true) != false then mixin.prometheusAlerts else { groups: [] });
     {
       [alertNamespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
         namespace: alertNamespace,
@@ -44,7 +46,7 @@
     local namespace = (if std.objectHasAll(config, 'mimirNamespace') then config.mimirNamespace else config.mixinName);
     local alertNamespace = (if std.objectHasAll(config, 'mimirAlertNamespace') then config.mimirAlertNamespace else namespace);
     local rules = (if std.objectHasAll(mixin, 'prometheusRules') then mixin.prometheusRules else { groups: [] });
-    local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') then mixin.prometheusAlerts else { groups: [] });
+    local alerts = (if std.objectHasAll(mixin, 'prometheusAlerts') && std.get(config, 'mimirAlerts', true) != false then mixin.prometheusAlerts else { groups: [] });
     {
       [alertNamespace + '-' + group.name + '.yaml']: std.manifestYamlDoc({
         namespace: alertNamespace,

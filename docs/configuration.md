@@ -239,6 +239,8 @@ mixins:
 
 `config.mimirAlertNamespace` (optional) puts a mixin's alert groups in their own Mimir namespace, next to the recording rules in `mimirNamespace`.
 
+`config.mimirAlerts: false` renders a mixin's dashboards and recording rules but leaves out its alert groups, for a mixin whose alerts another mixin already covers. It does not delete groups pushed earlier: remove that Mimir namespace once (`mimirtool rules delete-namespace` or `DELETE /prometheus/config/v1/rules/<namespace>`).
+
 Rendered rule files are named `<namespace>-<group>.yaml`, so mixins that share a group name no longer overwrite each other's files.
 
 ## SLO Configuration
