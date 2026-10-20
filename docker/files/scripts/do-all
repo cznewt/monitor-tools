@@ -1,7 +1,11 @@
 #!/bin/bash
+# Sync, install and render every config in $CONFIG_DIR. Every step runs; the
+# exit status is non-zero when any of them failed.
 
 CONFIG_DIR="${CONFIG_DIR:=/config}"
 
-sync-all-mixins
-init-all-mixins
-render-all-resources
+rc=0
+sync-all-mixins || rc=1
+init-all-mixins || rc=1
+render-all-resources || rc=1
+exit $rc

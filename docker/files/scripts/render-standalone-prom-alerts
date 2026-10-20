@@ -4,5 +4,7 @@ cd /source
 
 mkdir -p /source/out/prometheus_alerts
 
+fail=0
 jsonnet -c -S -J "/source/vendor" \
-  -e "std.manifestYamlDoc((import 'mixin.libsonnet').prometheusAlerts)" > /source/out/prometheus_alerts/alerts.yaml
+  -e "std.manifestYamlDoc((import 'mixin.libsonnet').prometheusAlerts)" > /source/out/prometheus_alerts/alerts.yaml || fail=1
+exit $fail

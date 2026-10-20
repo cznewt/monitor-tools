@@ -13,6 +13,7 @@ alertmanager=$(yq eval ".alertmanager.render" "$CONFIG_FILE")
 pyrra=$(yq eval ".pyrra.render" "$CONFIG_FILE")
 sloth=$(yq eval ".sloth.render" "$CONFIG_FILE")
 
+rc=0
 if [ "$mixins" = "null" ] || [ -z "$mixins" ]; then
   printf  "\nMixins not found in $CONFIG_FILE, skipping...\n"
 else
@@ -21,40 +22,40 @@ else
   # grafana resources
   printf  "\nProcessing Grafana resources with $grafana processor...\n"
   if [ "$grafana" = "grizzly" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-folders render-grizzly-grafana-folders
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-grafana-dashboards
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-library-panels render-grizzly-grafana-library-panels
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-folders render-grizzly-grafana-folders || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-grafana-dashboards || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-library-panels render-grizzly-grafana-library-panels || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards || rc=1
   fi
   if [ "$grafana" = "plain" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-grafana-dashboards || rc=1
   fi
   if [ "$grafana" = "grafanactl" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-folders render-grafanactl-grafana-folders
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards render-grafanactl-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-folders render-grafanactl-grafana-folders || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards render-grafanactl-grafana-dashboards || rc=1
   fi
 
   # prometheus resources
   printf  "\nProcessing Prometheus resources with $prometheus processor...\n"
   if [ "$prometheus" = "mimirtool" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-mimir-rules
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-mimir-rules || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules || rc=1
   fi
   if [ "$prometheus" = "plain" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-prom-rules || rc=1
   fi
   if [ "$prometheus" = "configmap" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/prom-rules render-configmap-prom-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/prom-rules render-configmap-prom-rules || rc=1
   fi
 
   # loki resources
   if [ "$loki" = "lokitool" ]; then
     printf  "\nProcessing Loki resources with $loki processor...\n"
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/lokitool/loki-rules render-lokitool-loki-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/lokitool/loki-rules render-lokitool-loki-rules || rc=1
   fi
   if [ "$loki" = "configmap" ]; then
     printf  "\nProcessing Loki resources with $loki processor...\n"
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/loki-rules render-configmap-loki-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/configmap/loki-rules render-configmap-loki-rules || rc=1
   fi
 fi
 
@@ -63,14 +64,14 @@ if [ "$dashboards" = "null" ] || [ -z "$dashboards" ]; then
 else
   printf  "\nProcessing static Grafana dashboards from $CONFIG_FILE...\n"
   if [ "$grafana" = "grizzly" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-static-grafana-dashboards
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grizzly/grafana-dashboards render-grizzly-static-grafana-dashboards || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards || rc=1
   fi
   if [ "$grafana" = "plain" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/grafana-dashboards render-plain-static-grafana-dashboards || rc=1
   fi
   if [ "$grafana" = "grafanactl" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards render-grafanactl-static-grafana-dashboards
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/grafanactl/grafana-dashboards render-grafanactl-static-grafana-dashboards || rc=1
   fi
 fi
 
@@ -78,25 +79,26 @@ fi
 if [ "$alertmanager" != "null" ] && [ -n "$alertmanager" ]; then
   printf  "\nProcessing Alertmanager resources with $alertmanager processor...\n"
   if [ "$alertmanager" = "mimirtool" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config render-mimirtool-alertmanager-config
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/alertmanager-config render-mimirtool-alertmanager-config || rc=1
   fi
 fi
 
 # pyrra resources
 if [ "$pyrra" != "null" ] && [ -n "$pyrra" ]; then
   printf  "\nProcessing Pyrra resources with $pyrra processor...\n"
-  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/pyrra/pyrra-slos render-pyrra-rules
+  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/pyrra/pyrra-slos render-pyrra-rules || rc=1
   if [ "$pyrra" = "mimirtool" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-pyrra-prom-rules
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-pyrra-mimir-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-pyrra-prom-rules || rc=1
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/mimirtool/mimir-rules render-mimirtool-pyrra-mimir-rules || rc=1
   fi
 fi
 
 # sloth resources
 if [ "$sloth" != "null" ] && [ -n "$sloth" ]; then
   printf  "\nProcessing Sloth resources with $sloth processor...\n"
-  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/sloth/sloth-slos render-sloth-rules
+  CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/source/$ENV_NAME/sloth/sloth-slos render-sloth-rules || rc=1
   if [ "$sloth" = "mimirtool" ]; then
-    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-sloth-prom-rules
+    CONFIG_FILE=$CONFIG_FILE SOURCE_DIR=/source/$ENV_NAME BUILD_DIR=/build/$ENV_NAME/plain/prom-rules render-plain-sloth-prom-rules || rc=1
   fi
 fi
+exit $rc

@@ -5,6 +5,7 @@ VENDOR_DIR="/scripts/vendor"
 SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/lokitool/loki-rules}"
 
+fail=0
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 
 # extra -J paths a mixin declares (config: mixins.<key>.jpaths, relative to
@@ -23,10 +24,11 @@ for key in $keys; do
   if [ -d "$mixinDir/vendor" ]; then
       echo "Rendering $mixinDir lokitool LokiRules with vendor to $BUILD_DIR..."
       jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR -J "$mixinDir/vendor" $(extra_jpaths "$key") \
-      -e "(import 'cbm.libsonnet').lokitoolLokiRules('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+      -e "(import 'cbm.libsonnet').lokitoolLokiRules('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))" || fail=1
   else
       echo "Rendering $mixinDir lokitool LokiRules to $BUILD_DIR..."
       jsonnet -c -S -m $BUILD_DIR -J $VENDOR_DIR $(extra_jpaths "$key") \
-      -e "(import 'cbm.libsonnet').lokitoolLokiRules('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))"
+      -e "(import 'cbm.libsonnet').lokitoolLokiRules('$key', (import '$mixinDir/mixin.libsonnet'), std.parseYaml(importstr '$CONFIG_FILE'))" || fail=1
   fi
 done
+exit $fail

@@ -2,7 +2,9 @@
 
 CONFIG_DIR="${CONFIG_DIR:=/config}"
 
+rc=0
 for CONFIG_FILE in $CONFIG_DIR/*.y*ml; do
   ENV_NAME=$(yq eval ".name" "$CONFIG_FILE")
-  CONFIG_FILE="$CONFIG_FILE" BUILD_DIR="/source/$ENV_NAME" render-resources
+  CONFIG_FILE="$CONFIG_FILE" BUILD_DIR="/source/$ENV_NAME" render-resources || rc=1
 done
+exit $rc

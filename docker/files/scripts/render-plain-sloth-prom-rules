@@ -4,6 +4,7 @@ CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
 SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/plain/prom-rules}"
 
+fail=0
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 sloth=$(yq eval -o=json -I=0 '.sloth.slos | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
 
@@ -13,5 +14,6 @@ if [ "$sloth" = "null" ] || [ -z "$sloth" ]; then
 else
     mkdir -p "$BUILD_DIR"
     echo "Rendering plain PrometheusRules from sloth definitions in $SOURCE_DIR/sloth/sloth-slos to $BUILD_DIR..."
-    sloth generate --input="$SOURCE_DIR/sloth/sloth-slos" --out="$BUILD_DIR"
+    sloth generate --input="$SOURCE_DIR/sloth/sloth-slos" --out="$BUILD_DIR" || fail=1
 fi
+exit $fail

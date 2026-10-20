@@ -8,7 +8,7 @@ BUILD_DIR="${BUILD_DIR:=/build/default/grafanactl/grafana-dashboards}"
 GRAFANA_NAMESPACE="${GRAFANA_NAMESPACE:=default}"
 
 yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml")
-if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+if [ -z "$yaml_files" ]; then echo "No *.yaml files in '$BUILD_DIR', nothing to apply."; exit 0; fi
 if [ -z "$GRAFANA_URL" ]; then echo "GRAFANA_URL not set, cannot connect to Grafana server."; exit 1; fi
 if [ -n "$GRAFANA_TOKEN" ]; then AUTH=(-H "Authorization: Bearer $GRAFANA_TOKEN");
 elif [ -n "$GRAFANA_USER" ] && [ -n "$GRAFANA_PASSWORD" ]; then AUTH=(-u "$GRAFANA_USER:$GRAFANA_PASSWORD");

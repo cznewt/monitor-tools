@@ -33,14 +33,13 @@ BUILD_DIR=/source/$ENV_NAME sync-mixins || { echo "Warning: some mixins did not 
 BUILD_DIR=/source/$ENV_NAME sync-dashboards || { echo "Warning: some static dashboards did not sync."; status=1; }
 
 echo "== init ($ENV_NAME)"
-SOURCE_DIR=/source/$ENV_NAME init-mixins
+SOURCE_DIR=/source/$ENV_NAME init-mixins || { echo "Warning: some mixin dependencies did not install - rendering the rest."; status=1; }
 
 echo "== render ($ENV_NAME)"
-render-resources 2>&1 | tee /tmp/render.log
-if grep -q "RUNTIME ERROR" /tmp/render.log; then echo "Warning: some mixins did not render - applying the rest."; status=1; fi
+if ! render-resources 2>&1 | tee /tmp/render.log; then echo "Warning: some resources did not render - applying the rest."; status=1; fi
 
 if [ "$APPLY" = "true" ]; then
   echo "== apply ($ENV_NAME)"
-  apply-resources
+  apply-resources || { echo "Warning: some resources did not apply."; status=1; }
 fi
 exit $status

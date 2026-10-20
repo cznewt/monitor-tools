@@ -13,6 +13,7 @@ CONFIG_FILE="${CONFIG_FILE:=/config/default.yaml}"
 SOURCE_DIR="${SOURCE_DIR:=/source/default}"
 BUILD_DIR="${BUILD_DIR:=/build/default/mimirtool/mimir-rules}"
 
+fail=0
 if [ ! -f "$CONFIG_FILE" ]; then echo "Error: Config file $CONFIG_FILE does not exist."; exit 1; fi
 slos=$(yq eval -o=json -I=0 '.pyrra.slos | keys' "$CONFIG_FILE" 2>/dev/null | jq -r '.[]?')
 if [ -z "$slos" ] || [ "$slos" = "null" ]; then echo "No pyrra in $CONFIG_FILE config."; exit 0; fi
@@ -38,3 +39,4 @@ for rule_file in "$tmp"/*.yaml; do
     echo "$out"
   done
 done
+exit $fail

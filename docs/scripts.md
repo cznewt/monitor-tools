@@ -31,7 +31,9 @@ Most scripts use the following environment variables. Specific requirements are 
 
 These scripts orchestrate multiple specialized scripts based on the configuration file.
 
-- `do-all`: Runs `init-all-mixins`, `sync-all-mixins`, `render-all-resources`, `lint-all-resources`, and `apply-all-resources`. (Env: `CONFIG_DIR`)
+**Exit status.** Every script exits non-zero when any of its steps failed: a mixin that did not render, a resource that did not apply, a dependency that did not install. A failing step does not stop the others: a render script still renders the remaining mixins and an apply script still applies the remaining files, so the log shows every failure at once. An apply step with nothing rendered for it (no `*.yaml` files) is a skip, not a failure. In a Kubernetes Job the failure fails the pod, so a broken mixin shows up as a failed Job instead of a green one.
+
+- `do-all`: Runs `sync-all-mixins`, `init-all-mixins` and `render-all-resources` for every config in `CONFIG_DIR`; apply with `apply-all-resources` (or `apply-resources` for one config). (Env: `CONFIG_DIR`)
 - `init-all-mixins` / `sync-all-mixins`: Initialize and sync all mixins defined in the config. (Env: `CONFIG_DIR`)
 - `render-all-resources`: Renders all resources (Grafana, Mimir, Loki, etc.) for all environments. (Env: `CONFIG_DIR`)
 - `lint-all-resources`: Lints all rendered resources. (Env: `CONFIG_DIR`)
@@ -111,4 +113,4 @@ Pushes the rendered and linted resources to the respective services.
 
 ## sync-render-apply
 
-Runs one config end to end: `sync-mixins`, `sync-dashboards`, `init-mixins`, `render-resources` and, unless `APPLY=false`, `apply-resources`. A mixin that fails to sync or render is skipped and the rest is applied: resources are only upserted, so the skipped mixin keeps its previous version. The script then exits non-zero. Set `CONFIG_FILE`, plus the apply credentials (`GRAFANA_URL` with `GRAFANA_TOKEN` or `GRAFANA_USER` and `GRAFANA_PASSWORD`, `MIMIR_ADDRESS`, `MIMIR_TENANT_ID`, `LOKI_ADDRESS`, `LOKI_TENANT_ID`). The in-cluster monitor-tools CronJob runs this script. `sync-mixins` retries each mixin (`SYNC_ATTEMPTS`, default 4). An optional `GITHUB_TOKEN` authenticates git fetches from github.com; anonymous fetches from shared cloud addresses get throttled and GitHub then answers 401.
+Runs one config end to end: `sync-mixins`, `sync-dashboards`, `init-mixins`, `render-resources` and, unless `APPLY=false`, `apply-resources`. A mixin that fails to sync, install or render is skipped and the rest is applied: resources are only upserted, so the skipped mixin keeps its previous version. The script then exits non-zero, as it does when a resource fails to apply. Set `CONFIG_FILE`, plus the apply credentials (`GRAFANA_URL` with `GRAFANA_TOKEN` or `GRAFANA_USER` and `GRAFANA_PASSWORD`, `MIMIR_ADDRESS`, `MIMIR_TENANT_ID`, `LOKI_ADDRESS`, `LOKI_TENANT_ID`). The in-cluster monitor-tools CronJob runs this script. `sync-mixins` retries each mixin (`SYNC_ATTEMPTS`, default 4). An optional `GITHUB_TOKEN` authenticates git fetches from github.com; anonymous fetches from shared cloud addresses get throttled and GitHub then answers 401.
