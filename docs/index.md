@@ -46,6 +46,3 @@ do-all
     - [Chart reference](demo-apps-chart.md) - values and version history
     - [Containers](demo-apps-images.md) - what runs in each image and generator, and how to build a new tag
 - [Alert handler](alert-handler.md) - the Alertmanager → alert-handler → actions demo, and the webhook contract
-
-This site is built from the repository's `docs/` on every push to `main`:
-<https://cznewt.github.io/monitor-tools/>.
