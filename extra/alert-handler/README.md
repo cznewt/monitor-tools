@@ -105,8 +105,10 @@ Add a script to `runbooks/`, name it from a rule, and
 The Kubernetes actions (`k8s_rollout_restart`, `k8s_scale`, `k8s_delete_pod`,
 `k8s_cordon_node`, `k8s_annotate`) are commented out in `handler/config.yaml`:
 compose has no API server, so they would only produce failures here. In a
-cluster the catalog component renders the ServiceAccount and the ClusterRole
-they need — see `monitor-services/alert-handler/README.md`.
+cluster they need the handler's ServiceAccount and ClusterRole, which its
+Kapitan component and Helm chart render — see
+[RBAC](https://cznewt.github.io/alert-handler/install/#rbac) in the handler's
+documentation.
 
 To point the demo handler at *your* Alertmanager instead, add a webhook
 receiver over there:
@@ -118,3 +120,41 @@ receivers:
       - url: http://<host>:8080/alert
         send_resolved: true
 ```
+
+## The webhook contract
+
+What Alertmanager and the handler agree on, in short. The handler's
+[reference](https://cznewt.github.io/alert-handler/reference/#http-endpoints)
+has every endpoint and metric.
+
+- Alertmanager `POST`s each notification group, as its standard webhook JSON,
+  to `/alert`. `/alerts`, `/webhook` and `/` accept it too.
+- The handler answers `202 {"queued": n}` straight away and runs the actions
+  on a worker pool (`settings.workers`).
+- It never answers `5xx` because a rule failed: Alertmanager would resend the
+  whole group and the actions would run twice. Failures show up in
+  `alert_handler_actions_total{result="failure"}` and in the log instead.
+- With `settings.auth_token` set (or `auth_token_secret`, or the
+  `WEBHOOK_TOKEN` variable), `/alert` requires `Authorization: Bearer <token>`.
+  The commented `http_config` in `alertmanager/alertmanager.yml` is the
+  Alertmanager side of it.
+- Each alert in the group is matched against the rules in order. `match`
+  (label equality), `match_re` (full-string regex) and `status` must all hold,
+  and a rule still in cooldown for that alert's fingerprint is skipped.
+- Rules with `status: resolved` or `any` only see resolved alerts when the
+  receiver has `send_resolved: true`.
+
+## Beyond the demo
+
+The demo uses three action types: `log`, `runbook` and `http`. The handler
+also has `exec`, the five `k8s_*` actions, `salt_state_apply`, `salt_cmd` and
+`salt_run`, and `llm`. For an alert that needs a person, it runs incidents
+with Alertmanager silences, approvals and Jira tickets. Its documentation at
+<https://cznewt.github.io/alert-handler/> covers them all:
+
+- [Configuration](https://cznewt.github.io/alert-handler/configuration/#actions):
+  settings, rules, every action, templating, runbooks and credentials.
+- [Incidents](https://cznewt.github.io/alert-handler/incidents/): silences,
+  approvals and tickets.
+- [Install](https://cznewt.github.io/alert-handler/install/): the image,
+  Kapitan, Helm and RBAC.

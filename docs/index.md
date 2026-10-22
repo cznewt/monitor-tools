@@ -41,4 +41,11 @@ do-all
 - [Scripts Documentation](scripts.md)
 - [Software Documentation](software.md)
 - [Configuration Documentation](configuration.md)
+- [Mixins Documentation](mixins.md)
 - [Demo apps](demo-apps.md) - the `demo-apps` chart: an instrumented online store to monitor, with incidents on demand
+    - [Chart reference](demo-apps-chart.md) - values and version history
+    - [Containers](demo-apps-images.md) - what runs in each image and generator, and how to build a new tag
+- [Alert handler](alert-handler.md) - the Alertmanager → alert-handler → actions demo, and the webhook contract
+
+This site is built from the repository's `docs/` on every push to `main`:
+<https://cznewt.github.io/monitor-tools/>.

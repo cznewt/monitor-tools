@@ -1,8 +1,26 @@
 site_name: Monitor Tools
+site_url: https://cznewt.github.io/monitor-tools/
 site_description: A collection of tools and scripts for managing monitoring resources as code.
+repo_url: https://github.com/cznewt/monitor-tools
+repo_name: cznewt/monitor-tools
+edit_uri: edit/main/docs/
 
 theme:
-  name: readthedocs
+  name: material
+  palette:
+    scheme: slate
+    primary: deep orange
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - toc.follow
+    - content.code.copy
 
 nav:
   - Home: index.md
@@ -10,10 +28,25 @@ nav:
     - Scripts: scripts.md
     - Configuration: configuration.md
     - Examples: examples.md
-    - Demo apps: demo-apps.md
+    - Mixins: mixins.md
+  - Demo apps:
+    - Usage: demo-apps.md
+    - Chart reference: demo-apps-chart.md
+    - Containers: demo-apps-images.md
+  - Alert handler: alert-handler.md
   - Reference:
     - Software: software.md
 
 markdown_extensions:
   - toc:
       permalink: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences
+  # pages that include a README from elsewhere in the repository (the chart's,
+  # the alert-handler demo's), so each stays written in one place
+  - pymdownx.snippets:
+      base_path: [.]
+      check_paths: true
+  - tables

@@ -7,8 +7,8 @@
 services:
   # ── The handler under test ──
   alert-handler:
-    # Built from service-catalog/monitor-services/alert-handler:
-    #   cd <service-catalog>/monitor-services/alert-handler && just container-build
+    # Published (public) from github.com/cznewt/alert-handler; to try a change,
+    # build your own there with `just image` and set ALERT_HANDLER_VERSION.
     image: ghcr.io/cznewt/alert-handler:${ALERT_HANDLER_VERSION:-latest}
     environment:
       LOG_LEVEL: INFO

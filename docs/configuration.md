@@ -285,9 +285,9 @@ sloth:
 
 ## Available Example Files
 
-- [default.yaml](../docker/files/config/default.yaml): Standard configuration using local mixins.
-- [example-mixins.yaml](../docker/files/config/example-mixins.yaml): Demonstrates fetching mixins from Git.
-- [example-observ-lib.yaml](../docker/files/config/example-observ-lib.yaml): Example using Grafana's Jsonnet libs.
-- [example-pyrra.yaml](../docker/files/config/example-pyrra.yaml): Pyrra SLO examples.
-- [example-sloth.yaml](../docker/files/config/example-sloth.yaml): Sloth SLO examples.
-- [example-dashboards.yaml](../docker/files/config/example-dashboards.yaml): Static Grafana dashboards from grafana.com and HTTP URLs.
+- [default.yaml](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/default.yaml): Standard configuration using local mixins.
+- [example-mixins.yaml](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-mixins.yaml): Demonstrates fetching mixins from Git.
+- [example-observ-lib.yaml](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-observ-lib.yaml): Example using Grafana's Jsonnet libs.
+- [example-pyrra.yaml](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-pyrra.yaml): Pyrra SLO examples.
+- [example-sloth.yaml](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-sloth.yaml): Sloth SLO examples.
+- [example-dashboards.yaml](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-dashboards.yaml): Static Grafana dashboards from grafana.com and HTTP URLs.

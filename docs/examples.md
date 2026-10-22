@@ -4,7 +4,7 @@ Worked examples for common `monitor-tools` flows. Each corresponds to a ready-to
 
 ## Prometheus rules as Kubernetes ConfigMaps
 
-Config: [`example-prometheus-configmap.yaml`](../docker/files/config/example-prometheus-configmap.yaml)
+Config: [`example-prometheus-configmap.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-prometheus-configmap.yaml)
 
 Render a mixin's recording + alerting rules as Kubernetes ConfigMaps and let a config-reloader sidecar mount them into Prometheus — instead of pushing them to a Mimir/Cortex ruler. This is the same ConfigMap-watch pattern the Grafana and prometheus-community Helm charts use, driven here by [kiwigrid/k8s-sidecar](https://github.com/kiwigrid/k8s-sidecar).
 
@@ -140,9 +140,9 @@ spec:
 
 | Config | Demonstrates |
 | --- | --- |
-| [`default.yaml`](../docker/files/config/default.yaml) | Local + Git mixins, Mimir rules (`mimirtool`) + Grafana (`grizzly`) |
-| [`example-mixins.yaml`](../docker/files/config/example-mixins.yaml) | Fetching mixins from Git |
-| [`example-observ-lib.yaml`](../docker/files/config/example-observ-lib.yaml) | Vendoring observ-libs alongside mixins |
-| [`example-dashboards.yaml`](../docker/files/config/example-dashboards.yaml) | Static grafana.com / HTTP dashboards |
-| [`example-pyrra.yaml`](../docker/files/config/example-pyrra.yaml) | Pyrra SLOs |
-| [`example-sloth.yaml`](../docker/files/config/example-sloth.yaml) | Sloth SLOs |
+| [`default.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/default.yaml) | Local + Git mixins, Mimir rules (`mimirtool`) + Grafana (`grizzly`) |
+| [`example-mixins.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-mixins.yaml) | Fetching mixins from Git |
+| [`example-observ-lib.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-observ-lib.yaml) | Vendoring observ-libs alongside mixins |
+| [`example-dashboards.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-dashboards.yaml) | Static grafana.com / HTTP dashboards |
+| [`example-pyrra.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-pyrra.yaml) | Pyrra SLOs |
+| [`example-sloth.yaml`](https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-sloth.yaml) | Sloth SLOs |

@@ -1,0 +1,39 @@
+name: docs
+
+# Builds docs/ with mkdocs (material) and publishes it to the gh-pages branch,
+# which GitHub Pages serves at https://cznewt.github.io/monitor-tools/. Two
+# pages include READMEs from outside docs/ (pymdownx.snippets): the demo-apps
+# chart's and the alert-handler demo's.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'charts/demo-apps/README.md'
+      - 'extra/alert-handler/README.md'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # mkdocs-material needs MkDocs 1.x (2.0 drops plugins and themes)
+      - name: install
+        run: pip install --quiet 'mkdocs>=1.6,<2' mkdocs-material
+      - name: build (warnings fail it)
+        run: mkdocs build --strict
+      - name: deploy to gh-pages
+        run: mkdocs gh-deploy --force

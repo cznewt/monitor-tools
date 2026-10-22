@@ -2,6 +2,8 @@
 
 A collection of tools and scripts for managing monitoring resources as a code. This toolkit simplifies the process of developing, linting, and deploying Grafana dashboards, Prometheus/Mimir rules, Loki rules, and SLOs.
 
+Documentation: <https://cznewt.github.io/monitor-tools/>
+
 - **Syncing**: Fetch and manage external mixins and libraries using `vendir` (e.g., `sync-mixins`).
 - **Rendering**: Convert Jsonnet/Libsonnet templates into ready-to-use JSON/YAML resources (e.g., `render-resources`).
 - **Linting**: Validate the syntax and correctness of generated resources (e.g., `lint-resources`).
@@ -178,8 +180,13 @@ helm upgrade --install demo oci://ghcr.io/cznewt/charts/demo-apps --version 0.3.
 
 ### Documentation
 
+Published at <https://cznewt.github.io/monitor-tools/> from `docs/` on every
+push to `main`:
+
 - [Scripts Documentation](docs/scripts.md)
 - [Software Documentation](docs/software.md)
 - [Configuration Documentation](docs/configuration.md)
 - [Mixins Documentation](docs/mixins.md)
 - [Demo apps](docs/demo-apps.md) - the `demo-apps` chart: install, incidents, what to look for
+- [Demo app containers](docs/demo-apps-images.md) - what runs in each image and generator, and how to build a new tag
+- [Alert handler](extra/alert-handler/README.md) - the Alertmanager → alert-handler → actions demo
