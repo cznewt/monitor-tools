@@ -1,0 +1,1831 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A collection of tools and scripts for managing monitoring resources as code.">
+      
+      
+      
+        <link rel="canonical" href="https://cznewt.github.io/monitor-tools/configuration/">
+      
+      
+        <link rel="prev" href="../scripts/">
+      
+      
+        <link rel="next" href="../examples/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Configuration - Monitor Tools</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configuration-documentation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Monitor Tools" class="md-header__button md-logo" aria-label="Monitor Tools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Monitor Tools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configuration
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/cznewt/monitor-tools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cznewt/monitor-tools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../scripts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../demo-apps/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Demo apps
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../alert-handler/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Alert handler
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Monitor Tools" class="md-nav__button md-logo" aria-label="Monitor Tools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Monitor Tools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/cznewt/monitor-tools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cznewt/monitor-tools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prometheus-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prometheus Rendering
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prometheus Rendering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#render-configmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        render: configmap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mixin-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mixin Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mixin Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-git-source-example-mixinsyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Git Source (example-mixins.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-local-directory-source-defaultyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Local Directory Source (default.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-observ-lib-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library (observ-lib) Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Library (observ-lib) Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-example-observ-libyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example (example-observ-lib.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-dashboard-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Dashboard Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Dashboard Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source: grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source: http
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grafana-rendering-render-grafanactl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grafana Rendering: render: grafanactl
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extra-jsonnet-paths-jpaths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra Jsonnet paths: jpaths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slo-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLO Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SLO Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pyrra-example-pyrrayaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pyrra (example-pyrra.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sloth-example-slothyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sloth (example-sloth.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-example-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Example Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mixins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Demo apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps-images/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alert-handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alert handler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#global-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Global Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prometheus-rendering" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prometheus Rendering
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prometheus Rendering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#render-configmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        render: configmap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mixin-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mixin Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mixin Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-git-source-example-mixinsyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Git Source (example-mixins.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-local-directory-source-defaultyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Local Directory Source (default.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#library-observ-lib-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Library (observ-lib) Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Library (observ-lib) Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-example-observ-libyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example (example-observ-lib.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-dashboard-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Static Dashboard Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Dashboard Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source: grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source: http
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fields_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fields
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grafana-rendering-render-grafanactl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grafana Rendering: render: grafanactl
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#extra-jsonnet-paths-jpaths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extra Jsonnet paths: jpaths
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slo-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SLO Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SLO Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pyrra-example-pyrrayaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pyrra (example-pyrra.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sloth-example-slothyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sloth (example-sloth.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#available-example-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Available Example Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href=".." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../scripts/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Usage
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="configuration-documentation">Configuration Documentation<a class="headerlink" href="#configuration-documentation" title="Permanent link">&para;</a></h1>
+<p>The <code>monitor-tools</code> uses YAML configuration files to define how monitoring resources are synced, rendered, and applied. These files are typically located in <code>/config</code> within the Docker container (mapped to <code>docker/files/config</code> locally).</p>
+<h2 id="global-structure">Global Structure<a class="headerlink" href="#global-structure" title="Permanent link">&para;</a></h2>
+<p>The configuration file generally contains the following top-level keys:</p>
+<ul>
+<li><code>name</code>: The environment name (e.g., <code>default</code>).</li>
+<li><code>prometheus</code>: Settings for Prometheus resource rendering (e.g., <code>render: mimirtool</code>).</li>
+<li><code>grafana</code>: Settings for Grafana resource rendering: <code>render: grizzly</code> (classic dashboards via grr), <code>render: plain</code> (JSON files) or <code>render: grafanactl</code> (app-platform resources, needed for schema v2 dashboards).</li>
+<li><code>loki</code> (Optional): renders the Loki rule groups a mixin lists in <code>lokiRuleGroups</code>. <code>render: lokitool</code> loads them through the ruler API (needs a writable ruler store); <code>render: configmap</code> wraps them in a ConfigMap (<code>namespace</code>, <code>labels</code>) that a Loki config sidecar syncs into the ruler's rule directory, which is how a Loki on the read-only local rule store gets them.</li>
+<li><code>mixins</code>: A map of mixin definitions.</li>
+<li><code>libs</code> (Optional): A map of observ-lib (or any reusable Jsonnet library) definitions vendored alongside mixins.</li>
+<li><code>dashboards</code> (Optional): A map of static Grafana dashboard releases (from grafana.com or any HTTP URL).</li>
+<li><code>pyrra</code> (Optional): Configuration for Pyrra SLOs.</li>
+<li><code>sloth</code> (Optional): Configuration for Sloth SLOs.</li>
+</ul>
+<h2 id="prometheus-rendering">Prometheus Rendering<a class="headerlink" href="#prometheus-rendering" title="Permanent link">&para;</a></h2>
+<p>The <code>prometheus:</code> block selects how a config's mixin rule groups (recording + alerting) are rendered. Set <code>render</code> to one of:</p>
+<ul>
+<li><code>mimirtool</code>: render Mimir/Cortex rule-group files (and plain Prometheus rule files), applied to a Mimir / Grafana Cloud ruler with <code>mimirtool</code>.</li>
+<li><code>plain</code>: render plain Prometheus rule-group files only.</li>
+<li><code>configmap</code>: wrap each mixin's rule groups in a Kubernetes ConfigMap, ready to <code>kubectl apply</code>. A config-reloader sidecar (e.g. <a href="https://github.com/kiwigrid/k8s-sidecar">kiwigrid/k8s-sidecar</a>) that watches the configured labels mounts the rules into Prometheus via <code>rule_files</code>.</li>
+</ul>
+<h3 id="render-configmap"><code>render: configmap</code><a class="headerlink" href="#render-configmap" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">render</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configmap</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span><span class="w">        </span><span class="c1"># namespace stamped on every ConfigMap (default: default)</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">                      </span><span class="c1"># labels the sidecar selects ConfigMaps on</span>
+<span class="w">    </span><span class="nt">prometheus_rule</span><span class="p">:</span><span class="w"> </span><span class="s">"1"</span>
+</code></pre></div>
+<p>One ConfigMap is rendered per mixin (named after the mixin) into <code>/build/&lt;env&gt;/configmap/prom-rules/</code>. Its recording and alerting groups are stored under <code>data</code> as a single <code>{ groups: [...] }</code> Prometheus rule file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ConfigMap</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">base</span>
+<span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">monitoring</span>
+<span class="w">  </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">prometheus_rule</span><span class="p">:</span><span class="w"> </span><span class="s">"1"</span>
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base.yaml</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">groups:</span>
+<span class="w">      </span><span class="no">- name: base</span>
+<span class="w">        </span><span class="no">rules:</span>
+<span class="w">          </span><span class="no">- alert: Watchdog</span>
+<span class="w">            </span><span class="no">expr: vector(1)</span>
+<span class="w">            </span><span class="no">labels:</span>
+<span class="w">              </span><span class="no">severity: info</span>
+<span class="w">            </span><span class="no">annotations:</span>
+<span class="w">              </span><span class="no">summary: This is an alert meant to ensure that the entire alerting pipeline is functional.</span>
+</code></pre></div>
+<ul>
+<li><strong>namespace</strong> (optional): namespace set on every rendered ConfigMap. Defaults to <code>default</code>.</li>
+<li><strong>labels</strong> (optional): map of labels added to each ConfigMap's <code>metadata.labels</code>. These are what your sidecar (or operator) selects on; quote numeric-looking values (<code>"1"</code>) so they stay strings.</li>
+</ul>
+<p>Applying the ConfigMaps is left to your deployment flow (<code>kubectl apply</code>, Argo CD, Flux, …) — the image does not ship <code>kubectl</code>. <code>lint-resources</code> validates the embedded rules with <code>promtool</code>. See <a href="../examples/">Examples</a> for the full sidecar wiring.</p>
+<h2 id="mixin-configuration">Mixin Configuration<a class="headerlink" href="#mixin-configuration" title="Permanent link">&para;</a></h2>
+<p>Mixins are the core building blocks. Each mixin entry under <code>mixins</code> defines where to get the mixin and how to configure it.</p>
+<h3 id="example-git-source-example-mixinsyaml">Example: Git Source (<code>example-mixins.yaml</code>)<a class="headerlink" href="#example-git-source-example-mixinsyaml" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">mixins</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">node</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">git</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/prometheus/node_exporter.git</span>
+<span class="w">        </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<span class="w">        </span><span class="nt">depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">includePaths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/node-mixin/**/*</span>
+<span class="w">      </span><span class="nt">newRootPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docs/node-mixin</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">mimirNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Platform</span>
+</code></pre></div>
+<h3 id="example-local-directory-source-defaultyaml">Example: Local Directory Source (<code>default.yaml</code>)<a class="headerlink" href="#example-local-directory-source-defaultyaml" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">mixins</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">base</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">directory</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mixins/base-mixin</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">mimirNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">base</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Base</span>
+</code></pre></div>
+<h3 id="fields">Fields<a class="headerlink" href="#fields" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>source</strong>: Defines the origin of the mixin (<code>git</code> or <code>directory</code>).<ul>
+<li><strong>git</strong>: Fetches from a remote repository.</li>
+<li><strong>directory</strong>: Uses a local path.</li>
+</ul>
+</li>
+<li><strong>config</strong>: Parameters passed to the mixin's Jsonnet code. Common parameters include:<ul>
+<li><code>mimirNamespace</code>: The namespace for Mimir rules.</li>
+<li><code>grafanaDashboardFolder</code>: The folder title in Grafana.</li>
+<li><code>grafanaDashboardFolderUid</code>: The folder's uid. Defaults to the slug of the title (<code>Upstream / CI/CD</code> -&gt; <code>ci-cd</code>); set it when two folders share a title.</li>
+<li><code>grafanaDashboardFolderParent</code>: Title of a parent folder. The renderer emits the parent too and nests the folder under it, so a tree like <code>Upstream / kubernetes-mixin</code> comes out of the config. <code>grafanaDashboardFolderParentUid</code> overrides the parent's uid the same way.</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">mixins</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kubernetes</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubernetes-mixin</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolderParent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Upstream</span>
+</code></pre></div>
+<p>Nesting needs <code>grafana.render: grafanactl</code>; the grizzly path creates flat folders only.</p>
+<p>A mixin that emits whole Dashboard resources (observ-viz does) can instead file
+each board itself: the renderer reads the board's <code>grafana.app/folder</code>
+annotation, and <code>observ-viz.dev/folder-path</code> when the board sits deeper than one
+level, and emits every folder in that chain.</p>
+<h2 id="library-observ-lib-configuration">Library (observ-lib) Configuration<a class="headerlink" href="#library-observ-lib-configuration" title="Permanent link">&para;</a></h2>
+<p>The <code>libs</code> section vendors reusable Jsonnet libraries (the <code>*-observ-lib</code> modules from <a href="https://github.com/grafana/jsonnet-libs">grafana/jsonnet-libs</a>, shared helpers, etc.) alongside mixins. Libraries don't render to anything on their own — they're build-time dependencies that mixins <code>import</code>.</p>
+<h3 id="example-example-observ-libyaml">Example (<code>example-observ-lib.yaml</code>)<a class="headerlink" href="#example-example-observ-libyaml" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">libs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">windows-observ-lib</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">git</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/grafana/jsonnet-libs.git</span>
+<span class="w">        </span><span class="nt">ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<span class="w">        </span><span class="nt">depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">      </span><span class="nt">includePaths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-observ-lib/**/*</span>
+<span class="w">      </span><span class="nt">newRootPath</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">windows-observ-lib</span>
+</code></pre></div>
+<h3 id="fields_1">Fields<a class="headerlink" href="#fields_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>source</strong>: Same <code>git</code> / <code>directory</code> schema as a mixin's source. Use <code>includePaths</code> and <code>newRootPath</code> to narrow a multi-lib monorepo (like grafana/jsonnet-libs) down to the single subdirectory you want.</li>
+<li><strong>No <code>config:</code> block</strong>: libraries are pure Jsonnet — they're consumed by mixins, not rendered into Grafana/Prometheus resources directly.</li>
+</ul>
+<p>See <a href="../mixins/">docs/mixins.md</a> for the catalog of common observ-libs.</p>
+<h2 id="static-dashboard-configuration">Static Dashboard Configuration<a class="headerlink" href="#static-dashboard-configuration" title="Permanent link">&para;</a></h2>
+<p>The <code>dashboards</code> section pulls released Grafana dashboards as raw JSON and turns them into Grizzly resources. Each entry must be pinned (revision number for <code>grafana</code>, optional <code>sha256</code> for <code>http</code>) so that builds are reproducible. To release a new version of a dashboard, bump the pin and resync.</p>
+<h3 id="source-grafana">Source: <code>grafana</code><a class="headerlink" href="#source-grafana" title="Permanent link">&para;</a></h3>
+<p>Fetches a published revision from the Grafana.com community dashboards catalog (<code>https://grafana.com/grafana/dashboards/&lt;id&gt;</code>).</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dashboards</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">node-exporter-full</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1860</span>
+<span class="w">        </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">41</span><span class="w">          </span><span class="c1"># required — acts as the release pin</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Platform</span>
+<span class="w">      </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node-exporter-full</span>
+<span class="w">      </span><span class="nt">datasources</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">DS_PROMETHEUS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+</code></pre></div>
+<h3 id="source-http">Source: <code>http</code><a class="headerlink" href="#source-http" title="Permanent link">&para;</a></h3>
+<p>Fetches dashboard JSON from any HTTP(S) URL. Use this for self-hosted exports or vendor-published JSON outside grafana.com.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">dashboards</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">cadvisor</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">http</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/google/cadvisor/master/deploy/grafana/cadvisor.json</span>
+<span class="w">        </span><span class="nt">sha256</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;optional hex digest&gt;</span><span class="w">   </span><span class="c1"># if set, sync fails on mismatch</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Platform</span>
+<span class="w">      </span><span class="nt">uid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cadvisor</span>
+<span class="w">      </span><span class="nt">datasources</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">DS_PROMETHEUS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+</code></pre></div>
+<h3 id="fields_2">Fields<a class="headerlink" href="#fields_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>source.grafana.id</strong> / <strong>source.grafana.revision</strong>: Dashboard ID and revision number from grafana.com. The revision is the release identifier — never use "latest".</li>
+<li><strong>source.http.url</strong>: Direct URL to dashboard JSON.</li>
+<li><strong>source.http.sha256</strong> (optional): SHA-256 of the file. If provided, sync aborts on mismatch.</li>
+<li><strong>config.grafanaDashboardFolder</strong> (optional): Target folder in Grafana. A folder resource is generated automatically.</li>
+<li><strong>config.uid</strong> (optional): Dashboard UID. Defaults to the slugified dashboard name.</li>
+<li><strong>config.datasources</strong> (optional): Map of <code>${PLACEHOLDER}</code> → datasource name. Most community dashboards use <code>${DS_PROMETHEUS}</code> etc.; this map substitutes them with the real datasource UIDs/names in your Grafana.</li>
+</ul>
+<h3 id="pipeline">Pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Sync</strong>: <code>sync-dashboards</code> (also called by <code>sync-all-mixins</code>) downloads each pinned JSON to <code>/source/&lt;env&gt;/dashboards/&lt;name&gt;.json</code>.</li>
+<li><strong>Render</strong>: <code>render-grizzly-static-grafana-dashboards</code> (and the plain variant) wrap them as Grizzly <code>Dashboard</code> resources, applying the datasource substitutions.</li>
+<li><strong>Apply</strong>: handled by the same <code>apply-grizzly-grafana-dashboards</code> script as mixin-derived dashboards.</li>
+</ol>
+<h2 id="grafana-rendering-render-grafanactl">Grafana Rendering: <code>render: grafanactl</code><a class="headerlink" href="#grafana-rendering-render-grafanactl" title="Permanent link">&para;</a></h2>
+<p>Renders dashboards and folders as Grafana app-platform resources and pushes them through Grafana's Kubernetes-style API (<code>/apis/dashboard.grafana.app/...</code>). Use it for schema v2 dashboards (for example the observ-viz mixin), which grizzly cannot push.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">render</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafanactl</span>
+</code></pre></div>
+<ul>
+<li>A dashboard whose spec has <code>elements</code> and <code>layout</code> is rendered as <code>dashboard.grafana.app/v2beta1</code>; anything else as <code>dashboard.grafana.app/v0alpha1</code>. Static <code>dashboards:</code> go the same way.</li>
+<li>The folder comes from <code>config.grafanaDashboardFolder</code> and rides in the <code>grafana.app/folder</code> annotation. Its uid is the slugified folder name (<code>CI/CD (upstream)</code> becomes <code>ci-cd-upstream</code>).</li>
+<li>The dashboard uid is the uid the mixin set when it is a valid Grafana uid (kubernetes-mixin cross-links its boards by those), otherwise the file name. A v2 spec carries no uid, so the file name is used.</li>
+<li><code>apply-grafanactl-grafana-folders</code> and <code>apply-grafanactl-grafana-dashboards</code> create or update each resource with <code>curl</code>. Set <code>GRAFANA_URL</code> plus either <code>GRAFANA_TOKEN</code> or <code>GRAFANA_USER</code> and <code>GRAFANA_PASSWORD</code>. <code>GRAFANA_NAMESPACE</code> defaults to <code>default</code> (org 1).</li>
+<li>The target Grafana needs the feature toggles <code>kubernetesDashboards</code>, <code>dashboardNewLayouts</code> and <code>kubernetesClientDashboardsFolders</code> for v2 boards.</li>
+</ul>
+<h2 id="extra-jsonnet-paths-jpaths">Extra Jsonnet paths: <code>jpaths</code><a class="headerlink" href="#extra-jsonnet-paths-jpaths" title="Permanent link">&para;</a></h2>
+<p>A mixin may list extra <code>-J</code> paths, relative to its mixin directory. Every renderer adds them after the mixin's <code>vendor/</code>. This is how a vendored repository that imports its own files by repo-relative path resolves:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">mixins</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">observ-viz-platform</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">directory</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/mixins/observ-viz-mixin</span>
+<span class="w">    </span><span class="nt">jpaths</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vendor/github.com/cznewt/observ-viz</span>
+<span class="w">    </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">scenario</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">platform</span>
+<span class="w">      </span><span class="nt">mimirNamespace</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">observ-viz-platform</span>
+<span class="w">      </span><span class="nt">grafanaDashboardFolder</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Platform (observ-viz)</span>
+</code></pre></div>
+<p><code>config.mimirAlertNamespace</code> (optional) puts a mixin's alert groups in their own Mimir namespace, next to the recording rules in <code>mimirNamespace</code>.</p>
+<p><code>config.mimirAlerts: false</code> renders a mixin's dashboards and recording rules but leaves out its alert groups, for a mixin whose alerts another mixin already covers. It does not delete groups pushed earlier: remove that Mimir namespace once (<code>mimirtool rules delete-namespace</code> or <code>DELETE /prometheus/config/v1/rules/&lt;namespace&gt;</code>).</p>
+<p>Rendered rule files are named <code>&lt;namespace&gt;-&lt;group&gt;.yaml</code>, so mixins that share a group name no longer overwrite each other's files.</p>
+<h2 id="slo-configuration">SLO Configuration<a class="headerlink" href="#slo-configuration" title="Permanent link">&para;</a></h2>
+<p><code>pyrra: {render: mimirtool}</code> renders the SLOs twice: as plain Prometheus rule files, and as one-group Mimir rule files under <code>pyrra.namespace</code> (default <code>pyrra</code>), which the mimirtool apply loads into the ruler. <code>pyrra.genericRules: false</code> leaves out Pyrra's own UI series (<code>pyrra_objective</code>, <code>pyrra_window</code>, <code>pyrra_availability</code>); Mimir loads them, but <code>mimirtool rules check</code> rejects their names for carrying no colon.</p>
+<p>Service Level Objectives can be defined using Pyrra or Sloth.</p>
+<h3 id="pyrra-example-pyrrayaml">Pyrra (<code>example-pyrra.yaml</code>)<a class="headerlink" href="#pyrra-example-pyrrayaml" title="Permanent link">&para;</a></h3>
+<p>Defines SLOs to be processed by Pyrra.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">pyrra</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">render</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mimirtool</span>
+<span class="w">  </span><span class="nt">slos</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">prometheus-api-query</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pyrra.dev/v1alpha1</span>
+<span class="w">      </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ServiceLevelObjective</span>
+<span class="w">      </span><span class="nt">spec</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="s">'99.0'</span>
+<span class="w">        </span><span class="nt">window</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7d</span>
+<span class="w">        </span><span class="c1"># ... indicator definition</span>
+</code></pre></div>
+<h3 id="sloth-example-slothyaml">Sloth (<code>example-sloth.yaml</code>)<a class="headerlink" href="#sloth-example-slothyaml" title="Permanent link">&para;</a></h3>
+<p>Defines SLOs using the Sloth format.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">sloth</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">render</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mimirtool</span>
+<span class="w">  </span><span class="nt">slos</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">home-wifi</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s">"home-wifi"</span>
+<span class="w">      </span><span class="nt">slos</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">"good-wifi-client-satisfaction"</span>
+<span class="w">          </span><span class="nt">objective</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">95</span>
+<span class="w">          </span><span class="nt">sli</span><span class="p">:</span>
+<span class="w">            </span><span class="c1"># ... SLI definition</span>
+</code></pre></div>
+<h2 id="available-example-files">Available Example Files<a class="headerlink" href="#available-example-files" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/default.yaml">default.yaml</a>: Standard configuration using local mixins.</li>
+<li><a href="https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-mixins.yaml">example-mixins.yaml</a>: Demonstrates fetching mixins from Git.</li>
+<li><a href="https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-observ-lib.yaml">example-observ-lib.yaml</a>: Example using Grafana's Jsonnet libs.</li>
+<li><a href="https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-pyrra.yaml">example-pyrra.yaml</a>: Pyrra SLO examples.</li>
+<li><a href="https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-sloth.yaml">example-sloth.yaml</a>: Sloth SLO examples.</li>
+<li><a href="https://github.com/cznewt/monitor-tools/blob/main/docker/files/config/example-dashboards.yaml">example-dashboards.yaml</a>: Static Grafana dashboards from grafana.com and HTTP URLs.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../scripts/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Scripts">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Scripts
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../examples/" class="md-footer__link md-footer__link--next" aria-label="Next: Examples">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Examples
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

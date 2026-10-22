@@ -1,0 +1,1676 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A collection of tools and scripts for managing monitoring resources as code.">
+      
+      
+      
+        <link rel="canonical" href="https://cznewt.github.io/monitor-tools/demo-apps-images/">
+      
+      
+        <link rel="prev" href="../demo-apps-chart/">
+      
+      
+        <link rel="next" href="../alert-handler/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Containers - Monitor Tools</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#demo-app-containers" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Monitor Tools" class="md-header__button md-logo" aria-label="Monitor Tools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Monitor Tools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Containers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/cznewt/monitor-tools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cznewt/monitor-tools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../scripts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../demo-apps/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Demo apps
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../alert-handler/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Alert handler
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Monitor Tools" class="md-nav__button md-logo" aria-label="Monitor Tools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Monitor Tools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/cznewt/monitor-tools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cznewt/monitor-tools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mixins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Demo apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-images-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the images live
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="App images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logging-demo-logging-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging: demo-logging-&lt;runtime&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrics-demo-metrics-prom-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics: demo-metrics-prom-&lt;runtime&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traces-demo-traces-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traces: demo-traces-&lt;runtime&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo-metrics-generator-gen-metricspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        demo-metrics-generator: gen-metrics.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo-logs-generator-gen-logspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        demo-logs-generator: gen-logs.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo-traces-graph-gen-traces-graphpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        demo-traces-graph: gen-traces-graph.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-and-push-a-new-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build and push a new tag
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-them-without-a-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run them without a cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alert-handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alert handler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#where-the-images-live" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where the images live
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App images
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="App images">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logging-demo-logging-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Logging: demo-logging-&lt;runtime&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#metrics-demo-metrics-prom-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics: demo-metrics-prom-&lt;runtime&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traces-demo-traces-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Traces: demo-traces-&lt;runtime&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#demo-metrics-generator-gen-metricspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        demo-metrics-generator: gen-metrics.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo-logs-generator-gen-logspy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        demo-logs-generator: gen-logs.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#demo-traces-graph-gen-traces-graphpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        demo-traces-graph: gen-traces-graph.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-and-push-a-new-tag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build and push a new tag
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-them-without-a-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Run them without a cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href=".." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../demo-apps/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Demo apps
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="demo-app-containers">Demo app containers<a class="headerlink" href="#demo-app-containers" title="Permanent link">&para;</a></h1>
+<p>The <code>demo-apps</code> chart runs two kinds of containers:</p>
+<ul>
+<li><strong>Nine app images</strong>, one per signal and runtime, built from
+  <a href="https://github.com/cznewt/monitor-tools/tree/main/extra/app-instrumentation"><code>extra/app-instrumentation</code></a>.</li>
+<li><strong>Three generators</strong>, which are plain Python scripts on a stock image.</li>
+</ul>
+<p>This page covers what is inside each container and how to build a new image
+tag. <a href="../demo-apps/">Usage</a> covers installing the chart, and the
+<a href="../demo-apps-chart/">Chart reference</a> lists its values.</p>
+<h2 id="where-the-images-live">Where the images live<a class="headerlink" href="#where-the-images-live" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Name and tag:</strong> <code>ghcr.io/cznewt/demo-&lt;logging|metrics-prom|traces&gt;-&lt;go|python|rust&gt;:&lt;tag&gt;</code>.
+  All nine share one tag. The current one is <code>2026.09-r1</code>, which is the
+  chart's <code>imageTag</code> default and its <code>appVersion</code>.</li>
+<li>
+<p><strong>Private:</strong> ghcr refuses anonymous pulls of all nine (checked 2026-10-22).
+  A cluster needs a pull secret, passed as <code>imagePullSecrets</code>:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>-n<span class="w"> </span>&lt;namespace&gt;<span class="w"> </span>create<span class="w"> </span>secret<span class="w"> </span>docker-registry<span class="w"> </span>ghcr-registry<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--docker-server<span class="o">=</span>ghcr.io<span class="w"> </span>--docker-username<span class="o">=</span>&lt;user&gt;<span class="w"> </span>--docker-password<span class="o">=</span>&lt;token<span class="w"> </span>with<span class="w"> </span>read:packages&gt;
+helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>...<span class="w"> </span>--set<span class="w"> </span><span class="s2">"imagePullSecrets[0].name=ghcr-registry"</span>
+</code></pre></div>
+</li>
+<li>
+<p><strong>linux/amd64 only:</strong> there are no arm64 builds.</p>
+</li>
+<li><strong>The chart is public:</strong> <code>oci://ghcr.io/cznewt/charts/demo-apps</code> (0.1.0–0.3.1)
+  pulls anonymously.</li>
+</ul>
+<h2 id="app-images">App images<a class="headerlink" href="#app-images" title="Permanent link">&para;</a></h2>
+<p>Each app is standalone: it calls no other service, does one simulated piece of
+work per second, and runs as the container <code>app</code>.</p>
+<h3 id="logging-demo-logging-runtime">Logging: <code>demo-logging-&lt;runtime&gt;</code><a class="headerlink" href="#logging-demo-logging-runtime" title="Permanent link">&para;</a></h3>
+<p>No ports and no environment variables. They write log lines once a second,
+which the cluster's pod-log collection picks up.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Image</th>
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">Language and library</th>
+<th style="text-align: left;">Base image</th>
+<th style="text-align: left;">Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>demo-logging-go</code></td>
+<td style="text-align: left;"><code>logging/popular-logging-frameworks/go</code></td>
+<td style="text-align: left;">Go, <a href="https://github.com/uber-go/zap">zap</a> 1.28 (production JSON config, debug level on)</td>
+<td style="text-align: left;"><code>golang:1.26-alpine</code>, single stage</td>
+<td style="text-align: left;">JSON on stdout: <code>level</code>, <code>ts</code> (Unix seconds), <code>logger</code> (<code>app</code>, <code>database</code>, <code>api</code>), <code>caller</code>, <code>msg</code> and the call's fields; error lines add <code>stacktrace</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-logging-python</code></td>
+<td style="text-align: left;"><code>logging/popular-logging-frameworks/python</code></td>
+<td style="text-align: left;">Python 3.12, stdlib <code>logging</code></td>
+<td style="text-align: left;"><code>python:3.12-slim</code></td>
+<td style="text-align: left;">Plain text on <strong>stderr</strong>: <code>&lt;date&gt; &lt;time&gt;,&lt;ms&gt; - app.py:&lt;line&gt; - WARNING - Warning message, counter: 7</code>, cycling DEBUG → CRITICAL</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-logging-rust</code></td>
+<td style="text-align: left;"><code>logging/popular-logging-frameworks/rust</code></td>
+<td style="text-align: left;">Rust, <code>tracing</code> 0.1 + <code>tracing-subscriber</code> 0.3 (JSON)</td>
+<td style="text-align: left;">built on <code>rust:1-alpine</code>, runs on <code>alpine:3.21</code></td>
+<td style="text-align: left;">JSON on stdout: <code>timestamp</code>, <code>level</code>, <code>target</code> (<code>app</code>, <code>database</code>, <code>api</code>), <code>message</code> and the event's fields, flattened</td>
+</tr>
+</tbody>
+</table>
+<p>The Go and Rust apps run the same loop of twelve messages:</p>
+<ul>
+<li>plain info lines;</li>
+<li>errors, some with context fields;</li>
+<li>structured fields and a nested object;</li>
+<li>a <code>database</code> slow-query warning;</li>
+<li>an <code>api</code> request line (<code>method</code>, <code>path</code>, <code>status</code>);</li>
+<li>a debug line from a child logger or span carrying a request id.</li>
+</ul>
+<h3 id="metrics-demo-metrics-prom-runtime">Metrics: <code>demo-metrics-prom-&lt;runtime&gt;</code><a class="headerlink" href="#metrics-demo-metrics-prom-runtime" title="Permanent link">&para;</a></h3>
+<p>All three serve the Prometheus text format on <code>0.0.0.0:9100/metrics</code>. The chart
+gives the pod the <code>k8s.grafana.com/scrape</code> annotations and a Service.</p>
+<div class="admonition warning">
+<p class="admonition-title">The port is fixed in the code</p>
+<p><code>runtimes.&lt;rt&gt;.metricsProm.port</code> only moves the chart's <code>containerPort</code>,
+Service port and scrape annotation, while the app keeps listening on 9100.
+Leave it at 9100.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Image</th>
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">Language and library</th>
+<th style="text-align: left;">Base image</th>
+<th style="text-align: left;">Series</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>demo-metrics-prom-python</code></td>
+<td style="text-align: left;"><code>metrics/prometheus-client/python</code></td>
+<td style="text-align: left;">Python 3.11, <code>prometheus-client</code> 0.21.0</td>
+<td style="text-align: left;"><code>python:3.11-slim</code></td>
+<td style="text-align: left;"><code>checkout_transactions_total{status, payment_method}</code>, <code>checkout_payment_duration_seconds{status, payment_method}</code> (histogram, 50 ms–5 s buckets), <code>checkout_active_carts</code>, <code>checkout_queue_depth</code>; plus the client's <code>process_*</code> and <code>python_*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-metrics-prom-go</code></td>
+<td style="text-align: left;"><code>metrics/prometheus-client/go</code></td>
+<td style="text-align: left;">Go, <code>prometheus/client_golang</code> (newest at build time)</td>
+<td style="text-align: left;"><code>golang:1.25-alpine</code>, single stage</td>
+<td style="text-align: left;"><code>inventory_updates_total{warehouse, operation}</code>, <code>inventory_reservation_duration_seconds</code> (histogram, default buckets), <code>inventory_stock_level</code>, <code>inventory_pending_shipments</code>; plus <code>go_*</code>, <code>process_*</code> and <code>promhttp_*</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-metrics-prom-rust</code></td>
+<td style="text-align: left;"><code>metrics/prometheus-client/rust</code></td>
+<td style="text-align: left;">Rust, <code>prometheus</code> 0.13 + <code>tiny_http</code> 0.12</td>
+<td style="text-align: left;">built on <code>rust:1-alpine</code>, runs on <code>alpine:3.21</code></td>
+<td style="text-align: left;">The same four <code>inventory_*</code> series as Go; any other path answers 404</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Errors:</strong> about 8 % of ticks are errors. Python counts them as
+  <code>status="declined"</code> with 0.8–2.5 s payments. Go and Rust count them as
+  <code>operation="reserve_failed"</code> with 200–500 ms reservations.</li>
+<li><strong>Label values:</strong><ul>
+<li><code>payment_method</code>: <code>card</code>, <code>paypal</code>, <code>apple_pay</code>, <code>bank_transfer</code>;</li>
+<li><code>warehouse</code>: <code>eu-west</code>, <code>us-east</code>, <code>ap-south</code>.</li>
+</ul>
+</li>
+<li><strong>Log line:</strong> the Python app also prints one <code>tick:</code> line per second to
+  stdout.</li>
+</ul>
+<h3 id="traces-demo-traces-runtime">Traces: <code>demo-traces-&lt;runtime&gt;</code><a class="headerlink" href="#traces-demo-traces-runtime" title="Permanent link">&para;</a></h3>
+<p>All three send one trace per second over OTLP <strong>gRPC</strong>. They use the
+OpenTelemetry SDK and take their settings only from the standard environment
+variables, which the chart sets:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Set from</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>OTEL_EXPORTER_OTLP_ENDPOINT</code></td>
+<td style="text-align: left;"><code>otlp.endpoint</code> (default: the k8s-monitoring Alloy receiver on <code>:4317</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>OTEL_EXPORTER_OTLP_PROTOCOL</code></td>
+<td style="text-align: left;"><code>otlp.protocol</code> (<code>grpc</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>OTEL_SERVICE_NAME</code></td>
+<td style="text-align: left;"><code>runtimes.&lt;rt&gt;.traceServiceName</code>: <code>warehouse</code> (Go), <code>checkout</code> (Python), <code>payments</code> (Rust)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>OTEL_RESOURCE_ATTRIBUTES</code></td>
+<td style="text-align: left;"><code>service.namespace=&lt;serviceNamespace&gt;,deployment.environment=&lt;environment&gt;,language=&lt;rt&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">gRPC only, plaintext</p>
+<p>The apps are built with gRPC exporters, so <code>OTEL_EXPORTER_OTLP_PROTOCOL</code>
+can't switch them to OTLP/HTTP: point <code>otlp.endpoint</code> at a gRPC receiver.
+The receiver must also accept plaintext, because the Go app dials without
+TLS whatever the endpoint says.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Image</th>
+<th style="text-align: left;">Source</th>
+<th style="text-align: left;">Language and library</th>
+<th style="text-align: left;">Base image</th>
+<th style="text-align: left;">Trace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>demo-traces-go</code></td>
+<td style="text-align: left;"><code>traces/opentelemetry-sdk/go</code></td>
+<td style="text-align: left;">Go, OpenTelemetry Go SDK + <code>otlptracegrpc</code> (newest at build time)</td>
+<td style="text-align: left;"><code>golang:1.25-alpine</code>, single stage</td>
+<td style="text-align: left;">Tracer <code>store/inventory</code>. <code>reserve_stock</code> (<code>sku</code>, <code>warehouse</code>, <code>quantity</code>) has two children: <code>check_warehouse</code> (event <code>reorder_triggered</code>), then <code>decrement_stock</code>. In about 15 % of traces, <code>decrement_stock</code> records an <code>out_of_stock</code> error with status ERROR</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-traces-python</code></td>
+<td style="text-align: left;"><code>traces/opentelemetry-sdk/python</code></td>
+<td style="text-align: left;">Python 3.11, <code>opentelemetry-sdk</code> 1.27.0 + the OTLP gRPC exporter</td>
+<td style="text-align: left;"><code>python:3.11-slim</code></td>
+<td style="text-align: left;">Tracer <code>checkout.simulator</code>. <code>process_checkout</code> (<code>cart.id</code>, <code>payment.method</code>, <code>amount.usd</code>, <code>checkout.outcome</code>) → <code>validate_payment</code> (event <code>fraud_check</code> with <code>risk.score</code>) → <code>charge_card</code>. In about 15 % of traces, <code>charge_card</code> records a <code>DeclinedCardError</code> with status ERROR and the outcome is <code>declined</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-traces-rust</code></td>
+<td style="text-align: left;"><code>traces/opentelemetry-sdk/rust</code></td>
+<td style="text-align: left;">Rust, <code>opentelemetry</code> 0.30 + <code>opentelemetry-otlp</code> (tonic)</td>
+<td style="text-align: left;">built on <code>rust:1-alpine</code>, runs on <code>alpine:3.21</code></td>
+<td style="text-align: left;">Tracer <code>store/payments</code>. The same <code>reserve_stock</code> shape as Go: same attributes, same event, same <code>out_of_stock</code> errors</td>
+</tr>
+</tbody>
+</table>
+<p>Each trace stays inside one service. The cross-service traces and the
+service-graph edges come from the <code>demo-traces-graph</code> generator.</p>
+<h2 id="generators">Generators<a class="headerlink" href="#generators" title="Permanent link">&para;</a></h2>
+<p>The generators have no image of their own. Each one is a stdlib Python script
+from
+<a href="https://github.com/cznewt/monitor-tools/tree/main/charts/demo-apps/files"><code>charts/demo-apps/files/</code></a>:</p>
+<ul>
+<li>the chart ships the script in a ConfigMap (key <code>gen.py</code>), mounted at <code>/app</code>;</li>
+<li>the container runs <code>python /app/gen.py</code> on <code>generators.image</code>, which
+  defaults to <code>mirror.gcr.io/library/python:3.12-slim</code>;</li>
+<li><code>PYTHONUNBUFFERED=1</code> is set.</li>
+</ul>
+<p>A script change ships with a chart release. The pod template's
+<code>checksum/script</code> annotation restarts the pod when the script changes.</p>
+<p>All three read the incident schedule from <code>generators.incident.*</code>:
+<code>INCIDENT_EVERY_SECONDS</code>, <code>INCIDENT_DURATION_SECONDS</code>, <code>INCIDENT_ERROR_RATIO</code>
+and <code>INCIDENT_LATENCY_FACTOR</code>. Each generator works out the scheduled window
+from the wall clock (<code>now mod everySeconds &lt; durationSeconds</code>), so all three
+open it at the same moment without talking to each other. When the metrics
+generator is enabled, the other two also get:</p>
+<ul>
+<li><code>INCIDENT_URL</code>: its <code>/incident</code> endpoint;</li>
+<li><code>INCIDENT_POLL_SECONDS</code>: how often to poll it.</li>
+</ul>
+<p>That is how they follow incidents opened on demand
+(<a href="../demo-apps/#incidents">Incidents</a>).</p>
+<h3 id="demo-metrics-generator-gen-metricspy"><code>demo-metrics-generator</code>: <code>gen-metrics.py</code><a class="headerlink" href="#demo-metrics-generator-gen-metricspy" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Listens</strong> on <code>PORT</code> (9100):<ul>
+<li><code>GET /metrics</code>;</li>
+<li><code>GET</code>, <code>POST</code> and <code>DELETE /incident</code>, the release's incident switch.</li>
+</ul>
+</li>
+<li><strong>Simulates</strong> <code>RATE_PER_SECOND</code> (5) requests a second over six routes: <code>GET /</code>,
+  <code>/products</code>, <code>/products/{id}</code>, <code>/health</code>, and <code>POST /cart</code>, <code>/cart/checkout</code>.</li>
+<li><strong>Status mix:</strong><ul>
+<li>5xx (500, 502, 503, 504) at the error ratio;</li>
+<li>4xx (400, 401, 404, 409) for another 4 %;</li>
+<li>otherwise 200, or 201 for a POST.</li>
+</ul>
+</li>
+<li><strong>Series:</strong><ul>
+<li><code>http_server_request_duration_seconds{http_request_method, http_route, http_response_status_code}</code>,
+  a histogram on the OTel default boundaries (5 ms–10 s);</li>
+<li><code>http_server_active_requests{http_request_method}</code>;</li>
+<li><code>demo_incident_active</code> and <code>demo_incident_seconds_remaining</code>.</li>
+</ul>
+</li>
+<li><strong>Environment:</strong> <code>PORT</code>, <code>RATE_PER_SECOND</code>, <code>ERROR_RATIO</code>, plus the
+  incident variables.</li>
+</ul>
+<h3 id="demo-logs-generator-gen-logspy"><code>demo-logs-generator</code>: <code>gen-logs.py</code><a class="headerlink" href="#demo-logs-generator-gen-logspy" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Writes</strong> one JSON line per simulated request to stdout, <code>RATE_PER_SECOND</code>
+  (2) a second on average. The fields are:<ul>
+<li><code>ts</code>, <code>service</code>, <code>service_namespace</code> and <code>environment</code>;</li>
+<li><code>level</code>: <code>info</code>, <code>warn</code> for a 4xx, <code>error</code> for a 5xx;</li>
+<li><code>method</code>, <code>route</code>, <code>status</code> and <code>latency_ms</code>;</li>
+<li><code>trace_id</code>, <code>incident</code> and <code>msg</code>.</li>
+</ul>
+</li>
+<li><strong>Routes and status mix:</strong> the same as the metrics generator.</li>
+<li><strong><code>trace_id</code> is random:</strong> it does not point at a stored trace, so a
+  log-to-trace link from these lines finds nothing.</li>
+<li><strong>Environment:</strong> <code>SERVICE_NAME</code>, <code>SERVICE_NAMESPACE</code>,
+  <code>DEPLOYMENT_ENVIRONMENT</code>, <code>RATE_PER_SECOND</code>, <code>ERROR_RATIO</code>, plus the
+  incident variables.</li>
+</ul>
+<h3 id="demo-traces-graph-gen-traces-graphpy"><code>demo-traces-graph</code>: <code>gen-traces-graph.py</code><a class="headerlink" href="#demo-traces-graph-gen-traces-graphpy" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Posts</strong> one trace every <code>INTERVAL_SECONDS</code> (2) as OTLP/HTTP JSON to
+  <code>OTLP_HTTP_ENDPOINT</code>, with the header <code>X-Scope-OrgID: &lt;TENANT&gt;</code>.</li>
+<li>
+<p><strong>Shape:</strong> client/server span pairs, which Tempo's service-graph processor
+  turns into edges:</p>
+<div class="highlight"><pre><span></span><code>storefront  SERVER  GET /cart/checkout
+  storefront  CLIENT  POST /checkout   peer.service=checkout
+    checkout  SERVER  POST /checkout
+      checkout  CLIENT  POST /charge   peer.service=payments
+        payments  SERVER  POST /charge
+</code></pre></div>
+</li>
+<li>
+<p><strong>Resource attributes:</strong> <code>service.name</code>, <code>service.namespace</code>,
+  <code>deployment.environment</code> and <code>telemetry.sdk.language=python</code>. The scope is
+  <code>demo.service-graph</code>.</p>
+</li>
+<li><strong>Errors:</strong> <code>ERROR_RATIO</code> (8 %) of traces fail. Every span in the trace gets
+  status ERROR, and the HTTP status is 500 on the storefront and checkout
+  spans and 402 on the charge spans.</li>
+<li><strong>Send failures</strong> are counted and logged, and the loop keeps going, for
+  example through a Tempo restart.</li>
+<li><strong>Environment:</strong> <code>OTLP_HTTP_ENDPOINT</code>, <code>TENANT</code>, <code>INTERVAL_SECONDS</code>,
+  <code>ERROR_RATIO</code>, <code>SERVICE_NAMESPACE</code>, <code>DEPLOYMENT_ENVIRONMENT</code>, plus the
+  incident variables.</li>
+</ul>
+<h2 id="build-and-push-a-new-tag">Build and push a new tag<a class="headerlink" href="#build-and-push-a-new-tag" title="Permanent link">&para;</a></h2>
+<p>Nothing builds these images automatically. No workflow under
+<code>.github/workflows</code> and no <code>just</code> recipe pushes them. The <code>instrumentation-*</code>
+recipes run the local compose stacks under their own image names, with more
+languages than the chart uses.</p>
+<p>Build and push by hand from the repository root, logged in to ghcr
+(<code>docker login ghcr.io</code>) with a token that can write packages:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">TAG</span><span class="o">=</span><span class="m">2026</span>.10-r1<span class="w">   </span><span class="c1"># the next YYYY.MM-rN tag</span>
+<span class="k">for</span><span class="w"> </span>rt<span class="w"> </span><span class="k">in</span><span class="w"> </span>go<span class="w"> </span>python<span class="w"> </span>rust<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>docker<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>linux/amd64<span class="w"> </span>-t<span class="w"> </span>ghcr.io/cznewt/demo-logging-<span class="nv">$rt</span>:<span class="nv">$TAG</span><span class="w">      </span>extra/app-instrumentation/logging/popular-logging-frameworks/<span class="nv">$rt</span>
+<span class="w">  </span>docker<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>linux/amd64<span class="w"> </span>-t<span class="w"> </span>ghcr.io/cznewt/demo-metrics-prom-<span class="nv">$rt</span>:<span class="nv">$TAG</span><span class="w"> </span>extra/app-instrumentation/metrics/prometheus-client/<span class="nv">$rt</span>
+<span class="w">  </span>docker<span class="w"> </span>build<span class="w"> </span>--platform<span class="w"> </span>linux/amd64<span class="w"> </span>-t<span class="w"> </span>ghcr.io/cznewt/demo-traces-<span class="nv">$rt</span>:<span class="nv">$TAG</span><span class="w">       </span>extra/app-instrumentation/traces/opentelemetry-sdk/<span class="nv">$rt</span>
+<span class="k">done</span>
+<span class="k">for</span><span class="w"> </span>rt<span class="w"> </span><span class="k">in</span><span class="w"> </span>go<span class="w"> </span>python<span class="w"> </span>rust<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span>signal<span class="w"> </span><span class="k">in</span><span class="w"> </span>logging<span class="w"> </span>metrics-prom<span class="w"> </span>traces<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>docker<span class="w"> </span>push<span class="w"> </span>ghcr.io/cznewt/demo-<span class="nv">$signal</span>-<span class="nv">$rt</span>:<span class="nv">$TAG</span>
+<span class="w">  </span><span class="k">done</span>
+<span class="k">done</span>
+</code></pre></div>
+<p>Then either install with <code>--set imageTag=$TAG</code>, or release the chart with the
+new tag as its <code>imageTag</code> default and <code>appVersion</code>.</p>
+<ul>
+<li><strong>A new package is private:</strong> ghcr refuses anonymous pulls of it until its
+  visibility is changed in the package settings on GitHub.</li>
+<li><strong>Builds are not reproducible:</strong><ul>
+<li>the Go metrics and traces Dockerfiles run <code>go mod tidy</code>, which pulls the
+  newest <code>client_golang</code> and OpenTelemetry modules at build time; only the
+  Go logging app has a <code>go.sum</code>;</li>
+<li>the Rust apps have no <code>Cargo.lock</code>, so each build resolves the newest
+  crates <code>Cargo.toml</code> allows;</li>
+<li>the Python apps pin theirs in <code>requirements.txt</code>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="run-them-without-a-cluster">Run them without a cluster<a class="headerlink" href="#run-them-without-a-cluster" title="Permanent link">&para;</a></h2>
+<p>Each source directory belongs to a self-contained compose stack, which runs the
+apps next to Alloy and a local backend. From the repository root:
+<code>just instrumentation-logging</code>, <code>just instrumentation-metrics-prom</code> or
+<code>just instrumentation-traces</code>. See the
+<a href="https://github.com/cznewt/monitor-tools/blob/main/extra/app-instrumentation/README.md">app-instrumentation README</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../demo-apps-chart/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Chart reference">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Chart reference
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../alert-handler/" class="md-footer__link md-footer__link--next" aria-label="Next: Alert handler">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Alert handler
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

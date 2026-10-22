@@ -1,0 +1,1408 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A collection of tools and scripts for managing monitoring resources as code.">
+      
+      
+      
+        <link rel="canonical" href="https://cznewt.github.io/monitor-tools/demo-apps-chart/">
+      
+      
+        <link rel="prev" href="../demo-apps/">
+      
+      
+        <link rel="next" href="../demo-apps-images/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Chart reference - Monitor Tools</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#demo-apps" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Monitor Tools" class="md-header__button md-logo" aria-label="Monitor Tools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Monitor Tools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Chart reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/cznewt/monitor-tools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cznewt/monitor-tools
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../scripts/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../demo-apps/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Demo apps
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../alert-handler/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Alert handler
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../software/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Monitor Tools" class="md-nav__button md-logo" aria-label="Monitor Tools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Monitor Tools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/cznewt/monitor-tools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cznewt/monitor-tools
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../scripts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scripts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mixins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mixins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Demo apps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Demo apps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#incidents-on-demand-030" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incidents on demand (0.3.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adopting-existing-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adopting existing objects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo-apps-images/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Containers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alert-handler/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alert handler
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#incidents-on-demand-030" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Incidents on demand (0.3.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#values" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Values
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adopting-existing-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adopting existing objects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href=".." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../demo-apps/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Demo apps
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="demo-apps">demo-apps<a class="headerlink" href="#demo-apps" title="Permanent link">&para;</a></h1>
+<p>Instrumented demo services for monitoring labs. Per runtime (Go, Python, Rust)
+three apps, each switchable, plus activity generators:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Workload</th>
+<th style="text-align: left;">What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>demo-logging-&lt;runtime&gt;</code></td>
+<td style="text-align: left;">writes log lines with the runtime's popular logging framework (Rust/Go JSON, Python plain text)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-metrics-prom-&lt;runtime&gt;</code></td>
+<td style="text-align: left;">serves Prometheus-client metrics on <code>:9100</code> (scraped through <code>k8s.grafana.com/*</code> pod annotations)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-traces-&lt;runtime&gt;</code></td>
+<td style="text-align: left;">sends OTLP traces through the SDK (<code>OTEL_*</code> env): services warehouse (go), checkout (python), payments (rust)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-traces-graph</code></td>
+<td style="text-align: left;">generator: a three-service checkout trace per tick (storefront → checkout → payments) as OTLP/HTTP JSON with an <code>X-Scope-OrgID</code> header - the client/server span pairs Tempo's service-graph processor turns into edges</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-logs-generator</code></td>
+<td style="text-align: left;">generator: JSON access-log lines of a simulated storefront (level, method, route, status, latency_ms, trace_id)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>demo-metrics-generator</code></td>
+<td style="text-align: left;">generator: <code>http_server_request_duration_seconds</code> / <code>http_server_active_requests</code> under the OTel semantic-convention names (the observ-viz HTTP server and RED boards read them); also the release's incident switch (below)</td>
+</tr>
+</tbody>
+</table>
+<p>The demo apps generate their own activity (one simulated request per second).
+The generators are stdlib Python scripts (<code>files/</code>) on a plain Python image;
+the generators open an <strong>incident window</strong> every
+<code>generators.incident.everySeconds</code> (error ratio and latency jump), so alert
+exercises have something to fire on.</p>
+<h3 id="incidents-on-demand-030">Incidents on demand (0.3.0)<a class="headerlink" href="#incidents-on-demand-030" title="Permanent link">&para;</a></h3>
+<p>The metrics generator is the release's incident switch. Open a window now,
+whatever the schedule says:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># from a pod in the namespace (or kubectl port-forward svc/demo-metrics-generator 9100)</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="s1">'http://demo-metrics-generator:9100/incident?seconds=300'</span><span class="w">   </span><span class="c1"># optional &amp;errorRatio=0.5&amp;latencyFactor=5</span>
+curl<span class="w"> </span>http://demo-metrics-generator:9100/incident<span class="w">                        </span><span class="c1"># the window in force</span>
+curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://demo-metrics-generator:9100/incident<span class="w">              </span><span class="c1"># end it now</span>
+</code></pre></div>
+<p>Each answers the window as JSON - <code>{"active", "until", "seconds_remaining",
+"source": "manual"|"schedule", "errorRatio", "latencyFactor"}</code>; out-of-range
+parameters get a 400 (<code>seconds</code> 1-86400, <code>errorRatio</code> 0-1, <code>latencyFactor</code>
+1-100). An on-demand window wins over the schedule; <code>DELETE</code> ends whichever is
+open, a scheduled one for the rest of its window. <code>everySeconds: 0</code> turns only
+the schedule off - the switch keeps working.</p>
+<p>The logs and traces generators poll the switch every
+<code>generators.incident.pollSeconds</code> and follow it: log lines carry
+<code>"incident": true</code> and the window's error ratio and latency, traces fail at the
+window's error ratio with every span stretched by its latency factor (the
+storefront server span carries <code>demo.incident=true</code>). While the switch cannot
+be reached they fall back to the schedule. The metrics generator exports the
+state as <code>demo_incident_active</code> and <code>demo_incident_seconds_remaining</code>.</p>
+<p>Generators roll out without a surge pod (<code>maxSurge: 0</code>, <code>maxUnavailable: 1</code> -
+Recreate in effect for their one replica), so a tight namespace quota cannot
+stall an upgrade.</p>
+<p>Image sources: <code>monitor-tools/extra/app-instrumentation/{logging,metrics,traces}/*/&lt;runtime&gt;</code>;
+default image <code>&lt;imageRegistry&gt;/demo-&lt;signal&gt;-&lt;runtime&gt;:&lt;imageTag&gt;</code>
+(signal <code>logging</code> | <code>metrics-prom</code> | <code>traces</code>).</p>
+<h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
+<p>One release per environment (namespace) - object names are fixed:</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>demo<span class="w"> </span>oci://ghcr.io/cznewt/charts/demo-apps<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.3.1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span>demo-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">environment</span><span class="o">=</span>dev<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>generators.tracesGraph.tenant<span class="o">=</span>dev
+</code></pre></div>
+<p>One app - e.g. a student's own metrics app in their namespace, under its own
+name (0.2.0):</p>
+<div class="highlight"><pre><span></span><code>helm<span class="w"> </span>upgrade<span class="w"> </span>--install<span class="w"> </span>lab-app<span class="w"> </span>oci://ghcr.io/cznewt/charts/demo-apps<span class="w"> </span>--version<span class="w"> </span><span class="m">0</span>.3.1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--namespace<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_NAMESPACE</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="nv">partOf</span><span class="o">=</span>lab-app<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s2">"enabledRuntimes={</span><span class="nv">$LAB_LANG</span><span class="s2">}"</span><span class="w"> </span>--set<span class="w"> </span><span class="s2">"enabledSignals={metricsProm}"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span><span class="s2">"runtimes.</span><span class="nv">$LAB_LANG</span><span class="s2">.metricsProm.name=metrics-app"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>generators.enabled<span class="o">=</span><span class="nb">false</span>
+</code></pre></div>
+<p>Or switch runtimes / signals off one by one (0.1.0 and later):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">runtimes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> enabled</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">rust</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> enabled</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="nt">go</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logging</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> enabled</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="nt">generators</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">logs</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> enabled</span><span class="p">:</span><span class="w"> </span><span class="nv">false</span><span class="w"> </span><span class="p p-Indicator">}</span>
+</code></pre></div>
+<h2 id="values">Values<a class="headerlink" href="#values" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>imageRegistry</code> / <code>imageTag</code></td>
+<td style="text-align: left;"><code>ghcr.io/cznewt</code> / <code>2026.09-r1</code></td>
+<td style="text-align: left;">demo app image = <code>&lt;registry&gt;/demo-&lt;signal&gt;-&lt;runtime&gt;:&lt;tag&gt;</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>imagePullSecrets</code></td>
+<td style="text-align: left;"><code>[]</code></td>
+<td style="text-align: left;">e.g. <code>[{name: ghcr-registry}]</code> for private images</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>environment</code></td>
+<td style="text-align: left;"><code>workshop</code></td>
+<td style="text-align: left;"><code>deployment.environment</code> of the traces apps and generators</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>serviceNamespace</code></td>
+<td style="text-align: left;"><code>onlinestore</code></td>
+<td style="text-align: left;"><code>service.namespace</code> of the traces apps and generators</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>otlp.endpoint</code> / <code>otlp.protocol</code></td>
+<td style="text-align: left;">Alloy receiver <code>:4317</code> / <code>grpc</code></td>
+<td style="text-align: left;">where the traces apps send OTLP</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>enabledRuntimes</code></td>
+<td style="text-align: left;"><code>[]</code></td>
+<td style="text-align: left;">when non-empty, only these runtimes render (replaces <code>runtimes.&lt;rt&gt;.enabled</code>; 0.2.0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>enabledSignals</code></td>
+<td style="text-align: left;"><code>[]</code></td>
+<td style="text-align: left;">when non-empty, only these signals render - <code>logging</code>, <code>metricsProm</code> (or <code>metrics-prom</code>), <code>traces</code> (replaces the per-signal <code>enabled</code>; 0.2.0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>runtimes.&lt;go\|python\|rust&gt;.enabled</code></td>
+<td style="text-align: left;"><code>true</code></td>
+<td style="text-align: left;">the runtime's three apps</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>runtimes.&lt;rt&gt;.&lt;logging\|metricsProm\|traces&gt;.enabled</code></td>
+<td style="text-align: left;"><code>true</code></td>
+<td style="text-align: left;">one app</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>runtimes.&lt;rt&gt;.&lt;signal&gt;.image</code></td>
+<td style="text-align: left;"><code>""</code></td>
+<td style="text-align: left;">image override</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>runtimes.&lt;rt&gt;.&lt;signal&gt;.name</code></td>
+<td style="text-align: left;"><code>demo-&lt;signal&gt;-&lt;rt&gt;</code></td>
+<td style="text-align: left;">object name override (Deployment, Service, <code>app.kubernetes.io/name</code>; 0.2.0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>runtimes.&lt;rt&gt;.traceServiceName</code></td>
+<td style="text-align: left;">warehouse / checkout / payments</td>
+<td style="text-align: left;"><code>OTEL_SERVICE_NAME</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>resources.&lt;logging\|metricsProm\|traces&gt;</code></td>
+<td style="text-align: left;">10m/32-48Mi → 200m/128-192Mi</td>
+<td style="text-align: left;">per signal</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>nodeSelector</code> / <code>tolerations</code></td>
+<td style="text-align: left;"><code>{}</code> / <code>[]</code></td>
+<td style="text-align: left;">every workload</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>generators.enabled</code></td>
+<td style="text-align: left;"><code>true</code></td>
+<td style="text-align: left;">all generators at once (0.2.0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>generators.image</code></td>
+<td style="text-align: left;"><code>mirror.gcr.io/library/python:3.12-slim</code></td>
+<td style="text-align: left;">the generators' runtime</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>generators.incident.*</code></td>
+<td style="text-align: left;">every 1800 s for 300 s, errors 50 %, latency x5, poll every 5 s</td>
+<td style="text-align: left;">scheduled incident window (<code>everySeconds: 0</code> = schedule off); <code>pollSeconds</code> - how often the logs / traces generators ask the switch (0.3.0)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>generators.tracesGraph.*</code></td>
+<td style="text-align: left;">enabled, Alloy receiver <code>:4318/v1/traces</code>, tenant <code>anonymous</code>, every 2 s, 8 % errors</td>
+<td style="text-align: left;">the service-graph trace generator</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>generators.logs.*</code></td>
+<td style="text-align: left;">enabled, <code>storefront</code>, 2 lines/s, 5 % errors</td>
+<td style="text-align: left;">the access-log generator</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>generators.metrics.*</code></td>
+<td style="text-align: left;">enabled, <code>:9100</code>, 5 req/s, 5 % errors</td>
+<td style="text-align: left;">the HTTP-metrics generator</td>
+</tr>
+</tbody>
+</table>
+<h2 id="adopting-existing-objects">Adopting existing objects<a class="headerlink" href="#adopting-existing-objects" title="Permanent link">&para;</a></h2>
+<p>A release can take over plain-manifest objects of the same names (the
+monitoring lab's <code>demo-apps.yaml</code> / <code>demo-envs.yaml</code>): selectors and pod labels
+match. Mark them for Helm first, then install:</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span>o<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>kubectl<span class="w"> </span>-n<span class="w"> </span>&lt;ns&gt;<span class="w"> </span>get<span class="w"> </span>deploy,svc,cm<span class="w"> </span>-l<span class="w"> </span>app.kubernetes.io/part-of<span class="o">=</span>demo-apps<span class="w"> </span>-o<span class="w"> </span>name<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>kubectl<span class="w"> </span>-n<span class="w"> </span>&lt;ns&gt;<span class="w"> </span>label<span class="w"> </span><span class="s2">"</span><span class="nv">$o</span><span class="s2">"</span><span class="w"> </span>app.kubernetes.io/managed-by<span class="o">=</span>Helm<span class="w"> </span>--overwrite
+<span class="w">  </span>kubectl<span class="w"> </span>-n<span class="w"> </span>&lt;ns&gt;<span class="w"> </span>annotate<span class="w"> </span><span class="s2">"</span><span class="nv">$o</span><span class="s2">"</span><span class="w"> </span>meta.helm.sh/release-name<span class="o">=</span>&lt;release&gt;<span class="w"> </span>meta.helm.sh/release-namespace<span class="o">=</span>&lt;ns&gt;<span class="w"> </span>--overwrite
+<span class="k">done</span>
+</code></pre></div>
+<h2 id="changes">Changes<a class="headerlink" href="#changes" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>0.3.1</strong> - generators roll out with <code>maxSurge: 0</code> / <code>maxUnavailable: 1</code> instead of <code>strategy: Recreate</code>: server-side apply cannot switch an existing Deployment from RollingUpdate to Recreate (<code>spec.strategy.rollingUpdate: Forbidden</code>), so upgrading a 0.2.0 release to 0.3.0 fails - use 0.3.1.</li>
+<li><strong>0.3.0</strong> - incidents on demand: <code>POST</code> / <code>GET</code> / <code>DELETE /incident</code> on the metrics generator, followed by the logs and traces generators (<code>generators.incident.pollSeconds</code>); <code>demo_incident_active</code> / <code>demo_incident_seconds_remaining</code>; the traces generator now has incident windows too (failed-trace share and span durations); generators roll out with <code>strategy: Recreate</code>.</li>
+<li><strong>0.2.0</strong> - additive, renders exactly what 0.1.0 renders with default values: <code>enabledRuntimes</code> / <code>enabledSignals</code> shortcuts, <code>runtimes.&lt;rt&gt;.&lt;signal&gt;.name</code> overrides, <code>generators.enabled</code> master switch.</li>
+<li><strong>0.1.0</strong> - first release.</li>
+</ul>
+<hr />
+<p>This page is the chart's README,
+<a href="https://github.com/cznewt/monitor-tools/blob/main/charts/demo-apps/README.md"><code>charts/demo-apps/README.md</code></a>.
+<a href="../demo-apps/">Usage</a> walks through installing it, incidents and what to look
+for in Grafana; <a href="../demo-apps-images/">Containers</a> covers what runs inside each
+workload.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../demo-apps/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Usage
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../demo-apps-images/" class="md-footer__link md-footer__link--next" aria-label="Next: Containers">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Containers
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.path", "navigation.top", "navigation.footer", "search.suggest", "search.highlight", "toc.follow", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
