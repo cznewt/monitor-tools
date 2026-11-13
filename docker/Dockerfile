@@ -138,7 +138,7 @@ RUN git clone --depth 1 --branch v0.1.1 https://github.com/grafana/dashboard-lin
     /usr/local/go/bin/go build -o /root/go/bin/dashboard-linter . && \
     rm -rf /tmp/dashboard-linter
 
-RUN /usr/local/go/bin/go install github.com/monitoring-mixins/mixtool/cmd/mixtool@main
+RUN /usr/local/go/bin/go install github.com/monitoring-mixins/mixtool/cmd/mixtool@v0.0.0-20260629085351-496ea9a28ba9
 
 # Loki publishes no lokitool binary and its go.mod carries `replace`
 # directives, so `go install pkg@version` refuses it too: build it from a
