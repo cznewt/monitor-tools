@@ -29,8 +29,12 @@
 // config's grafanaDashboardFolder does not apply to them. `config.base` is passed
 // to the board builders (clusterLabel / nodeLabel / appLabel / selector / titles /
 // folder), e.g. config: { scenario: base, base: { appLabel: namespace } }.
+//
+// `dropAlerts` names alerting rules to leave out of every group, whatever the
+// scenario, e.g. config: { dropAlerts: [ContainerNetworkUnavailable] }. A group
+// left with no rules is dropped too (Mimir rejects an empty group).
 {
-  _config+:: { scenario: 'platform', base: {}, libs: [], rulesOnly: [], libConfig: {}, rules: true },
+  _config+:: { scenario: 'platform', base: {}, libs: [], rulesOnly: [], libConfig: {}, rules: true, dropAlerts: [] },
   local isReference = $._config.scenario == 'reference',
   local isBase = $._config.scenario == 'base',
   local isLibs = $._config.scenario == 'libs',
@@ -65,6 +69,9 @@
     if std.objectHas(lib, 'prometheus') && std.objectHas(lib.prometheus, 'rules') then lib.prometheus.rules else []
     for lib in ruleLibs
   ])),
+  local dropAlerts(groups) =
+    local kept = [g { rules: [r for r in g.rules if !std.member($._config.dropAlerts, std.get(r, 'alert', ''))] } for g in groups];
+    [g for g in kept if std.length(g.rules) > 0],
   local reference = (import 'libs/reference-lib/mixin.libsonnet'),
   local base = (import 'libs/common-lib/base.libsonnet'),
   local baseBoards =
@@ -83,12 +90,13 @@
     else if isBase then baseBoards
     else if isLibs then libBoards
     else s.grafanaDashboards,
-  prometheusAlerts+::
+  local alerts =
     if isBase
     then { groups: [{ name: 'base-watchdog', rules: [base.watchdogAlert] }] }
     else if isReference then { groups: [] }
     else if isLibs then { groups: if $._config.rules then libAlerts else [] }
     else s.prometheusAlerts,
+  prometheusAlerts+:: alerts { groups: dropAlerts(alerts.groups) },
   prometheusRules+::
     if isBase then { groups: baseRules }
     else if isReference then { groups: [] }
