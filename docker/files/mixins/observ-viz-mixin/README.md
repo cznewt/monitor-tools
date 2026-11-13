@@ -61,3 +61,17 @@ All three name their own Grafana folder in each board's metadata, so the config'
     jpaths: [vendor/github.com/cznewt/observ-viz]
     source: { directory: { path: /mixins/observ-viz-mixin } }
 ```
+
+`dropAlerts` lists alerting rules to leave out, by `alert` name, whatever the
+scenario. It removes single rules from upstream groups without forking them; a
+group left with no rules is dropped too, because Mimir rejects an empty group.
+Recording rules and boards are not affected.
+
+```yaml
+  observ-viz-k8s:
+    config:
+      scenario: libs
+      mimirNamespace: observ-viz-k8s
+      libs: [kubernetes.pod, kubernetes.cadvisor]
+      dropAlerts: [ContainerNetworkUnavailable]
+```
