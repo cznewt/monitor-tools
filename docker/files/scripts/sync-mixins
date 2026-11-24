@@ -33,7 +33,15 @@ fi
 
 yaml_files=$(find "$BUILD_DIR" -maxdepth 1 -type f -name "*.yaml" -not -name "*.lock.yaml")
 
-if [ -z "$yaml_files" ]; then echo "No *.yaml files found in '$BUILD_DIR'."; exit 1; fi
+# a config with no mixins and no libs (sloth/pyrra/oncall-only, static
+# dashboards) has nothing to sync: skip it. Mixins or libs declared but no
+# vendir file rendered is still an error.
+if [ -z "$yaml_files" ]; then
+  if { [ "$mixins" = "null" ] || [ -z "$mixins" ]; } && { [ "$libs" = "null" ] || [ -z "$libs" ]; }; then
+    echo "No mixins or libs in '$CONFIG_FILE', nothing to sync."; exit 0
+  fi
+  echo "No *.yaml files found in '$BUILD_DIR'."; exit 1
+fi
 
 # GitHub intermittently answers shallow fetches with 'could not read
 # Username' / 'expected flush after ref listing' - retry each mixin with
